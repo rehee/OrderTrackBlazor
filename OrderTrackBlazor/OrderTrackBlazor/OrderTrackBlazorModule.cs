@@ -72,7 +72,7 @@ namespace OrderTrackBlazor
 
       // Add additional endpoints required by the Identity /Account Razor components.
       context.App!.MapAdditionalIdentityEndpoints();
-      app.UseHttpsRedirection();
+      //app.UseHttpsRedirection();
     }
   }
 }
