@@ -6,14 +6,14 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8888:80"
+      - "8888:8080"
     depends_on:
       - mssql2019
       - azurite
     environment:
       AllowedHosts: '*'
       AddDefaultAdmin: "true"
-      ASPNETCORE_URLS: http://+:80
+      # ASPNETCORE_URLS: http://+:80
       #init starting data
       #database connection string server is docker. Initial Catalog is the database to used. name can change. if no database will add a new one.
       ConnectionStrings__DefaultConnection: "Server=mssql2019;Initial Catalog=otb01;User=sa;Password=Ps1234567!;MultipleActiveResultSets=true;TrustServerCertificate=true"
