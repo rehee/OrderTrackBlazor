@@ -1,5 +1,6 @@
 ﻿
 using Google.Api;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OrderTrackBlazor.Data;
 using ReheeCmf.Commons;
@@ -29,7 +30,7 @@ namespace OrderTrackBlazor.Workers
       {
         using var context = scope.ServiceProvider.GetService<IContext>();
         var db = context.Context as ApplicationDbContext;
-
+        db?.Database.Migrate();
         Array enumValues = Enum.GetValues(typeof(EnumShop));
         foreach (var e in enumValues)
         {
