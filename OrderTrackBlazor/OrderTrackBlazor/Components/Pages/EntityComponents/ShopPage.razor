@@ -1,0 +1,24 @@
+﻿@page "/entity/shop"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@inherits ShopPageComponent
+
+
+
+@if (Shops == null)
+{
+  <div>null</div>
+}
+else
+{
+  <div>
+    <Table TItem="OrderTrackShop" Items="@Shops">
+      <TableColumns>
+        <TableColumn @bind-Field="@context.ShopType" Width="180" />
+        <TableColumn @bind-Field="@context.PostCode" />
+        <TableColumn @bind-Field="@context.Note" />
+      </TableColumns>
+    </Table>
+  </div>
+}

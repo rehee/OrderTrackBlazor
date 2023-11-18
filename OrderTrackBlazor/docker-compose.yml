@@ -1,0 +1,55 @@
+version: "3.4"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8888:80"
+    depends_on:
+      - mssql2019
+      - azurite
+    environment:
+      AllowedHosts: '*'
+      AddDefaultAdmin: "true"
+      ASPNETCORE_URLS: http://+:80
+      #init starting data
+      #database connection string server is docker. Initial Catalog is the database to used. name can change. if no database will add a new one.
+      ConnectionStrings__DefaultConnection: "Server=mssql2019;Initial Catalog=otb01;User=sa;Password=Ps1234567!;MultipleActiveResultSets=true;TrustServerCertificate=true"
+      # Enable this to use memory database
+      # CrudOption__SQLType: "Memory"
+      NoHttpsRedirection: "true"
+      TenantSetting__EnableTenant: "false"
+      FileServiceOption__AuthRequired: "false"
+      FileServiceOption__ServiceType: "AzureBlob"
+      FileServiceOption__BaseFolder: "Files"
+      FileServiceOption__AccessToken: "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://host.docker.internal:10000/devstoreaccount1;TableEndpoint=http://host.docker.internal:10002/devstoreaccount1;QueueEndpoint=http://host.docker.internal:10001/devstoreaccount1;"
+      FileServiceOption__MaxFileUploadSize: "10485760"
+      FileServiceOption__AllowedFileType: ".jpg,.jpeg,.png,.pdf,.docx,.xlsx,.heic,.txt"
+      TokenManagement__AccessExpiration: 30
+      TokenManagement__Audience: "agent1"
+      TokenManagement__Issuer: "agent1"
+      TokenManagement__Secret: "123456789012345678123456789012345678123456789012345678123456789012345678"
+      TokenManagement__EnableAuth: "true"
+      TokenManagement__FullAccessRole: "admin"
+    networks:
+          - default
+  mssql2019:
+    image: "mcr.microsoft.com/azure-sql-edge:latest"
+    ports:
+      - "2433:1433"
+    environment:
+      ACCEPT_EULA: 'Y'
+      SA_PASSWORD: 'Ps1234567!'
+    user: root
+    networks:
+          - default
+  azurite:
+    image: "mcr.microsoft.com/azure-storage/azurite"
+    ports:
+     - "10000:10000"
+     - "10001:10001"
+     - "10002:10002"
+    networks:
+          - default
