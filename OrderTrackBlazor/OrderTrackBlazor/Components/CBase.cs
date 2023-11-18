@@ -11,7 +11,11 @@ namespace OrderTrackBlazor.Components
     {
       DisposeAsync().GetAwaiter().GetResult();
     }
-
+    protected override async Task OnInitializedAsync()
+    {
+      await base.OnInitializedAsync();
+      Console.WriteLine(Context?.GetHashCode());
+    }
     public bool IsDisposed { get; protected set; }
     public virtual ValueTask DisposeAsync()
     {
