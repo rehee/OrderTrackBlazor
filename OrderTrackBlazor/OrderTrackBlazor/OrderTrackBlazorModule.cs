@@ -8,6 +8,7 @@ using ReheeCmf;
 using ReheeCmf.Commons.DTOs;
 using ReheeCmf.Contexts;
 using ReheeCmf.Modules;
+using static Dropbox.Api.TeamLog.ActorLogInfo;
 
 
 namespace OrderTrackBlazor
@@ -47,7 +48,7 @@ namespace OrderTrackBlazor
     public override async Task BeforePreApplicationInitializationAsync(ServiceConfigurationContext context)
     {
       await base.BeforePreApplicationInitializationAsync(context);
-
+      context.App!.UseHttpsRedirection();
     }
     public override async Task ApplicationInitializationAsync(ServiceConfigurationContext context)
     {
@@ -72,7 +73,7 @@ namespace OrderTrackBlazor
 
       // Add additional endpoints required by the Identity /Account Razor components.
       context.App!.MapAdditionalIdentityEndpoints();
-      //app.UseHttpsRedirection();
+      
     }
   }
 }
