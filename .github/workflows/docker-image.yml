@@ -93,3 +93,11 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+  trigger-webhook-preview:    
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Trigger Azure Web App Webhook Preview
+        run: |
+          curl -X POST -d {} '${{ secrets.AZURE_WEBAPP_URL_PREVIEW }}'
+        if: success()  
