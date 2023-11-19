@@ -12,6 +12,11 @@ namespace OrderTrackBlazor.DTOs
 
   public class OrderProductionDTO : DTOBase
   {
+    public Guid Gid { get; set; }
+    public OrderProductionDTO()
+    {
+      Gid = Guid.NewGuid();
+    }
     public long? ProductionId { get; set; }
     public long? ParentId { get; set; }
     public IWithOrderProductionsDTO? Parent { get; set; }

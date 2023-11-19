@@ -37,32 +37,32 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
 
     public async Task CreateProduction(long? id = null)
     {
-      nm.NavigateTo("/entity/order/-1");
+      //nm.NavigateTo("/entity/order/-1");
 
-      return;
-      //var onsave = new OnSaveDTO();
-      //var comp = BootstrapDynamicComponent.CreateComponent<OrderDetail>(
-      //    new Dictionary<string, object?>()
-      //    {
-      //      ["Id"] = null,
-      //      ["OnSave"] = onsave
-      //    });
-      //var dotion = new DialogOption()
-      //{
-      //  Title = id == null ? "new order" : "edit order",
-      //  Size = Size.ExtraLarge,
-      //  Component = comp,
-      //  ShowSaveButton = true,
-      //  OnSaveAsync = async () =>
-      //  {
-      //    if (onsave.OnSaveFunc != null)
-      //    {
-      //      return await onsave.OnSaveFunc();
-      //    }
-      //    return true;
-      //  }
-      //};
-      //await dialogService!.Show(dotion);
+      //return;
+      var onsave = new OnSaveDTO();
+      var comp = BootstrapDynamicComponent.CreateComponent<OrderDetail>(
+          new Dictionary<string, object?>()
+          {
+            ["Id"] = null,
+            ["OnSave"] = onsave
+          });
+      var dotion = new DialogOption()
+      {
+        Title = id == null ? "new order" : "edit order",
+        Size = Size.ExtraLarge,
+        Component = comp,
+        ShowSaveButton = true,
+        OnSaveAsync = async () =>
+        {
+          if (onsave.OnSaveFunc != null)
+          {
+            return await onsave.OnSaveFunc();
+          }
+          return true;
+        }
+      };
+      await dialogService!.Show(dotion);
     }
     public OrderTrackProduction? Model { get; set; }
 

@@ -38,15 +38,16 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
 
     public async Task AddProduction(OrderProductionDTO? dto = null)
     {
-
+      var fromTable = dto != null;
       var onsave = new OnSaveDTO();
       var comp = BootstrapDynamicComponent.CreateComponent<OrderProduction>(
           new Dictionary<string, object?>()
           {
             ["OnSave"] = onsave,
             ["Productions"] = Productions,
+            ["FromTable"] = fromTable,
             ["DTO"] = dto == null ? new OrderProductionDTO { ParentId = Model?.Id, Parent = Model } : dto
-          });
+          }); ;
 
       var dotion = new DialogOption()
       {
@@ -55,12 +56,16 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
         ShowSaveButton = true,
         OnSaveAsync = async () =>
         {
+          var result = true;
           if (onsave.OnSaveFunc != null)
           {
-            await onsave.OnSaveFunc();
+            result = await onsave.OnSaveFunc();
           }
-          StateHasChanged();
-          return true;
+          if (result)
+          {
+            StateHasChanged();
+          }
+          return result;
         }
       };
       await dialogService!.Show(dotion);

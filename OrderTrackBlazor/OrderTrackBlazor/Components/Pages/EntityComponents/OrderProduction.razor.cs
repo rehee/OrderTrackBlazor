@@ -8,6 +8,8 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
   public partial class OrderProductionComponent : CBase
   {
     [Parameter]
+    public bool? FromTable { get; set; }
+    [Parameter]
     public OrderProductionDTO? DTO { get; set; }
     [Parameter]
     public OnSaveDTO? OnSave { get; set; }
@@ -20,7 +22,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     {
       await base.OnInitializedAsync();
       Items = (new List<SelectedItem>() { new SelectedItem("", "select") }).Concat(Productions.Select(b => new SelectedItem(b.Id.ToString() ?? "", b.Name ?? ""))).ToList();
-      IItem = Items.FirstOrDefault(b => b.Value == DTO?.Id.ToString());
+      IItem = Items.FirstOrDefault(b => b.Value == DTO?.ProductionId.ToString());
       if (OnSave != null)
       {
         OnSave.OnSaveFunc = async () =>
@@ -36,16 +38,49 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
               DTO.ProductionId = lId;
             }
           }
+          else
+          {
+            return false;
+          }
           if (DTO.ProductionId <= 0)
           {
+            return true;
+          }
+          if (DTO.Quantity <= 0)
+          {
+            DTO.Quantity = 0;
+          }
+          if (DTO.IsCreate && FromTable == true && DTO.Quantity <= 0)
+          {
+            DTO.Parent.Productions?.Remove(DTO);
             return true;
           }
           if (DTO.IsCreate && DTO.Quantity <= 0)
           {
             return true;
           }
-          DTO.ParentId = DTO.Parent.Id;
-          DTO.Parent.Productions?.Add(DTO);
+
+          if (DTO.IsCreate)
+          {
+            DTO.ParentId = DTO.Parent.Id;
+            var exist = DTO.Parent.Productions?.Where(b => b.ProductionId == DTO.ProductionId).FirstOrDefault();
+            if (exist == null)
+            {
+              DTO.Parent.Productions?.Add(DTO);
+            }
+            else
+            {
+              if (FromTable != true)
+              {
+                exist.Quantity = exist.Quantity + DTO.Quantity;
+              }
+
+            }
+
+
+          }
+
+
           return true;
         };
       }

@@ -30,10 +30,17 @@
       <div class="col-12">
         <Table TItem="OrderProductionDTO" Items="@Model.Productions" butto>
           <TableColumns>
-            <TableColumn @bind-Field="@context.ProductionId" />
+            <TableColumn @bind-Field="@context.ProductionId">
+              <Template Context="value">
+                <span>@Productions.Where(b => b.Id == value.Value).Select(b => b.Name).FirstOrDefault()</span>
+              </Template>
+            </TableColumn>
             <TableColumn @bind-Field="@context.Quantity" />
-            <TableColumn @bind-Field="@context.Id" Text="操作">
-
+            <TableColumn @bind-Field="@context.Gid" Text="操作">
+              <Template Context="value">
+                <Button Color="Color.Primary" Icon="fas fa-square-pen" Text="编辑" OnClickWithoutRender="()=>
+                  AddProduction(Model.Productions.FirstOrDefault(b=>b.Gid==value.Value))" />
+              </Template>
             </TableColumn>
           </TableColumns>
 
