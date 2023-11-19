@@ -1,0 +1,12 @@
+﻿@inherits OrderProductionComponent
+<div class="row g-3">
+  @if (DTO is not null)
+  {
+    <div class="col-12">
+      <Select Items="Items" @bind-Value="IItem" ShowLabel="true" DisplayText="选择一个产品"> </Select>
+    </div>
+    <div class="col-12">
+      <BootstrapInputNumber @bind-Value="DTO.Quantity" ShowLabel="true" DisplayText="数量" />
+    </div>
+  }
+</div>

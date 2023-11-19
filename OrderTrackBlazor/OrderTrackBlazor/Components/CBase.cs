@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using BootstrapBlazor.Components;
+using Microsoft.AspNetCore.Components;
 using ReheeCmf.Contexts;
 
 namespace OrderTrackBlazor.Components
@@ -7,6 +8,10 @@ namespace OrderTrackBlazor.Components
   {
     [Inject]
     protected IContext? Context { get; set; }
+    [Inject]
+    protected NavigationManager? nm { get; set; }
+    [Inject]
+    public DialogService? dialogService { get; set; }
     public void Dispose()
     {
       DisposeAsync().GetAwaiter().GetResult();
@@ -14,7 +19,7 @@ namespace OrderTrackBlazor.Components
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync();
-      Console.WriteLine(Context?.GetHashCode());
+      
     }
     public bool IsDisposed { get; protected set; }
     public virtual ValueTask DisposeAsync()

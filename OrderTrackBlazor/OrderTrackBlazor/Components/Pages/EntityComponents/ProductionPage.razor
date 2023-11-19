@@ -1,0 +1,32 @@
+﻿@page "/entity/production"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@inherits ProductionPageComponent
+
+<Dialog></Dialog>
+<div>
+  <Button Color="Color.Primary" Icon="fa-solid fa-font-awesome" Text="添加产品" OnClickWithoutRender="()=>CreateProduction()" />
+</div>
+
+@if (Productions == null)
+{
+  <div>null</div>
+}
+else
+{
+  <div>
+    <Table TItem="OrderTrackProduction" Items="@Productions" butto>
+      <TableColumns>
+        <TableColumn @bind-Field="@context.Id" Width="10" />
+        <TableColumn @bind-Field="@context.Name" />
+        <TableColumn @bind-Field="@context.Id" Text="操作">
+          <Template Context="value">
+            <Button Color="Color.Primary" Icon="fas fa-square-pen" Text="编辑" OnClickWithoutRender="()=>CreateProduction(value.Value)" />
+          </Template>
+        </TableColumn>
+      </TableColumns>
+
+    </Table>
+  </div>
+}
