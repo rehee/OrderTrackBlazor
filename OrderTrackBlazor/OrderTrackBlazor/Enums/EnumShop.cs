@@ -2,13 +2,13 @@
 {
   public enum EnumShop
   {
-    Boots,
     Tesco,
     Sainsbury,
     Asda,
     Morrisons,
     MarksSpencer,
     Waitrose,
-    Ocado
+    Ocado,
+    Boots,
   }
 }
