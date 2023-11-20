@@ -42,7 +42,7 @@ namespace OrderTrackBlazor.Components.Pages
           });
       var dotion = new DialogOption()
       {
-        Title = "¹ºÎï",
+        Title = """¹ºÎï""",
         Size = Size.ExtraLarge,
         Component = comp,
         ShowSaveButton = true,
