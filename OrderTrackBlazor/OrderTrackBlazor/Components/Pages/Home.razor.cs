@@ -3,6 +3,8 @@ using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using OrderTrackBlazor.Components.Pages.EntityComponents;
+using OrderTrackBlazor.Consts;
+using System.Text;
 using System.Web;
 
 
@@ -41,9 +43,13 @@ namespace OrderTrackBlazor.Components.Pages
             ["Shops"] = Shops,
             ["DTO"] = dto
           });
+      string chineseString = DefaultValues.PTitle;
+      System.Console.WriteLine(DefaultValues.PTitle);
+      byte[] utf8Bytes = Encoding.UTF8.GetBytes(chineseString);
+      string decodedString = Encoding.UTF8.GetString(utf8Bytes);
       var dotion = new DialogOption()
       {
-        Title = HttpUtility.UrlEncode("""¹ºÎï"""),
+        Title = decodedString,
         Size = Size.ExtraLarge,
         Component = comp,
         ShowSaveButton = true,

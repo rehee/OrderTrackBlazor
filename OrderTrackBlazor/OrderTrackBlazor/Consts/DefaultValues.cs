@@ -6,5 +6,6 @@
     {
       "有机 2段","有机 3段","todeler 3段"
     };
+    public const string PTitle = "采购";
   }
 }

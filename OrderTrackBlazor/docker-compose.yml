@@ -11,6 +11,8 @@ services:
     environment:
       AllowedHosts: '*'
       AddDefaultAdmin: "true"
+      # LC_ALL: en.UTF-8
+      # LANG: C.UTF-8
       # ASPNETCORE_URLS: http://+:80
       #init starting data
       #database connection string server is docker. Initial Catalog is the database to used. name can change. if no database will add a new one.
