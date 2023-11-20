@@ -28,7 +28,7 @@ namespace OrderTrackBlazor.Components.Pages
 
     public async Task Refresh()
     {
-      Purchase = await purchaseService.Query().OrderByDescending(b => b.PurchaseDate).ToListAsync();
+      Purchase = await purchaseService.Query().OrderByDescending(b => b.PurchaseDate).ThenByDescending(b=>b.CreateDate).ToListAsync();
       StateHasChanged();
     }
 
