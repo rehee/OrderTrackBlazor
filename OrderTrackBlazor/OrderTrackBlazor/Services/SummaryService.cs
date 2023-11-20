@@ -13,7 +13,7 @@ namespace OrderTrackBlazor.Services
     }
     public IQueryable<SummaryDTO> Query()
     {
-      
+
       return
         from order in context.Query<OrderTrackOrder>(true)
 
@@ -28,6 +28,7 @@ namespace OrderTrackBlazor.Services
         {
           OrderId = order.Id,
           OrderDate = order.OrderDate,
+          ShortNote = order.ShortNote,
           Productions = orderItem
         };
     }

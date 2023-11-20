@@ -9,18 +9,22 @@
 {
   <div>
     <div>
-      @summary.OrderDate?.ToString("dd/MM/yyyy")
+      @summary.OrderDate?.ToString("dd/MM/yyyy"),
+      @summary.ShortNote
     </div>
     <div>
       <Table TItem="SummaryProductionDTO" Items="@summary.Productions">
         <TableColumns>
-          <TableColumn @bind-Field="@context.ProductionName">
+          <TableColumn @bind-Field="@context.ProductionName" Text="产品">
           </TableColumn>
 
-          <TableColumn @bind-Field="@context.Required">
+          <TableColumn @bind-Field="@context.Required" Text="总需求">
           </TableColumn>
-          <TableColumn @bind-Field="@context.Purchased">
+          <TableColumn @bind-Field="@context.Purchased" Text="已采购">
           </TableColumn>
+          <TableColumn @bind-Field="@context.NeedToBuy" Text="需采购">
+          </TableColumn>
+          
         </TableColumns>
 
       </Table>
