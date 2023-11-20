@@ -48,6 +48,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
 
       Model = DTO == null ? new PurchaseDTO
       {
+        PurchaseDate = DateTime.UtcNow.Date,
         Productions = new List<OrderProductionDTO>()
       } : DTO;
       SelectedShop = ShopList.FirstOrDefault(b => b.Value == Model?.ShopId?.ToString());
