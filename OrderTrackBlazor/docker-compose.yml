@@ -2,9 +2,7 @@ version: "3.4"
 
 services:
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: otb:0.1
     ports:
       - "8888:8080"
     depends_on:

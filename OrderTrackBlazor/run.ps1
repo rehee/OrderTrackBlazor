@@ -7,13 +7,11 @@ Write-Output "Cleaning Docker system"
 docker system prune --force
 Write-Output "Running docker build"
 
-if(($rebuild )){
-  docker build `
+docker build `
   -t $image `
   --file ./Dockerfile `
   --rm `
   .
-}
 
 
 

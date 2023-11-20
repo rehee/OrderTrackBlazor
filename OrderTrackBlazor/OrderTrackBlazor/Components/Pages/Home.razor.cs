@@ -3,6 +3,7 @@ using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using OrderTrackBlazor.Components.Pages.EntityComponents;
+using System.Web;
 
 
 namespace OrderTrackBlazor.Components.Pages
@@ -42,7 +43,7 @@ namespace OrderTrackBlazor.Components.Pages
           });
       var dotion = new DialogOption()
       {
-        Title = """¹ºÎï""",
+        Title = HttpUtility.UrlEncode("""¹ºÎï"""),
         Size = Size.ExtraLarge,
         Component = comp,
         ShowSaveButton = true,
