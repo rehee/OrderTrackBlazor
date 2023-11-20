@@ -1,24 +1,18 @@
-﻿@inherits OrderDetailComponent
-@page "/entity/order/{Id:long}"
+﻿@inherits PurchaseDetailComponent
 @rendermode InteractiveServer
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 
-
-<h3>OrderDetail @Id</h3>
 <div class="row g-3">
 
   @if (Model is not null)
   {
 
     <div class="col-12 col-sm-6">
-      <DateTimePicker @bind-Value="@Model.OrderDate" Format="dd/MM/yyyy" ShowLabel="true" DisplayText="订单日期" />
+      <DateTimePicker @bind-Value="@Model.PurchaseDate" Format="dd/MM/yyyy" ShowLabel="true" DisplayText="购物日期" />
     </div>
     <div class="col-12 col-sm-6">
-      <BootstrapInput TValue="string" @bind-Value="@Model.ShortNote" ShowLabel="true" DisplayText="简要备注" />
-    </div>
-    <div class="col-12">
-      <Textarea rows="4" @bind-Value="@Model.Note" ShowLabel="true" DisplayText="详细备注" />
+      <Select Items="ShopList" @bind-Value="SelectedShop" OnSelectedItemChanged="SelectShop" ShowLabel="true" DisplayText="选择超市"> </Select>
     </div>
 
     <div class="col-12">

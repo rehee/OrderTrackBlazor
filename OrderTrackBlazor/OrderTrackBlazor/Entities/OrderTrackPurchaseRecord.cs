@@ -8,6 +8,7 @@ namespace OrderTrackBlazor.Entities
     public long? ShopId { get; set; }
     public virtual OrderTrackShop? Shop { get; set; }
 
+    public DateTime? PurchaseDate { get; set; }
     public virtual List<OrderTrackPurchaseItem>? Items { get; set; }
   }
 }

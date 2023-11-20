@@ -1,0 +1,29 @@
+﻿@page "/summary"
+@rendermode InteractiveServer
+@inherits SummaryComponent
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+<PageTitle>Home</PageTitle>
+<Dialog></Dialog>
+@foreach (var summary in SummaryDTOs)
+{
+  <div>
+    <div>
+      @summary.OrderDate?.ToString("dd/MM/yyyy")
+    </div>
+    <div>
+      <Table TItem="SummaryProductionDTO" Items="@summary.Productions">
+        <TableColumns>
+          <TableColumn @bind-Field="@context.ProductionName">
+          </TableColumn>
+
+          <TableColumn @bind-Field="@context.Required">
+          </TableColumn>
+          <TableColumn @bind-Field="@context.Purchased">
+          </TableColumn>
+        </TableColumns>
+
+      </Table>
+    </div>
+  </div>
+}

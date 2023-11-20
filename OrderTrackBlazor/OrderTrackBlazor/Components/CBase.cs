@@ -16,10 +16,16 @@ namespace OrderTrackBlazor.Components
     {
       DisposeAsync().GetAwaiter().GetResult();
     }
+    [Parameter]
+    public OnSaveDTO? OnSave { get; set; }
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync();
-      
+      if (OnSave != null)
+      {
+        OnSave.OnSaveFunc = SaveFunction;
+      }
+
     }
     public bool IsDisposed { get; protected set; }
     public virtual ValueTask DisposeAsync()
@@ -34,6 +40,11 @@ namespace OrderTrackBlazor.Components
       //  Context.Dispose();
       //}
       return ValueTask.CompletedTask;
+    }
+
+    public virtual Task<bool> SaveFunction()
+    {
+      return Task.FromResult(true);
     }
   }
 }

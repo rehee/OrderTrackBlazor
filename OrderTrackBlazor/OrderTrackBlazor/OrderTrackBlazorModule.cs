@@ -38,8 +38,9 @@ namespace OrderTrackBlazor
       context.Services!.AddScoped<IdentityRedirectManager>();
       context.Services!.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
-
-
+      context.Services!.AddScoped<IOrderService, OrderService>();
+      context.Services!.AddScoped<IPurchaseService, PurchaseService>();
+      context.Services!.AddScoped<ISummaryService, SummaryService>();
       context.Services!.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
       context.Services!.AddHostedService<SeedWorker>();
@@ -72,7 +73,7 @@ namespace OrderTrackBlazor
 
       // Add additional endpoints required by the Identity /Account Razor components.
       context.App!.MapAdditionalIdentityEndpoints();
-      
+
     }
   }
 }

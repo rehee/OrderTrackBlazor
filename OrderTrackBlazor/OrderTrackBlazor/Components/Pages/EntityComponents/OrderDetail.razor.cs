@@ -1,6 +1,7 @@
 using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
+using OrderTrackBlazor.Entities;
 
 namespace OrderTrackBlazor.Components.Pages.EntityComponents
 {
@@ -8,9 +9,10 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
   {
     [Parameter]
     public long? Id { get; set; }
-    [Parameter]
-    public OnSaveDTO? OnSave { get; set; }
+
     public List<OrderTrackProduction> Productions { get; set; } = new List<OrderTrackProduction>();
+    [Inject]
+    public IOrderService? orderService { get; set; }
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync();
@@ -19,18 +21,14 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       {
         Model = new OrderDTO
         {
+          Id = -1,
           Productions = new List<OrderProductionDTO>()
         };
       }
-      if (OnSave != null)
+      else
       {
-        OnSave.OnSaveFunc = async () =>
-        {
-
-          return true;
-        };
+        Model = await orderService.FindAsync(Id);
       }
-
       StateHasChanged();
     }
     public OrderDTO? Model { get; set; }
@@ -71,7 +69,73 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       await dialogService!.Show(dotion);
     }
 
+    public override async Task<bool> SaveFunction()
+    {
+      if (Model.IsCreate)
+      {
+        var order = new OrderTrackOrder
+        {
+          Note = Model.Note,
+          ShortNote = Model.ShortNote,
+          OrderDate = Model.OrderDate,
+        };
+        await Context.AddAsync<OrderTrackOrder>(order, CancellationToken.None);
+        foreach (var p in Model.Productions ?? new List<OrderProductionDTO>())
+        {
+          var p2 = new OrderTrackOrderItem()
+          {
+            OrderTrackOrderId = order.Id,
+            Order = order,
+            ProductionId = p.ProductionId,
+            Quantity = p.Quantity
+          };
+          await Context.AddAsync<OrderTrackOrderItem>(p2, CancellationToken.None);
+        }
+      }
+      else
+      {
+        var order = Context.Query<OrderTrackOrder>(false).FirstOrDefault(b => b.Id == Model.Id);
+        if (order != null)
+        {
+          order.Note = Model.Note;
+          order.ShortNote = Model.ShortNote;
+          order.OrderDate = Model.OrderDate;
+        }
+        foreach (var p in Model.Productions ?? new List<OrderProductionDTO>())
+        {
+          if (p.IsCreate)
+          {
+            var p2 = new OrderTrackOrderItem()
+            {
+              OrderTrackOrderId = order.Id,
+              Order = order,
+              ProductionId = p.ProductionId,
+              Quantity = p.Quantity
+            };
+            await Context.AddAsync<OrderTrackOrderItem>(p2, CancellationToken.None);
+          }
+          else
+          {
+            var p2 = Context.Query<OrderTrackOrderItem>(false).FirstOrDefault(b => b.Id == p.Id);
+            if (p2 != null)
+            {
+              p2.Quantity = p.Quantity;
+            }
+          }
+        }
 
+      }
+      try
+      {
+        await Context.SaveChangesAsync(null);
+      }
+      catch
+      {
+
+      }
+      StateHasChanged();
+      return true;
+    }
   }
 
 }
