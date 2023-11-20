@@ -48,17 +48,17 @@ namespace OrderTrackBlazor.Workers
         }
         await context.SaveChangesAsync(null, stoppingToken);
 
-        foreach (var p in DefaultValues.DefaultProduction)
-        {
-          if (context.Query<OrderTrackProduction>(true).Any(b => b.Name == p) != true)
-          {
-            await context.AddAsync<OrderTrackProduction>(new OrderTrackProduction()
-            {
-              Name = p
-            }, CancellationToken.None);
-          }
-        }
-        await context.SaveChangesAsync(null, stoppingToken);
+        //foreach (var p in DefaultValues.DefaultProduction)
+        //{
+        //  if (context.Query<OrderTrackProduction>(true).Any(b => b.Name == p) != true)
+        //  {
+        //    await context.AddAsync<OrderTrackProduction>(new OrderTrackProduction()
+        //    {
+        //      Name = p
+        //    }, CancellationToken.None);
+        //  }
+        //}
+        //await context.SaveChangesAsync(null, stoppingToken);
       }
       catch (Exception ex)
       {

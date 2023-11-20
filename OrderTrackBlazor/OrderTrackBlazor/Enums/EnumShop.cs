@@ -2,6 +2,7 @@
 {
   public enum EnumShop
   {
+    Boots,
     Tesco,
     Sainsbury,
     Asda,
