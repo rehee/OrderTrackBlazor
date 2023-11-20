@@ -4,5 +4,6 @@
   {
     public string? Name { get; set; }
     public virtual List<OrderTrackPurchaseItem>? PurchaseItems { get; set; }
+    public virtual List<OrderTrackDispatchItem>? DispatchItems { get; set; }
   }
 }

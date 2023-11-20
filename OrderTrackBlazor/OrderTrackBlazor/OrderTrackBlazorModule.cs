@@ -38,10 +38,12 @@ namespace OrderTrackBlazor
       context.Services!.AddScoped<IdentityRedirectManager>();
       context.Services!.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
+
+      context.Services!.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
       context.Services!.AddScoped<IOrderService, OrderService>();
       context.Services!.AddScoped<IPurchaseService, PurchaseService>();
       context.Services!.AddScoped<ISummaryService, SummaryService>();
-      context.Services!.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+      context.Services!.AddScoped<IStockService, StockService>();
 
       context.Services!.AddHostedService<SeedWorker>();
     }

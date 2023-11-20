@@ -1,0 +1,21 @@
+﻿@page "/stock"
+@rendermode InteractiveServer
+@inherits StockComponent
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+<PageTitle>stock</PageTitle>
+<Dialog></Dialog>
+<div>
+  <Table TItem="StockSummaryDTO" Items="@SummaryDTOs">
+    <TableColumns>
+      <TableColumn @bind-Field="@context.Name" Text="产品">
+      </TableColumn>
+
+      <TableColumn @bind-Field="@context.CurrentStock" Text="库存">
+      </TableColumn>
+
+
+    </TableColumns>
+
+  </Table>
+</div>
