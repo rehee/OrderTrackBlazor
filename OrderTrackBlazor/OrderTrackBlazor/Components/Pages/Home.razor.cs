@@ -16,6 +16,7 @@ namespace OrderTrackBlazor.Components.Pages
     public List<OrderTrackShop> Shops { get; set; } = new List<OrderTrackShop>();
 
     public List<PurchaseDTO> Purchase { get; set; } = new List<PurchaseDTO>();
+    public List<PurchaseListDTO> PurchaseItemList { get; set; } = new List<PurchaseListDTO>();
     [Inject]
     public IPurchaseService? purchaseService { get; set; }
     protected override async Task OnInitializedAsync()
@@ -28,7 +29,25 @@ namespace OrderTrackBlazor.Components.Pages
 
     public async Task Refresh()
     {
-      Purchase = await purchaseService.Query().OrderByDescending(b => b.PurchaseDate).ThenByDescending(b=>b.CreateDate).ToListAsync();
+      Purchase = await purchaseService.Query().OrderByDescending(b => b.PurchaseDate).ThenByDescending(b => b.CreateDate).ToListAsync();
+      PurchaseItemList.Clear();
+      foreach (var p in Purchase)
+      {
+        foreach (var item in (p.Productions ?? new List<OrderProductionDTO>()).OrderByDescending(b => b.CreateDate))
+        {
+          PurchaseItemList.Add(
+            new PurchaseListDTO
+            {
+              Id = p.Id,
+              ItemId = item.Id,
+              ProductionId = item.ProductionId,
+              PurchaseDate = p.PurchaseDate,
+              CreateDate = item.CreateDate,
+              ShopId = p.ShopId,
+              Quantity = item.Quantity,
+            });
+        }
+      }
       StateHasChanged();
     }
 

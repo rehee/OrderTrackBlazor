@@ -35,6 +35,7 @@ namespace OrderTrackBlazor.Services
              Id = b.Id,
              ProductionId = b.ProductionId,
              Quantity = b.Quantity,
+             CreateDate = b.CreateDate,
            }).ToList()
         };
     }

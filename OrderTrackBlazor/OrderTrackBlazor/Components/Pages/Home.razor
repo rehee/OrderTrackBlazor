@@ -7,7 +7,7 @@
 <Dialog></Dialog>
 <Button Color="Color.Primary" Icon="fa-solid fa-font-awesome" Text="购买" OnClickWithoutRender="()=>NormalShowDialog()" />
 <div>
-  <Table TItem="PurchaseDTO" Items="@Purchase">
+  <Table TItem="PurchaseListDTO" Items="@PurchaseItemList">
     <TableColumns>
       <TableColumn @bind-Field="@context.PurchaseDate">
         <Template Context="value">
@@ -19,6 +19,12 @@
           <span>@Shops.Where(b => b.Id == value.Value).Select(b => b.ShopType.ToString()).FirstOrDefault()</span>
         </Template>
       </TableColumn>
+      <TableColumn @bind-Field="@context.ProductionId">
+        <Template Context="value">
+          <span>@Productions.Where(b => b.Id == value.Value).Select(b => b.Name).FirstOrDefault()</span>
+        </Template>
+      </TableColumn>
+      <TableColumn @bind-Field="@context.Quantity" />
       <TableColumn @bind-Field="@context.Id" Text="操作">
         <Template Context="value">
           <Button Color="Color.Primary" Icon="fas fa-square-pen" Text="编辑"

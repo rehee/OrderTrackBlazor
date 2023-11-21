@@ -22,7 +22,7 @@
     @if (Model.Productions != null)
     {
       <div class="col-12">
-        <Table TItem="OrderProductionDTO" Items="@Model.Productions" butto>
+        <Table TItem="OrderProductionDTO" Items="@Model.Productions.OrderByDescending(b=>b.CreateDate)" butto>
           <TableColumns>
             <TableColumn @bind-Field="@context.ProductionId">
               <Template Context="value">
