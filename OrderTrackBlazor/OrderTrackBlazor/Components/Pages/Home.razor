@@ -2,45 +2,9 @@
 @rendermode InteractiveServer
 @inherits HomeComponent
 @using Microsoft.AspNetCore.Authorization
+
 @attribute [Authorize]
 <PageTitle>Home</PageTitle>
 <Dialog></Dialog>
-<Button Color="Color.Primary" Icon="fa-solid fa-font-awesome" Text="购买" OnClickWithoutRender="()=>NormalShowDialog()" />
-<div>
-  <Table TItem="PurchaseListDTO" Items="@PurchaseItemList">
-    <TableColumns>
-      <TableColumn @bind-Field="@context.PurchaseDate">
-        <Template Context="value">
-          <span>@value.Value?.ToString("dd/MM/yyyy")</span>
-        </Template>
-      </TableColumn>
-      <TableColumn @bind-Field="@context.ShopId">
-        <Template Context="value">
-          <span>@Shops.Where(b => b.Id == value.Value).Select(b => b.ShopType.ToString()).FirstOrDefault()</span>
-        </Template>
-      </TableColumn>
-      <TableColumn @bind-Field="@context.ProductionId">
-        <Template Context="value">
-          <span>@Productions.Where(b => b.Id == value.Value).Select(b => b.Name).FirstOrDefault()</span>
-        </Template>
-      </TableColumn>
-      <TableColumn @bind-Field="@context.Quantity" />
-      <TableColumn @bind-Field="@context.Id" Text="操作">
-        <Template Context="value">
-          <Button Color="Color.Primary" Icon="fas fa-square-pen" Text="编辑"
-                  OnClickWithoutRender="()=>NormalShowDialog(Purchase.FirstOrDefault(b=>b.Id==value.Value))" />
-        </Template>
-      </TableColumn>
 
-    </TableColumns>
-
-  </Table>
-</div>
-
-
-@* <TableColumn @bind-Field="@context.ShortNote" />
-      <TableColumn @bind-Field="@context.Id" Text="操作">
-        <Template Context="value">
-          <Button Color="Color.Primary" Icon="fas fa-square-pen" Text="编辑" OnClickWithoutRender="()=>CreateProduction(value.Value)" />
-        </Template>
-      </TableColumn> *@
+<PurchasePage></PurchasePage>

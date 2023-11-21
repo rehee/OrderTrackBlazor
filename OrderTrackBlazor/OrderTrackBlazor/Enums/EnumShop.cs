@@ -10,5 +10,7 @@
     Waitrose,
     Ocado,
     Boots,
+    Online,
+    Others,
   }
 }

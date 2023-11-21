@@ -6,6 +6,8 @@ namespace OrderTrackBlazor.Components
 {
   public class CBase : ComponentBase, IDisposable, IAsyncDisposable
   {
+    [Parameter]
+    public Func<Task>? ParentOnSave { get; set; }
     [Inject]
     protected IContext? Context { get; set; }
     [Inject]
