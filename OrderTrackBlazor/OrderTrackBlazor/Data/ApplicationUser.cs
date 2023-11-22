@@ -1,6 +1,9 @@
 using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Identity;
+using ReheeCmf.Commons;
+using ReheeCmf.Components.ChangeComponents;
 using ReheeCmf.ContextModule.Entities;
+using ReheeCmf.Entities;
 
 namespace OrderTrackBlazor.Data
 {
@@ -9,6 +12,16 @@ namespace OrderTrackBlazor.Data
   {
     public ApplicationUser()
     {
+    }
+  }
+
+  [EntityChangeTracker<ApplicationUser>]
+  public class BaseOrderEntityHandler : OrderTrackEntityHandler<ApplicationUser>
+  {
+    public override async Task BeforeCreateAsync(CancellationToken ct = default)
+    {
+      await base.BeforeCreateAsync(ct);
+      StatusException.Throw();
     }
   }
 
