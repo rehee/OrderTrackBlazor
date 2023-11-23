@@ -146,6 +146,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
                 continue;
               }
               production.Quantity = p.Quantity;
+              production.ProductionId = p.ProductionId;
             }
 
           }
