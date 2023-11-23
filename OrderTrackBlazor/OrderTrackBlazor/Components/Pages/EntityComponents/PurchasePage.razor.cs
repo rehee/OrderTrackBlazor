@@ -21,6 +21,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     {
       await base.OnInitializedAsync();
       Productions = await Context.Query<OrderTrackProduction>(true).ToListAsync();
+
       Shops = await Context.Query<OrderTrackShop>(true).ToListAsync();
       await Refresh();
     }
@@ -30,6 +31,13 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       Purchase = await
         (ProductionId.HasValue ? purchaseService.Query().Where(b => b.Productions.Any(b => b.ProductionId == ProductionId)) : purchaseService.Query())
         .OrderByDescending(b => b.PurchaseDate).ThenByDescending(b => b.CreateDate).ToListAsync();
+      foreach (var p in Purchase)
+      {
+        foreach (var item in p.Productions)
+        {
+          item.Parent = p;
+        }
+      }
       PurchaseItemList.Clear();
       foreach (var p in Purchase)
       {
@@ -88,7 +96,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
         },
         OnCloseAsync = async () =>
         {
-         
+
           System.Console.WriteLine("Close detected 2");
         },
       };

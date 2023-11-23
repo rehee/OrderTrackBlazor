@@ -29,10 +29,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
       await base.OnAfterRenderAsync(firstRender);
-      if (firstRender)
-      {
-
-      }
+      
     }
 
     public async Task CreateProduction(long? id = null)
@@ -41,7 +38,10 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
         new ProductionDTO() :
         await Context!.Query<OrderTrackProduction>(true).Where(b => b.Id == id).Select(b => new ProductionDTO() { Id = b.Id, ProductionName = b.Name }).FirstOrDefaultAsync();
       var items = Utility.GenerateEditorItems<ProductionDTO>();
+      if (id != null)
+      {
 
+      }
       var option = new EditDialogOption<ProductionDTO>()
       {
         Title = "edit dialog",
