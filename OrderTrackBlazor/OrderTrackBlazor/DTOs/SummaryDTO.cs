@@ -14,8 +14,8 @@
     public string? ProductionName { get; set; }
     public int Required { get; set; }
     public int Purchased { get; set; }
-
-    public int NeedToBuy { get => (Required - Purchased) > 0 ? (Required - Purchased) : 0; set { } }
+    public int Dispatched { get; set; }
+    public int NeedToBuy { get => (Required - Purchased - Dispatched) > 0 ? (Required - Purchased - Dispatched) : 0; set { } }
 
   }
 }

@@ -29,7 +29,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       Orders = await orderService.Query().OrderBy(b => b.OrderDate).ToListAsync();
       StateHasChanged();
     }
-    
+
 
     public async Task CreateProduction(long? id = null)
     {
@@ -58,6 +58,23 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       };
       await dialogService!.Show(dotion);
     }
+
+    public async Task DispatchList(long? id = null)
+    {
+      var comp = BootstrapDynamicComponent.CreateComponent<DispatchPage>(
+          new Dictionary<string, object?>()
+          {
+            ["Id"] = id,
+          });
+      var dotion = new DialogOption()
+      {
+        Title = "dispatch",
+        Size = Size.ExtraLarge,
+        Component = comp,
+      };
+      await dialogService!.Show(dotion);
+    }
+
     public OrderTrackProduction? Model { get; set; }
 
   }

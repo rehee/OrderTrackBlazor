@@ -3,5 +3,6 @@
   public interface ISummaryService
   {
     IQueryable<SummaryDTO> Query();
+    
   }
 }

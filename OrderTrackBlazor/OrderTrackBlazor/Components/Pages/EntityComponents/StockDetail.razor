@@ -1,0 +1,41 @@
+﻿@inherits StockDetailComponent
+<h1>@Name 库存</h1>
+<Table TItem="StockListDTO" Items="@StockLists">
+  <TableColumns>
+    <TableColumn @bind-Field="@context.IsPurchase" Text="(出/入)库">
+      <Template Context="value">
+        @if (value.Value == true)
+        {
+          <span>入库</span>
+        }
+        else
+        {
+          <span>出库</span>
+        }
+
+      </Template>
+    </TableColumn>
+    <TableColumn @bind-Field="@context.Date">
+      <Template Context="value">
+        <span>@value.Value?.ToString("dd/MM/yyyy")</span>
+      </Template>
+    </TableColumn>
+    @* <TableColumn @bind-Field="@context.Name" Text="产品"></TableColumn> *@
+    <TableColumn @bind-Field="@context.RowId" Text="来源">
+      <Template Context="value">
+        @{
+          var row = StockLists.FirstOrDefault(b => b.RowId == value.Value);
+          if (row.IsPurchase == true)
+          {
+            <span>@row.Shop</span>
+          }
+          else
+          {
+            <span>@row.OrderShortNote</span>
+          }
+        }
+      </Template>
+    </TableColumn>
+    <TableColumn @bind-Field="@context.Number" Text="数量"></TableColumn>
+  </TableColumns>
+</Table>

@@ -37,10 +37,11 @@ namespace OrderTrackBlazor.Components.Pages
     public async Task NormalShowDialog(long? productionId)
     {
 
-      var comp = BootstrapDynamicComponent.CreateComponent<PurchasePage>(
+      var comp = BootstrapDynamicComponent.CreateComponent<StockDetail>(
           new Dictionary<string, object?>()
           {
             ["ProductionId"] = productionId,
+            ["Name"] = SummaryDTOs.Where(b => b.Id == productionId).Select(b => b.Name).FirstOrDefault()
           });
       string chineseString = DefaultValues.PTitle;
       System.Console.WriteLine(DefaultValues.PTitle);

@@ -1,7 +1,7 @@
 ﻿@page "/entity/order"
 @rendermode InteractiveServer
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize]
+@* @attribute [Authorize] *@
 @inherits OrderPageComponent
 
 
@@ -16,7 +16,7 @@
 else
 {
   <div>
-    <Table TItem="OrderDTO" Items="@Orders" butto>
+    <Table TItem="OrderDTO" Items="@Orders">
       <TableColumns>
         <TableColumn @bind-Field="@context.OrderDate">
           <Template Context="value">
@@ -27,6 +27,7 @@ else
         <TableColumn @bind-Field="@context.Id" Text="操作">
           <Template Context="value">
             <Button Color="Color.Primary" Icon="fas fa-square-pen" Text="编辑" OnClickWithoutRender="()=>CreateProduction(value.Value)" />
+            <Button Color="Color.Secondary" Icon="fas fa-square-pen" Text="出库" OnClickWithoutRender="()=>DispatchList(value.Value)" />
           </Template>
         </TableColumn>
       </TableColumns>
