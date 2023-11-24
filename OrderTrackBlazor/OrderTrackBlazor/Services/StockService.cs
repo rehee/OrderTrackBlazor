@@ -28,7 +28,7 @@ namespace OrderTrackBlazor.Services
     public IQueryable<StockListDTO> QueryDetail()
     {
       var purchaesQuery =
-        from purchaes in context.Query<OrderTrackPurchaseItem>(true)
+        from purchaes in context.Query<OrderTrackPurchaseItem>(true).Where(b => b.Quantity != 0)
         select new StockListDTO
         {
           Pk = purchaes.Id,
@@ -42,7 +42,7 @@ namespace OrderTrackBlazor.Services
           OrderShortNote = ""
         };
       var dispatchQuery =
-        from dispatch in context.Query<OrderTrackDispatchItem>(true)
+        from dispatch in context.Query<OrderTrackDispatchItem>(true).Where(b => b.Quantity != 0)
         join record in context.Query<OrderTrackDispatchRecord>(true)
           .Where(b => b.Status != EnumDispatchStatus.Error) on dispatch.DispatchRecordId equals record.Id
         select new StockListDTO

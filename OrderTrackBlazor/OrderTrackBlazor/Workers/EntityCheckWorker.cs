@@ -18,7 +18,7 @@ namespace OrderTrackBlazor.Workers
       {
         while (true)
         {
-          
+
           await Task.Delay(1000 * 60);
           using var scope = sp.CreateScope();
           using var context = scope.ServiceProvider.GetService<IContext>();
@@ -38,7 +38,7 @@ namespace OrderTrackBlazor.Workers
           foreach (var b in dispatchs)
           {
 
-            context.Delete<OrderTrackDispatchRecord>(d);
+            context.Delete<OrderTrackDispatchRecord>(b);
           }
           await context.SaveChangesAsync(null);
         }
