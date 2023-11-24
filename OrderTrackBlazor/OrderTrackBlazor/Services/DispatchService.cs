@@ -106,6 +106,7 @@ namespace OrderTrackBlazor.Services
       return new DispatchDetailDTO
       {
         OrderId = orderId,
+        DispatchDate = DateTime.UtcNow,
         Items = order.Items?.Select(b => new DispatchDetailItemDTO
         {
           Number = 0,

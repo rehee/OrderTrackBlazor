@@ -5,20 +5,20 @@
 @foreach (var item in Dispatches)
 {
   <div class="row g-3">
-    <div class="col-3 col-sm-6">
+    <div class="col-6 col-sm-6">
       出库日期 <span>@item.DispatchDate?.ToString(DefaultValues.DatFormat)</span>
 
 
     </div>
-    <div class="col-3 col-sm-6">
+    <div class="col-6 col-sm-6">
       状态 <span>@item.Status</span>
     </div>
-    <div class="col-3 col-sm-6">
+    <div class="col-6 col-sm-6">
       结账日期 <span>@item.IncomeDate?.ToString(DefaultValues.DatFormat)</span>
 
 
     </div>
-    <div class="col-3 col-sm-6">
+    <div class="col-6 col-sm-6">
       收入 <span>@item.Income</span>
     </div>
     <div class="col-12">
