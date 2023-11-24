@@ -7,11 +7,10 @@
 <Dialog></Dialog>
 @foreach (var summary in SummaryDTOs)
 {
+  <hr />
   <div>
-    <div>
-      @summary.OrderDate?.ToString("dd/MM/yyyy"),
-      @summary.ShortNote
-    </div>
+    订单日期: @summary.OrderDate?.ToString("dd/MM/yyyy"),
+    备注: @summary.ShortNote
     <div>
       <Table TItem="SummaryProductionDTO" Items="@summary.Productions">
         <TableColumns>
@@ -24,10 +23,10 @@
           </TableColumn>
           <TableColumn @bind-Field="@context.Dispatched" Text="已发货" Width="50">
           </TableColumn>
-          
+
           <TableColumn @bind-Field="@context.NeedToBuy" Text="需采购" Width="50">
           </TableColumn>
-          
+
         </TableColumns>
 
       </Table>
