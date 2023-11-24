@@ -93,7 +93,7 @@ namespace OrderTrackBlazor.Services
     public async Task<DispatchDetailDTO?> GetNewDispatchDetailDTO(long orderId)
     {
 
-      var order = context.Query<OrderTrackOrder>(true).Where(b => b.Id == orderId).FirstOrDefault();
+      var order = context.Query<OrderTrackOrder>(true).Include(b => b.Items).ThenInclude(b => b.Production).Where(b => b.Id == orderId).FirstOrDefault();
       if (order == null)
       {
         return new DispatchDetailDTO()
