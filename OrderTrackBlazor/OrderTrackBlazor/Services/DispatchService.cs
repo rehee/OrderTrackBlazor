@@ -29,7 +29,7 @@ namespace OrderTrackBlazor.Services
       {
         var recordItem = new OrderTrackDispatchItem
         {
-          PurchaseRecordId = record.Id,
+          DispatchRecordId = record.Id,
           DispatchRecord = record,
           ProductionId = item.ProductionId,
           Quantity = item.Number,
@@ -77,6 +77,7 @@ namespace OrderTrackBlazor.Services
           Id = dispatch.Id,
           DispatchDate = dispatch.DispatchDate,
           IncomeDate = dispatch.IncomeDate,
+          CreateDate = dispatch.CreateDate,
           OrderId = dispatch.OrderTrackOrderId,
           Status = dispatch.Status,
           Income = dispatch.Income,

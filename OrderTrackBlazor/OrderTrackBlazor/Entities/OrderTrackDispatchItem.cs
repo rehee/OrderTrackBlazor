@@ -5,7 +5,7 @@ namespace OrderTrackBlazor.Entities
   public class OrderTrackDispatchItem : BaseOrderTrackEntity
   {
     [ForeignKey(nameof(OrderTrackDispatchRecord))]
-    public long? PurchaseRecordId { get; set; }
+    public long? DispatchRecordId { get; set; }
     public virtual OrderTrackDispatchRecord? DispatchRecord { get; set; }
 
 

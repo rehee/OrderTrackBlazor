@@ -23,20 +23,21 @@ namespace OrderTrackBlazor.Workers
           using var scope = sp.CreateScope();
           using var context = scope.ServiceProvider.GetService<IContext>();
           var current = DateTime.UtcNow;
-          var nextCurrent = DateTime.UtcNow.AddMinutes(15);
+          var nextCurrent = DateTime.UtcNow.AddMinutes(-15);
 
           var dispatchs = await context.Query<OrderTrackDispatchRecord>(false)
             .Where(b =>
               (b.SoftDeleteUntil != null && b.SoftDeleteUntil < current) ||
               (b.Status == EnumDispatchStatus.Error &&
                 (
-                  (b.UpdateDate != null && b.UpdateDate > nextCurrent) ||
-                  b.CreateDate > nextCurrent)
+                  (b.UpdateDate != null && b.UpdateDate < nextCurrent) ||
+                  b.CreateDate < nextCurrent)
                 )
 
             ).ToListAsync();
-          foreach (var d in dispatchs)
+          foreach (var b in dispatchs)
           {
+
             context.Delete<OrderTrackDispatchRecord>(d);
           }
           await context.SaveChangesAsync(null);

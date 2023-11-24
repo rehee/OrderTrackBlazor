@@ -15,7 +15,8 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     public List<DispatchDetailDTO> Dispatches { get; set; } = new List<DispatchDetailDTO>();
     public async Task RefreshPage()
     {
-      Dispatches = await dispatchService.GetDispatch(Id ?? 0).ToListAsync();
+      Dispatches = await dispatchService.GetDispatch(Id ?? 0)
+        .OrderByDescending(b=>b.DispatchDate).ThenByDescending(b=>b.CreateDate).ToListAsync();
       StateHasChanged();
     }
     protected override async Task OnInitializedAsync()

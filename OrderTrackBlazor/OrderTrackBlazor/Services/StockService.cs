@@ -43,15 +43,17 @@ namespace OrderTrackBlazor.Services
         };
       var dispatchQuery =
         from dispatch in context.Query<OrderTrackDispatchItem>(true)
+        join record in context.Query<OrderTrackDispatchRecord>(true)
+          .Where(b => b.Status != EnumDispatchStatus.Error) on dispatch.DispatchRecordId equals record.Id
         select new StockListDTO
         {
           Pk = dispatch.Id,
           Id = dispatch.ProductionId,
           CreateDate = dispatch.CreateDate,
-          Date = dispatch.DispatchRecord.DispatchDate,
+          Date = record.DispatchDate,
           IsPurchase = false,
           Number = dispatch.Quantity,
-          OrderShortNote = dispatch.DispatchRecord.Order.ShortNote,
+          OrderShortNote = record.Order.ShortNote,
           //Name = dispatch.Production.Name,
           Shop = EnumShop.Others
         };

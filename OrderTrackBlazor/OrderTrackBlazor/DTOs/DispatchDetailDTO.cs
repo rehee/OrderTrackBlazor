@@ -5,6 +5,7 @@
     public long? Id { get; set; }
     public long? OrderId { get; set; }
     public DateTime? DispatchDate { get; set; }
+    public DateTime? CreateDate { get; set; }
     public DateTime? IncomeDate { get; set; }
     public EnumDispatchStatus? Status { get; set; }
     public decimal? Income { get; set; }
