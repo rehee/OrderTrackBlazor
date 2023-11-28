@@ -1,4 +1,4 @@
-name: ProductionAction
+name: PreviewAction
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -12,17 +12,12 @@ on:
          branch:
           # Friendly description to be shown in the UI instead of 'name'
           description: 'Branch name can only select production'
-          default: 'production' # 默认分支
+          default: 'main' # 默认分支
           # Default value if no value is explicitly provided
           # Input has to be provided for the workflow to run
           required: false
           # The data type of the input
           type: string
-  # push:
-  #   branches: [ "production" ]
-  #   # Publish semver tags as releases.
-  # pull_request:
-  #   branches: [ "production" ]
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -43,8 +38,8 @@ jobs:
       id-token: write
 
     steps:
-      
-      
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
@@ -105,19 +100,11 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
-
   trigger-webhook-preview:    
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Debug
-        run: |
-          echo "Webhook URL: ${{ secrets.AZURE_WEBAPP_URL_PREVIEW  }}"
-          echo "Event name: ${{ github.event_name }}"
-          echo "Event ref: ${{ github.ref }}"
-        if: always()
-
       - name: Trigger Azure Web App Webhook Preview
         run: |
-          curl -X POST -d {} '${{ secrets.AZURE_WEBAPP_URL_PRODUCTION }}'
-        if: success()        
+          curl -X POST -d {} '${{ secrets.AZURE_WEBAPP_URL_PREVIEW }}'
+        if: success()  
