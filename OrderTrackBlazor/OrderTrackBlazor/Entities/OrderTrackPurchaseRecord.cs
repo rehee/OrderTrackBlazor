@@ -10,5 +10,11 @@ namespace OrderTrackBlazor.Entities
 
     public DateTime? PurchaseDate { get; set; }
     public virtual List<OrderTrackPurchaseItem>? Items { get; set; }
+
+    [ForeignKey(nameof(OrderTrackOrder))]
+    public long? OrderId { get; set; }
+    public virtual OrderTrackOrder? Order { get; set; }
+
+    public decimal? Price { get; set; }
   }
 }

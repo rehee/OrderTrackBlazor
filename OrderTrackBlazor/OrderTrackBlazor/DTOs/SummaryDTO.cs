@@ -4,6 +4,7 @@
   {
     public long? OrderId { get; set; }
     public DateTime? OrderDate { get; set; }
+    public DateTime? OrderCreateDate { get; set; }
     public string? ShortNote { get; set; }
     public IEnumerable<SummaryProductionDTO> Productions { get; set; }
   }

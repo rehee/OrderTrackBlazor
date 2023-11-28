@@ -1,0 +1,90 @@
+﻿@page "/summary/{Id:long}"
+@rendermode InteractiveServer
+@inherits OrderSummaryDetailComponent
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+<PageTitle>Summary @Id</PageTitle>
+
+  @if (Summary != null)
+{
+  <div>
+    <Button Color="Color.Primary" Icon="fa-solid fa-font-awesome" Text="采购" OnClick="()=>Shopping()" />
+  </div>
+  <div>
+    订单日期: @Summary.OrderDate?.ToString("dd/MM/yyyy"),
+    备注: @Summary.ShortNote
+
+
+  </div>
+  <div>
+    <Table TItem="SummaryProductionDTO" Items="@Summary.Productions">
+      <TableColumns>
+        <TableColumn @bind-Field="@context.ProductionName" Text="产品" Width="300">
+        </TableColumn>
+
+        <TableColumn @bind-Field="@context.Required" Text="总需求" Width="50">
+        </TableColumn>
+        <TableColumn @bind-Field="@context.Purchased" Text="已采购" Width="50">
+        </TableColumn>
+        <TableColumn @bind-Field="@context.Dispatched" Text="已发货" Width="50">
+        </TableColumn>
+
+        <TableColumn @bind-Field="@context.NeedToBuy" Text="需采购" Width="50">
+        </TableColumn>
+
+      </TableColumns>
+
+    </Table>
+  </div>
+  <div style="margin-top:20px;">
+  </div>
+  <div>
+    采购详情
+  </div>
+  foreach (var record in OrderPurchaseSummaryDTO)
+  {
+    <hr />
+    <div class="row g-3">
+      <div class="col-12">
+        <Button Color="Color.Success" Text="编辑" OnClick="()=>Shopping(record.Id)" />
+      </div>
+      <div class="col-6 col-sm-6">
+        采购时间: <span>@record.PurchaseDate?.ToString(DefaultValues.DatFormat)</span>
+      </div>
+      @* <div class="col-6 col-sm-6">
+  <Select Items="StatusItem" OnSelectedItemChanged="OnItemChanged" @bind-Value="SelectedStatusItem"
+  ShowLabel="true"
+  DisplayText="状态"></Select>
+  </div>
+  <div class="col-6 col-sm-6">
+  <DateTimePicker @bind-Value="@Model.IncomeDate" Format="dd/MM/yyyy" ShowLabel="true" DisplayText="结账日期" />
+  </div> *@
+      <div class="col-6 col-sm-6">
+        采购价格: <span>@record.Price</span>
+      </div>
+      
+      <Table TItem="OrderPurchaseItemDTO" Items="@record.Items">
+        <TableColumns>
+          <TableColumn @bind-Field="@context.ProductionName" Text="产品">
+
+          </TableColumn>
+          <TableColumn @bind-Field="@context.Id" Text="数量" Width="200">
+            <Template Context="value">
+              @{
+                var item = record.Items.FirstOrDefault(b => b.Id == value.Value);
+              }
+              <BootstrapInputNumber @bind-Value="item.Quantity"
+                                    ShowLabel="false" IsDisabled="true" />
+            </Template>
+          </TableColumn>
+
+        </TableColumns>
+
+      </Table>
+    </div>
+
+
+
+  }
+}
+<Dialog></Dialog>

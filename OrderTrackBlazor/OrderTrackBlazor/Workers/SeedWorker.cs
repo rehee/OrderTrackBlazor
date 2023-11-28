@@ -30,7 +30,7 @@ namespace OrderTrackBlazor.Workers
       try
       {
         using var context = scope.ServiceProvider.GetService<IContext>();
-        
+
         var db = context.Context as ApplicationDbContext;
         db?.Database.Migrate();
         Array enumValues = Enum.GetValues(typeof(EnumShop));
@@ -48,7 +48,7 @@ namespace OrderTrackBlazor.Workers
           }
         }
         await context.SaveChangesAsync(null, stoppingToken);
-
+        
         //foreach (var p in DefaultValues.DefaultProduction)
         //{
         //  if (context.Query<OrderTrackProduction>(true).Any(b => b.Name == p) != true)

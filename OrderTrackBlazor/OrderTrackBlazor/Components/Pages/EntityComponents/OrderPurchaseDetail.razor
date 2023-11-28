@@ -1,0 +1,77 @@
+﻿@inherits OrderPurchaseDetailComponent
+@if (Model != null)
+{
+  <div class="row g-3">
+    <div class="col-6 col-sm-6">
+      <DateTimePicker @bind-Value="@Model.PurchaseDate" Format="dd/MM/yyyy" ShowLabel="true" DisplayText="采购日期" />
+
+
+    </div>
+    <div class="col-12 col-sm-6">
+      <Select Items="StatusItem" @bind-Value="SelectedStatusItem" OnSelectedItemChanged="OnItemChanged" ShowLabel="true" DisplayText="选择超市"> </Select>
+    </div>
+    @* <div class="col-6 col-sm-6">
+  <Select Items="StatusItem" OnSelectedItemChanged="OnItemChanged" @bind-Value="SelectedStatusItem"
+  ShowLabel="true"
+  DisplayText="状态"></Select>
+  </div>
+  <div class="col-6 col-sm-6">
+  <DateTimePicker @bind-Value="@Model.IncomeDate" Format="dd/MM/yyyy" ShowLabel="true" DisplayText="结账日期" />
+  </div> *@
+    <div class="col-6 col-sm-6">
+      <BootstrapInputNumber @bind-Value="Model.Price"
+                            ShowLabel="true"
+                            DisplayText="采购价格" />
+    </div>
+    <div class="col-12">
+      <div class="row g-3">
+        <div class="col-6 col-sm-6">
+        </div>
+      </div>
+      @if (Id == null)
+      {
+        <Table TItem="OrderPurchaseItemDTO" Items="@Model.Items">
+          <TableColumns>
+            <TableColumn @bind-Field="@context.ProductionName" Text="产品">
+
+            </TableColumn>
+            <TableColumn @bind-Field="@context.RowId" Text="数量" Width="200">
+              <Template Context="value">
+                @{
+                  var item = Model.Items.FirstOrDefault(b => b.RowId == value.Value);
+                }
+                <BootstrapInputNumber @bind-Value="item.Quantity"
+                                      ShowLabel="false" />
+              </Template>
+            </TableColumn>
+
+          </TableColumns>
+
+        </Table>
+      }
+      else
+      {
+        <Table TItem="OrderPurchaseItemDTO" Items="@Model.EditOrderItem">
+          <TableColumns>
+            <TableColumn @bind-Field="@context.ProductionName" Text="产品">
+
+            </TableColumn>
+            <TableColumn @bind-Field="@context.RowId" Text="数量" Width="200">
+              <Template Context="value">
+                @{
+                  var item = Model.EditOrderItem.FirstOrDefault(b => b.RowId == value.Value);
+                }
+                <BootstrapInputNumber @bind-Value="item.Quantity"
+                                      ShowLabel="false" />
+              </Template>
+            </TableColumn>
+
+          </TableColumns>
+
+        </Table>
+      }
+
+    </div>
+  </div>
+
+}
