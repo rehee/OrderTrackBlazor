@@ -12,12 +12,10 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     [Parameter]
     public List<OrderTrackProduction>? Productions { get; set; }
     [Parameter]
-    public List<OrderTrackShop>? Shops { get; set; }
+    public IEnumerable<SelectedItem> Shops { get; set; } = new List<SelectedItem>();
     [Parameter]
     public PurchaseDTO? DTO { get; set; }
     public PurchaseDTO? Model { get; set; }
-
-    public List<SelectedItem> ShopList { get; set; } = new List<SelectedItem>();
     public SelectedItem? SelectedShop { get; set; }
     public async Task SelectShop(SelectedItem item)
     {
@@ -40,10 +38,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync();
-      ShopList = (new List<SelectedItem>() { new SelectedItem("", "select") })
-        .Concat(
-        Shops.Select(b => new SelectedItem(b.Id.ToString(), b.ShopType.ToString()))
-        ).ToList();
+
 
 
       Model = DTO == null ? new PurchaseDTO
@@ -51,7 +46,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
         PurchaseDate = DateTime.UtcNow.Date,
         Productions = new List<OrderProductionDTO>()
       } : DTO;
-      SelectedShop = ShopList.FirstOrDefault(b => b.Value == Model?.ShopId?.ToString());
+      SelectedShop = Shops.FirstOrDefault(b => b.Value == Model?.ShopId?.ToString());
 
       StateHasChanged();
     }

@@ -13,7 +13,7 @@
       </TableColumn>
       <TableColumn @bind-Field="@context.ShopId">
         <Template Context="value">
-          <span>@Shops.Where(b => b.Id == value.Value).Select(b => b.ShopType.ToString()).FirstOrDefault()</span>
+          <span>@Shops.Where(b => b.Value == value.Value.ToString()).Select(b => b.Text.ToString()).FirstOrDefault()</span>
         </Template>
       </TableColumn>
       <TableColumn @bind-Field="@context.ProductionId">
@@ -31,7 +31,7 @@
           </Template>
         </TableColumn>
       }
-      
+
 
     </TableColumns>
 

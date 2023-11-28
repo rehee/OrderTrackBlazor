@@ -13,12 +13,24 @@
 else
 {
   <div>
+    <Button Color="Color.Primary" Text="添加shop" OnClick="()=>NormalShowDialog()" />
+  </div>
+  <div>
     <Table TItem="OrderTrackShop" Items="@Shops">
       <TableColumns>
-        <TableColumn @bind-Field="@context.ShopType" Width="180" />
+        <TableColumn @bind-Field="@context.ShopType" />
+        <TableColumn @bind-Field="@context.ShopName" />
         <TableColumn @bind-Field="@context.PostCode" />
         <TableColumn @bind-Field="@context.Note" />
+        <TableColumn @bind-Field="@context.DisplayOrder" />
+        <TableColumn @bind-Field="@context.Id">
+          <Template Context="value">
+            <Button Color="Color.Success" Text="修改" OnClick="()=>NormalShowDialog(value.Value)" />
+          </Template>
+        </TableColumn>
+
       </TableColumns>
     </Table>
   </div>
+  <Dialog></Dialog>
 }

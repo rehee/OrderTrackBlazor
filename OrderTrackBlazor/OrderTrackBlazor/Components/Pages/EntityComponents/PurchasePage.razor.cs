@@ -11,18 +11,20 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     [Parameter]
     public long? ProductionId { get; set; }
     public List<OrderTrackProduction> Productions { get; set; } = new List<OrderTrackProduction>();
-    public List<OrderTrackShop> Shops { get; set; } = new List<OrderTrackShop>();
+    public IEnumerable<SelectedItem> Shops { get; set; } = new List<SelectedItem>();
 
     public List<PurchaseDTO> Purchase { get; set; } = new List<PurchaseDTO>();
     public List<PurchaseListDTO> PurchaseItemList { get; set; } = new List<PurchaseListDTO>();
     [Inject]
     public IPurchaseService? purchaseService { get; set; }
+    [Inject]
+    public IShopService? shopService { get; set; }
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync();
       Productions = await Context.Query<OrderTrackProduction>(true).ToListAsync();
 
-      Shops = await Context.Query<OrderTrackShop>(true).ToListAsync();
+      Shops = await shopService.GetShopSelected();
       await Refresh();
     }
 

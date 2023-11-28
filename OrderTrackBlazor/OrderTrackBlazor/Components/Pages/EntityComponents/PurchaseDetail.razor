@@ -12,7 +12,7 @@
       <DateTimePicker @bind-Value="@Model.PurchaseDate" Format="dd/MM/yyyy" ShowLabel="true" DisplayText="购物日期" />
     </div>
     <div class="col-12 col-sm-6">
-      <Select Items="ShopList" @bind-Value="SelectedShop" OnSelectedItemChanged="SelectShop" ShowLabel="true" DisplayText="选择超市"> </Select>
+      <Select Items="Shops" @bind-Value="SelectedShop" OnSelectedItemChanged="SelectShop" ShowLabel="true" DisplayText="选择超市"> </Select>
     </div>
 
     <div class="col-12">

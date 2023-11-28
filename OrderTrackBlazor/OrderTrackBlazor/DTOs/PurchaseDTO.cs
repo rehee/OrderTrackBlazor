@@ -14,6 +14,7 @@ namespace OrderTrackBlazor.DTOs
     public DateTime? PurchaseDate { get; set; }
     public DateTime? CreateDate { get; set; }
     public long? ShopId { get; set; }
+    
     public long? ItemId { get; set; }
     public long? ProductionId { get; set; }
     public int Quantity { get; set; }

@@ -1,0 +1,26 @@
+﻿@inherits ShopDetailComponent
+@if (Shop != null)
+{
+  <div class="row g-3">
+    <div class="col-12 ">
+      <span>@Shop.ShopType.ToString()</span>
+    </div>
+    <div class="col-12">
+      <BootstrapInput TValue="string"
+                      @bind-Value="Shop.ShopName"
+                      ShowLabel="true"
+                      DisplayText="商店名" />
+    </div>
+    <div class="col-12">
+      <BootstrapInputNumber @bind-Value="Shop.DisplayOrder"
+                            ShowLabel="true"
+                            DisplayText="排序" />
+
+    </div>
+    <div class="col-12">
+      <Switch @bind-Value="DeleteOnSave" OnColor="Color.Danger" ShowLabel="true" DisplayText="是否删除"></Switch>
+    </div>
+  </div>
+}
+
+
