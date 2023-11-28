@@ -1,7 +1,7 @@
 ﻿@inherits PurchasePageComponent
 @if (ProductionId.HasValue != true)
 {
-  <Button Color="Color.Primary" Icon="fa-solid fa-font-awesome" Text="购买" OnClick="()=>NormalShowDialog()" />
+  @* <Button Color="Color.Primary" Icon="fa-solid fa-font-awesome" Text="购买" OnClick="()=>NormalShowDialog()" /> *@
 }
 <div>
   <Table TItem="PurchaseListDTO" Items="@PurchaseItemList">

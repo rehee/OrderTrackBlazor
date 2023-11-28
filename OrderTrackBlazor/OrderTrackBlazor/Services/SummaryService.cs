@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using OrderTrackBlazor.Components.Pages.EntityComponents;
 using ReheeCmf.Contexts;
 
 namespace OrderTrackBlazor.Services
@@ -111,7 +112,8 @@ namespace OrderTrackBlazor.Services
           Price = purchase.Price,
           ShopId = purchase.ShopId,
           Items = currentItem,
-          OrderItems = orderItem
+          OrderItems = orderItem,
+          ShopName = purchase.Shop.ShopName
         };
     }
 

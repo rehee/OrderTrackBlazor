@@ -7,6 +7,7 @@
     public DateTime? PurchaseDate { get; set; }
     public DateTime? CreateDate { get; set; }
     public long? ShopId { get; set; }
+    public string? ShopName { get; set; } 
     public decimal? Price { get; set; }
     public IEnumerable<OrderPurchaseItemDTO>? Items { get; set; }
     public IEnumerable<OrderPurchaseItemDTO>? OrderItems { get; set; }

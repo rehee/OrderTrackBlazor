@@ -48,21 +48,16 @@
       <div class="col-12">
         <Button Color="Color.Success" Text="编辑" OnClick="()=>Shopping(record.Id)" />
       </div>
-      <div class="col-6 col-sm-6">
+      <div class="col-12 col-md-4">
         采购时间: <span>@record.PurchaseDate?.ToString(DefaultValues.DatFormat)</span>
       </div>
-      @* <div class="col-6 col-sm-6">
-  <Select Items="StatusItem" OnSelectedItemChanged="OnItemChanged" @bind-Value="SelectedStatusItem"
-  ShowLabel="true"
-  DisplayText="状态"></Select>
-  </div>
-  <div class="col-6 col-sm-6">
-  <DateTimePicker @bind-Value="@Model.IncomeDate" Format="dd/MM/yyyy" ShowLabel="true" DisplayText="结账日期" />
-  </div> *@
-      <div class="col-6 col-sm-6">
+      <div class="col-12 col-md-4">
+        采购超市: <span>@record.ShopName</span>
+      </div>
+      <div class="col-12 col-md-4">
         采购价格: <span>@record.Price</span>
       </div>
-      
+
       <Table TItem="OrderPurchaseItemDTO" Items="@record.Items">
         <TableColumns>
           <TableColumn @bind-Field="@context.ProductionName" Text="产品">
@@ -82,9 +77,11 @@
 
       </Table>
     </div>
-
-
-
   }
+  <div class="row g-3">
+    <div class="col-12">
+      总采购价格: @OrderPurchaseSummaryDTO.Sum(b => b.Price)
+    </div>
+  </div>
 }
 <Dialog></Dialog>
