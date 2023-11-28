@@ -7,5 +7,6 @@ namespace OrderTrackBlazor.Entities
     public EnumShop ShopType { get; set; }
     public string? PostCode { get; set; }
     public string? Note { get; set; }
+    public int DisplayOrder { get; set; }
   }
 }

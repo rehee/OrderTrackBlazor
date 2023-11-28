@@ -12,5 +12,6 @@
     Boots,
     Online,
     Others,
+    IceLand
   }
 }
