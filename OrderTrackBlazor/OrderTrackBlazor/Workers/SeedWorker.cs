@@ -33,33 +33,7 @@ namespace OrderTrackBlazor.Workers
 
         var db = context.Context as ApplicationDbContext;
         db?.Database.Migrate();
-        Array enumValues = Enum.GetValues(typeof(EnumShop));
-        foreach (var e in enumValues)
-        {
-          if (e is EnumShop ev)
-          {
-            if (!db.OrderTrackShops.Any(b => b.ShopType == ev && String.IsNullOrEmpty(b.PostCode)))
-            {
-              await db.AddAsync<OrderTrackShop>(new OrderTrackShop()
-              {
-                ShopType = ev
-              }, stoppingToken);
-            }
-          }
-        }
-        await context.SaveChangesAsync(null, stoppingToken);
         
-        //foreach (var p in DefaultValues.DefaultProduction)
-        //{
-        //  if (context.Query<OrderTrackProduction>(true).Any(b => b.Name == p) != true)
-        //  {
-        //    await context.AddAsync<OrderTrackProduction>(new OrderTrackProduction()
-        //    {
-        //      Name = p
-        //    }, CancellationToken.None);
-        //  }
-        //}
-        //await context.SaveChangesAsync(null, stoppingToken);
       }
       catch (Exception ex)
       {

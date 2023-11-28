@@ -94,7 +94,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       {
         var purcher = new OrderTrackPurchaseRecord()
         {
-          PurchaseDate = Model.PurchaseDate,
+          PurchaseDate = Model.PurchaseDate?.Date,
           ShopId = Model.ShopId,
         };
         await Context.AddAsync<OrderTrackPurchaseRecord>(purcher, CancellationToken.None);
@@ -116,7 +116,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
           Context.Query<OrderTrackPurchaseRecord>(false).FirstOrDefault(b => b.Id == Model.Id);
         if (purcher != null)
         {
-          purcher.PurchaseDate = Model.PurchaseDate;
+          purcher.PurchaseDate = Model.PurchaseDate?.Date;
           purcher.ShopId = Model.ShopId;
 
           foreach (var p in Model.Productions ?? new List<OrderProductionDTO>())

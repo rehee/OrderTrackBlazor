@@ -17,7 +17,7 @@
     public DateTime? Date { get; set; }
     public DateTime? CreateDate { get; set; }
     public int? Number { get; set; }
-    public EnumShop? Shop { get; set; }
+    public string? Shop { get; set; }
     public string? OrderShortNote { get; set; }
   }
 }

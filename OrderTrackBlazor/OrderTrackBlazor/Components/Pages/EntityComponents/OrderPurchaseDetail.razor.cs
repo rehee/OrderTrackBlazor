@@ -14,12 +14,12 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     [Parameter]
     public long? Id { get; set; }
     [Parameter]
-    public List<OrderTrackShop> Shops { get; set; } = new List<OrderTrackShop>();
+    public IEnumerable<SelectedItem> Shops { get; set; } = new List<SelectedItem>();
 
     [Inject]
     public ISummaryService? summaryService { get; set; }
     public OrderPurchaseSummaryDTO? Model { get; set; }
-    public List<SelectedItem> StatusItem { get; set; } = new List<SelectedItem>();
+    
     public SelectedItem? SelectedStatusItem { get; set; }
     public Task OnItemChanged(SelectedItem item)
     {
@@ -32,12 +32,6 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync();
-      StatusItem.Add(new SelectedItem("", "selected"));
-
-      foreach (var shop in Shops)
-      {
-        StatusItem.Add(new SelectedItem(shop.Id.ToString(), shop.ShopType.ToString()));
-      }
       if (Id == null)
       {
         Model = await summaryService!.NewOrderPurchaseSummaryDTO(OrderId ?? 0);
@@ -45,7 +39,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       else
       {
         Model = await summaryService!.FindOrderPurchaseSummaryDTO(Id.Value);
-        SelectedStatusItem = StatusItem.Where(b => b.Value == Model?.ShopId?.ToString()).FirstOrDefault();
+        SelectedStatusItem = Shops.Where(b => b.Value == Model?.ShopId?.ToString()).FirstOrDefault();
       }
       StateHasChanged();
     }

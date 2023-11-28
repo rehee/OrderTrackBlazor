@@ -12,15 +12,17 @@ namespace OrderTrackBlazor.Components.Pages
     [Inject]
     public ISummaryService? summaryService { get; set; }
     public SummaryDTO? Summary { get; set; }
-    public List<OrderTrackShop> Shops { get; set; } = new List<OrderTrackShop>();
+    public IEnumerable<SelectedItem> Shops { get; set; } = new List<SelectedItem>();
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync();
       await RefreshPage();
     }
+    [Inject]
+    public IShopService? shopService { get; set; }
     public async Task RefreshPage()
     {
-      Shops = Context.Query<OrderTrackShop>(true).ToList();
+      Shops = await shopService.GetShopSelected();
       Summary = await summaryService.Query().Where(b => b.OrderId == Id).FirstOrDefaultAsync();
       OrderPurchaseSummaryDTO = summaryService.GetOrderSummary(Id).OrderByDescending(b => b.PurchaseDate).ThenByDescending(b => b.CreateDate).ToList();
       StateHasChanged();

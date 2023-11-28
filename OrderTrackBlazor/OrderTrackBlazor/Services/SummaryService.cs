@@ -16,19 +16,19 @@ namespace OrderTrackBlazor.Services
     public async Task<bool> CreateOrderPurchase(OrderPurchaseSummaryDTO dto)
     {
       var order = context.Query<OrderTrackOrder>(true).Where(b => b.Id == dto.OrderId).FirstOrDefault();
-      if (order == null)
+      if (order == null || dto?.Items?.Any() != true || dto?.Items?.All(b => b.Quantity == 0) == true)
       {
         return true;
       }
       var record = new OrderTrackPurchaseRecord
       {
         OrderId = order.Id,
-        PurchaseDate = dto.PurchaseDate,
+        PurchaseDate = dto.PurchaseDate?.Date,
         Price = dto.Price,
         ShopId = dto.ShopId,
       };
       await context.AddAsync<OrderTrackPurchaseRecord>(record, CancellationToken.None);
-      foreach (var orderItem in order.Items ?? new List<OrderTrackOrderItem>())
+      foreach (var orderItem in order.Items.Where(b => b.Quantity != 0) ?? new List<OrderTrackOrderItem>())
       {
         var recordItem = new OrderTrackPurchaseItem
         {
@@ -46,7 +46,7 @@ namespace OrderTrackBlazor.Services
     {
       var record = context.Query<OrderTrackPurchaseRecord>(false).Where(b => b.Id == dto.Id).FirstOrDefault();
       if (record == null) return true;
-      record.PurchaseDate = dto.PurchaseDate;
+      record.PurchaseDate = dto.PurchaseDate?.Date;
       record.Price = dto.Price;
       record.ShopId = dto.ShopId;
       foreach (var item in dto.EditOrderItem?.ToList() ?? new List<OrderPurchaseItemDTO>())
@@ -59,7 +59,7 @@ namespace OrderTrackBlazor.Services
         }
         else
         {
-          if (item.Quantity <= 0)
+          if (item.Quantity == 0)
           {
             continue;
           }

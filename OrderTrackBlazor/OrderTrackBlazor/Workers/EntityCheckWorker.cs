@@ -19,7 +19,9 @@ namespace OrderTrackBlazor.Workers
         while (true)
         {
 
-          await Task.Delay(1000 * 60);
+          await Task.Delay(1000
+          //);
+          * 60);
           using var scope = sp.CreateScope();
           using var context = scope.ServiceProvider.GetService<IContext>();
           var current = DateTime.UtcNow;
@@ -44,19 +46,18 @@ namespace OrderTrackBlazor.Workers
           }
           await context.SaveChangesAsync(null);
 
-          var emptyPurchase = context.Query<OrderTrackPurchaseRecord>(false).Where(b => b.Items.All(b => b.Quantity == 0) == true).ToList();
+          var emptyPurchaseItem = context.Query<OrderTrackPurchaseItem>(false).Where(b => b.Quantity == 0).ToList();
+          foreach (var b2 in emptyPurchaseItem)
+          {
+            context.Delete<OrderTrackPurchaseItem>(b2);
+          }
+          await context.SaveChangesAsync(null);
+          var emptyPurchase = context.Query<OrderTrackPurchaseRecord>(false).Where(b => b.Items.Any() != true).ToList();
           foreach (var b in emptyPurchase)
           {
             if ((b.UpdateDate != null && b.UpdateDate < nextCurrent) ||
                   b.CreateDate < nextCurrent)
             {
-              if (b.Items?.Any() == true)
-              {
-                foreach (var b2 in b.Items)
-                {
-                  context.Delete<OrderTrackPurchaseItem>(b2);
-                }
-              }
               context.Delete<OrderTrackPurchaseRecord>(b);
             }
           }

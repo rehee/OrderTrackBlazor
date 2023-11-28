@@ -2,9 +2,6 @@
 @if (Shop != null)
 {
   <div class="row g-3">
-    <div class="col-12 ">
-      <span>@Shop.ShopType.ToString()</span>
-    </div>
     <div class="col-12">
       <BootstrapInput TValue="string"
                       @bind-Value="Shop.ShopName"
