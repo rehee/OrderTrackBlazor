@@ -41,7 +41,6 @@ namespace OrderTrackBlazor.Workers
             ).ToListAsync();
           foreach (var b in dispatchs)
           {
-
             context.Delete<OrderTrackDispatchRecord>(b);
           }
           await context.SaveChangesAsync(null);
@@ -49,7 +48,11 @@ namespace OrderTrackBlazor.Workers
           var emptyPurchaseItem = context.Query<OrderTrackPurchaseItem>(false).Where(b => b.Quantity == 0).ToList();
           foreach (var b2 in emptyPurchaseItem)
           {
-            context.Delete<OrderTrackPurchaseItem>(b2);
+            if ((b2.UpdateDate != null && b2.UpdateDate < nextCurrent) ||
+                  b2.CreateDate < nextCurrent)
+            {
+              context.Delete<OrderTrackPurchaseItem>(b2);
+            }
           }
           await context.SaveChangesAsync(null);
           var emptyPurchase = context.Query<OrderTrackPurchaseRecord>(false).Where(b => b.Items.Any() != true).ToList();

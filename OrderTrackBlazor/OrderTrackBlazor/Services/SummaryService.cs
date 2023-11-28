@@ -29,7 +29,7 @@ namespace OrderTrackBlazor.Services
         ShopId = dto.ShopId,
       };
       await context.AddAsync<OrderTrackPurchaseRecord>(record, CancellationToken.None);
-      foreach (var orderItem in order.Items.Where(b => b.Quantity != 0) ?? new List<OrderTrackOrderItem>())
+      foreach (var orderItem in order.Items ?? new List<OrderTrackOrderItem>())
       {
         var recordItem = new OrderTrackPurchaseItem
         {
@@ -38,6 +38,10 @@ namespace OrderTrackBlazor.Services
           ProductionId = orderItem.ProductionId,
           Quantity = dto.Items?.Where(b => b.ProductionId == orderItem.ProductionId).Select(b => b.Quantity).FirstOrDefault() ?? 0,
         };
+        if (recordItem.Quantity == 0)
+        {
+          continue;
+        }
         await context.AddAsync<OrderTrackPurchaseItem>(recordItem, CancellationToken.None);
       }
       context.SaveChanges(null);
