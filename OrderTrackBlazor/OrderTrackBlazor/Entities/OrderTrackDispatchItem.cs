@@ -13,6 +13,11 @@ namespace OrderTrackBlazor.Entities
     public long? ProductionId { get; set; }
     public virtual OrderTrackProduction? Production { get; set; }
 
+    [ForeignKey(nameof(OrderTrackOrderItem))]
+    public long? OrderProductionId { get; set; }
+    public virtual OrderTrackOrderItem? OrderProduction { get; set; }
+
+    public decimal? DispatchPrice { get; set; }
     public int Quantity { get; set; }
   }
 }

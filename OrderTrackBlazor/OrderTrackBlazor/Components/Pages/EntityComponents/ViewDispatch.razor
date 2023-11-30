@@ -1,0 +1,69 @@
+﻿@inherits ViewDispatchComponent
+@if (DTO != null)
+{
+  <div class="row g-3">
+    <div class="col-6 col-sm-6">
+      出库日期 <span>@DTO.DispatchDate?.ToString(DefaultValues.DatFormat)</span>
+
+
+    </div>
+    <div class="col-6 col-sm-6">
+      状态 <span>@DTO.Status</span>
+    </div>
+    <div class="col-6 col-sm-6">
+      结账日期 <span>@DTO.IncomeDate?.ToString(DefaultValues.DatFormat)</span>
+
+
+    </div>
+    @if (ShowDetail)
+    {
+      <div class="col-6 col-sm-3">
+        收入调整 <span>@DTO.Income</span>
+      </div>
+      <div class="col-6 col-sm-3">
+        箱数 <span>@DTO.PackageNumber</span>
+      </div>
+    }
+    
+    <div class="col-6">
+      合计收入: @DTO.TotalIncome
+    </div>
+    @if (ShowDetail)
+    {
+      <div class="col-6">
+        总采购数: @DTO.EditItems.Sum(b => b.Number)
+      </div>
+
+      <div class="col-12">
+        <Textarea placeholder="备注" rows="4" @bind-Value="DTO!.Note" DisplayText="备注" ShowLabel="true" IsDisabled="true" />
+      </div>
+    }
+   
+    <div class="col-12">
+      <Table TItem="DispatchDetailItemDTO" Items="@DTO.Items" ShowFooter="true">
+        <TableColumns>
+          <TableColumn @bind-Field="@context.ProductionName" Text="产品">
+          </TableColumn>
+          <TableColumn @bind-Field="@context.Number" Text="数量" Width="100">
+          </TableColumn>
+          <TableColumn @bind-Field="@context.DispatchPrice" Text="单价" Width="100">
+          </TableColumn>
+          <TableColumn @bind-Field="@context.TotalPrice" Text="总价" Width="100">
+          </TableColumn>
+        </TableColumns>
+        <TableFooter>
+          <TableFooterCell Text="合计：" />
+          <TableFooterCell Text="@DTO.Items.Sum(b=>b.Number).ToString()">
+
+          </TableFooterCell>
+          <TableFooterCell />
+          <TableFooterCell Text="@DTO.Items.Sum(b=>b.TotalPrice).ToString()">
+
+          </TableFooterCell>
+        </TableFooter>
+      </Table>
+    </div>
+
+  </div>
+
+}

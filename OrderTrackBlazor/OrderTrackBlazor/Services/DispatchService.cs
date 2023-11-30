@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using OrderTrackBlazor.Components.Pages.EntityComponents;
 using ReheeCmf.Contexts;
+using System.Xml.XPath;
 
 namespace OrderTrackBlazor.Services
 {
@@ -22,17 +22,25 @@ namespace OrderTrackBlazor.Services
         Status = dto.Status ?? EnumDispatchStatus.Packing,
         DispatchDate = dto.DispatchDate,
         Income = dto.Income,
+        Note = dto.Note,
+        PackageNumber = dto.PackageNumber,
         IncomeDate = dto.IncomeDate,
       };
       await context.AddAsync<OrderTrackDispatchRecord>(record, CancellationToken.None);
       foreach (var item in dto.Items ?? new List<DispatchDetailItemDTO>())
       {
+        if (item.Number == 0)
+        {
+          continue;
+        }
         var recordItem = new OrderTrackDispatchItem
         {
           DispatchRecordId = record.Id,
           DispatchRecord = record,
           ProductionId = item.ProductionId,
           Quantity = item.Number,
+          OrderProductionId = item.OrderProductionId,
+          DispatchPrice = item.DispatchPrice
         };
         await context.AddAsync<OrderTrackDispatchItem>(recordItem, CancellationToken.None);
       }
@@ -50,20 +58,53 @@ namespace OrderTrackBlazor.Services
       dispatch.Status = dto.Status ?? EnumDispatchStatus.Packing;
       dispatch.DispatchDate = dto.DispatchDate;
       dispatch.Income = dto.Income;
+      dispatch.PackageNumber = dto.PackageNumber;
+      dispatch.Note = dto.Note;
       dispatch.IncomeDate = dto.IncomeDate;
-      if (dispatch.Items?.Any() == true)
+      if (dto.EditItems?.Any() == true)
       {
-        foreach (var item in dispatch.Items)
+        foreach (var item in dto.EditItems)
         {
-          var patchItem = dto.Items?.FirstOrDefault(b => b.Id == item.Id);
-          if (patchItem == null)
+          if (item.Id <= 0)
           {
-            continue;
+            if (item.Number == 0)
+            {
+              continue;
+            }
+            await context.AddAsync<OrderTrackDispatchItem>(new OrderTrackDispatchItem()
+            {
+              DispatchRecordId = dispatch.Id,
+              DispatchRecord = dispatch,
+              ProductionId = item.ProductionId,
+              Quantity = item.Number,
+              OrderProductionId = item.OrderProductionId,
+              DispatchPrice = item.DispatchPrice
+
+            }, CancellationToken.None);
           }
-          item.Quantity = patchItem.Number;
+          else
+          {
+            var record = dispatch.Items.FirstOrDefault(b => b.Id == item.Id);
+            if (record == null)
+            {
+              continue;
+            }
+            record.Quantity = item.Number;
+            record.DispatchPrice = item.DispatchPrice;
+            record.ProductionId = item.ProductionId;
+            record.OrderProductionId = item.OrderProductionId;
+          }
         }
       }
-      await context.SaveChangesAsync(null);
+      try
+      {
+        await context.SaveChangesAsync(null);
+      }
+      catch (Exception ex)
+      {
+        var a = 1;
+      }
+
       return true;
     }
 
@@ -78,16 +119,22 @@ namespace OrderTrackBlazor.Services
           DispatchDate = dispatch.DispatchDate,
           IncomeDate = dispatch.IncomeDate,
           CreateDate = dispatch.CreateDate,
+          PackageNumber = dispatch.PackageNumber,
           OrderId = dispatch.OrderTrackOrderId,
+          Note = dispatch.Note,
           Status = dispatch.Status,
           Income = dispatch.Income,
           Items = dispatch.Items.Select(b => new DispatchDetailItemDTO()
           {
             Id = b.Id,
+            RowId = Guid.NewGuid(),
             Number = b.Quantity,
+            DispatchPrice = b.DispatchPrice != null ? b.DispatchPrice : b.OrderProduction != null ? b.OrderProduction.OrderPrice != null ? b.OrderProduction.OrderPrice : b.Production.OriginalPrice : b.Production.OriginalPrice,
             ProductionId = b.ProductionId,
-            ProductionName = b.Production.Name
-          }),
+            ProductionName = b.Production.Name,
+            OrderProductionId = b.OrderProductionId
+          })
+
         };
     }
 
@@ -110,8 +157,11 @@ namespace OrderTrackBlazor.Services
         Items = order.Items?.Select(b => new DispatchDetailItemDTO
         {
           Number = 0,
+          RowId = Guid.NewGuid(),
           ProductionId = b.ProductionId,
-          ProductionName = b.Production?.Name
+          ProductionName = b.Production?.Name,
+          OrderProductionId = b.Id,
+          DispatchPrice = b.OrderPrice != null ? b.OrderPrice : b.Production?.OriginalPrice
         }).ToList(),
       };
     }
@@ -128,6 +178,8 @@ namespace OrderTrackBlazor.Services
       return new DispatchDetailDTO
       {
         OrderId = dispatch.OrderTrackOrderId,
+        Note = dispatch.Note,
+        PackageNumber = dispatch.PackageNumber,
         Id = dispatch.Id,
         DispatchDate = dispatch.DispatchDate,
         Income = dispatch.Income,
@@ -136,10 +188,21 @@ namespace OrderTrackBlazor.Services
         Items = dispatch.Items?.Select(b => new DispatchDetailItemDTO
         {
           Id = b.Id,
+          RowId = Guid.NewGuid(),
+          OrderProductionId = b.OrderProductionId,
           Number = b.Quantity,
           ProductionId = b.ProductionId,
-          ProductionName = b.Production?.Name
+          ProductionName = b.Production?.Name,
+          DispatchPrice = b.DispatchPrice != null ? b.DispatchPrice : b.OrderProduction != null ? b.OrderProduction.OrderPrice != null ? b.OrderProduction.OrderPrice : b.Production.OriginalPrice : b.Production.OriginalPrice
         }).ToList(),
+        OrderItems = dispatch.Order.Items.Select(b => new DispatchDetailItemDTO
+        {
+          Number = 0,
+          ProductionId = b.ProductionId,
+          ProductionName = b.Production.Name,
+          OrderProductionId = b.Id,
+          DispatchPrice = b.OrderPrice != null ? b.OrderPrice : b.Production.OriginalPrice
+        })
       };
     }
 

@@ -36,7 +36,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     {
       var model = id == null ?
         new ProductionDTO() :
-        await Context!.Query<OrderTrackProduction>(true).Where(b => b.Id == id).Select(b => new ProductionDTO() { Id = b.Id, ProductionName = b.Name }).FirstOrDefaultAsync();
+        await Context!.Query<OrderTrackProduction>(true).Where(b => b.Id == id).Select(b => new ProductionDTO() { Id = b.Id, ProductionName = b.Name, OriginalPrice = b.OriginalPrice == null ? null : b.OriginalPrice.ToString() }).FirstOrDefaultAsync();
       var items = Utility.GenerateEditorItems<ProductionDTO>();
       if (id != null)
       {
@@ -68,9 +68,11 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
               {
                 return false;
               }
+
               await Context!.AddAsync<OrderTrackProduction>(new OrderTrackProduction
               {
-                Name = mdl.ProductionName
+                Name = mdl.ProductionName,
+                OriginalPrice = mdl.Price,
               }, CancellationToken.None);
               await Context.SaveChangesAsync(null);
               await RefreshTable();
@@ -84,6 +86,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
                 return true;
               }
               p.Name = mdl.ProductionName;
+              p.OriginalPrice = mdl.Price;
               await Context!.SaveChangesAsync(null);
               await RefreshTable();
               return true;

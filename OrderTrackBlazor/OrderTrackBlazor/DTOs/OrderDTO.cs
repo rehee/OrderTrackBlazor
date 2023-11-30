@@ -21,6 +21,7 @@ namespace OrderTrackBlazor.DTOs
     public long? ParentId { get; set; }
     public IWithOrderProductionsDTO? Parent { get; set; }
     public int Quantity { get; set; }
+    public decimal? OrderPrice { get; set; }
     public DateTime? CreateDate { get; set; }
   }
 

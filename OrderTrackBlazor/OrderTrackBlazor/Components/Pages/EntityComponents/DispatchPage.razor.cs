@@ -16,7 +16,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     public async Task RefreshPage()
     {
       Dispatches = await dispatchService.GetDispatch(Id ?? 0)
-        .OrderByDescending(b=>b.DispatchDate).ThenByDescending(b=>b.CreateDate).ToListAsync();
+        .OrderByDescending(b => b.DispatchDate).ThenByDescending(b => b.CreateDate).ToListAsync();
       StateHasChanged();
     }
     protected override async Task OnInitializedAsync()
@@ -36,7 +36,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
           });
       var dotion = new DialogOption()
       {
-        Title = "Create Dispatch",
+        Title = id == null ? "Create Dispatch" : "Edit Dispatch",
         Size = Size.ExtraLarge,
         Component = comp,
         ShowSaveButton = true,
@@ -50,6 +50,25 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
           await RefreshPage();
           return result;
         }
+      };
+      await dialogService!.Show(dotion);
+    }
+
+    public async Task ReadDispatch(long? id = null)
+    {
+      var onSave = new OnSaveDTO();
+      var comp = BootstrapDynamicComponent.CreateComponent<ViewDispatch>(
+          new Dictionary<string, object?>()
+          {
+            ["DTO"] = Dispatches.FirstOrDefault(b => b.Id == id),
+            ["ShowDetail"] = true,
+            //["OnSave"] = onSave
+          });
+      var dotion = new DialogOption()
+      {
+        Title = "Dispatch",
+        Size = Size.ExtraLarge,
+        Component = comp,
       };
       await dialogService!.Show(dotion);
     }

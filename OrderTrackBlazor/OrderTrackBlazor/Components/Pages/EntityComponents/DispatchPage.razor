@@ -1,47 +1,18 @@
 ﻿@inherits DispatchPageComponent
 <div class="row g-3">
   <div class="col-6 col-sm-6">
-    <Button Color="Color.Primary" Icon="fa-solid fa-font-awesome" Text="出库" OnClickWithoutRender="()=>CreateDispatch()" />
+    <Button Color="Color.Primary" Text="出库" OnClickWithoutRender="()=>CreateDispatch()" />
   </div>
- 
+
 </div>
 @foreach (var item in Dispatches)
 {
   <hr />
-  <div class="row g-3">
-    <div class="col-6 col-sm-6">
-      出库日期 <span>@item.DispatchDate?.ToString(DefaultValues.DatFormat)</span>
-
-
-    </div>
-    <div class="col-6 col-sm-6">
-      状态 <span>@item.Status</span>
-    </div>
-    <div class="col-6 col-sm-6">
-      结账日期 <span>@item.IncomeDate?.ToString(DefaultValues.DatFormat)</span>
-
-
-    </div>
-    <div class="col-6 col-sm-6">
-      收入 <span>@item.Income</span>
-    </div>
-    <div class="col-12">
-      <Table TItem="DispatchDetailItemDTO" Items="@item.Items">
-        <TableColumns>
-          <TableColumn @bind-Field="@context.ProductionName" Text="产品">
-          </TableColumn>
-          <TableColumn @bind-Field="@context.Number" Text="数量" Width="200">
-          </TableColumn>
-
-        </TableColumns>
-
-      </Table>
-    </div>
-    <div class="col-12">
-      <Button Color="Color.Success" Icon="fa-solid fa-font-awesome" Text="修改出库" OnClickWithoutRender="()=>CreateDispatch(item.Id)" />
-    </div>
+  <ViewDispatch DTO="item"></ViewDispatch>
+  <div class="col-12">
+    <Button Color="Color.Success" Text="修改" OnClickWithoutRender="()=>CreateDispatch(item.Id)" />
+    <Button Color="Color.Warning" Text="查看" OnClickWithoutRender="()=>ReadDispatch(item.Id)" />
   </div>
-
 }
 
 

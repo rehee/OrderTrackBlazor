@@ -17,6 +17,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     [Inject]
     public IDispatchService? dispatchService { get; set; }
     public DispatchDetailDTO? Model { get; set; }
+    public IEnumerable<DispatchDetailItemDTO> Source => Id == null ? Model.Items : Model.EditItems;
     public List<SelectedItem> StatusItem { get; set; } = new List<SelectedItem>();
     public SelectedItem? SelectedStatusItem { get; set; }
     public Task OnItemChanged(SelectedItem item)

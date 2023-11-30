@@ -27,6 +27,7 @@ namespace OrderTrackBlazor.Services
                   Id = b.Id,
                   ProductionId = b.ProductionId,
                   Quantity = b.Quantity,
+                  OrderPrice = b.OrderPrice != null ? b.OrderPrice : b.Production.OriginalPrice,
                 }).ToList()
              };
     }

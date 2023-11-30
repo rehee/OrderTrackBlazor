@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderTrackBlazor.Data;
 
@@ -11,9 +12,11 @@ using OrderTrackBlazor.Data;
 namespace OrderTrackBlazor.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231130165931_add_price_for_product")]
+    partial class add_price_for_product
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,9 +119,6 @@ namespace OrderTrackBlazor.Migrations
                     b.Property<long?>("DispatchRecordId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("OrderProductionId")
-                        .HasColumnType("bigint");
-
                     b.Property<long?>("ProductionId")
                         .HasColumnType("bigint");
 
@@ -137,8 +137,6 @@ namespace OrderTrackBlazor.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DispatchRecordId");
-
-                    b.HasIndex("OrderProductionId");
 
                     b.HasIndex("ProductionId");
 
@@ -173,9 +171,6 @@ namespace OrderTrackBlazor.Migrations
 
                     b.Property<long?>("OrderTrackOrderId")
                         .HasColumnType("bigint");
-
-                    b.Property<decimal?>("PackageNumber")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("SoftDeleteUntil")
                         .HasColumnType("datetime2");
@@ -694,17 +689,11 @@ namespace OrderTrackBlazor.Migrations
                         .WithMany("Items")
                         .HasForeignKey("DispatchRecordId");
 
-                    b.HasOne("OrderTrackBlazor.Entities.OrderTrackOrderItem", "OrderProduction")
-                        .WithMany()
-                        .HasForeignKey("OrderProductionId");
-
                     b.HasOne("OrderTrackBlazor.Entities.OrderTrackProduction", "Production")
                         .WithMany("DispatchItems")
                         .HasForeignKey("ProductionId");
 
                     b.Navigation("DispatchRecord");
-
-                    b.Navigation("OrderProduction");
 
                     b.Navigation("Production");
                 });
@@ -725,7 +714,7 @@ namespace OrderTrackBlazor.Migrations
                         .HasForeignKey("OrderTrackOrderId");
 
                     b.HasOne("OrderTrackBlazor.Entities.OrderTrackProduction", "Production")
-                        .WithMany("OrderItems")
+                        .WithMany()
                         .HasForeignKey("ProductionId");
 
                     b.Navigation("Order");
@@ -840,8 +829,6 @@ namespace OrderTrackBlazor.Migrations
             modelBuilder.Entity("OrderTrackBlazor.Entities.OrderTrackProduction", b =>
                 {
                     b.Navigation("DispatchItems");
-
-                    b.Navigation("OrderItems");
 
                     b.Navigation("PurchaseItems");
                 });

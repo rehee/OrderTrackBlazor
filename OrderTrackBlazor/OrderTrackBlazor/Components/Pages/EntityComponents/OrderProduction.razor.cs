@@ -14,6 +14,24 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     [Parameter]
     public List<OrderTrackProduction> Productions { get; set; } = new List<OrderTrackProduction>();
 
+
+    public async Task OrderItemChange(SelectedItem item)
+    {
+      await Task.CompletedTask;
+      if (item == null || DTO == null)
+      {
+        return;
+      }
+      long.TryParse(item.Value, out var id);
+      var selectProduction = Productions.Where(b => b.Id == id).FirstOrDefault();
+      if (selectProduction == null)
+      {
+        return;
+      }
+      DTO.OrderPrice = selectProduction.OriginalPrice;
+      DTO.ProductionId = id;
+    }
+
     public List<SelectedItem> Items = new List<SelectedItem>();
     public SelectedItem? IItem { get; set; }
     protected override async Task OnInitializedAsync()

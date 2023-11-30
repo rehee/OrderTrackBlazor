@@ -12,7 +12,7 @@ namespace OrderTrackBlazor.Entities
     [ForeignKey(nameof(OrderTrackProduction))]
     public long? ProductionId { get; set; }
     public virtual OrderTrackProduction? Production { get; set; }
-
+    public decimal? OrderPrice { get; set; }
     public int Quantity { get; set; }
   }
 }

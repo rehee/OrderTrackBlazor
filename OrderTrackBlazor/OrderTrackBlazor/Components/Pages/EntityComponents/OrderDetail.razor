@@ -36,6 +36,7 @@
               </Template>
             </TableColumn>
             <TableColumn @bind-Field="@context.Quantity" />
+            <TableColumn @bind-Field="@context.OrderPrice" />
             <TableColumn @bind-Field="@context.Gid" Text="操作">
               <Template Context="value">
                 <Button Color="Color.Primary" Icon="fas fa-square-pen" Text="编辑" OnClickWithoutRender="()=>

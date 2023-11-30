@@ -87,7 +87,8 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
             OrderTrackOrderId = order.Id,
             Order = order,
             ProductionId = p.ProductionId,
-            Quantity = p.Quantity
+            Quantity = p.Quantity,
+            OrderPrice = p.OrderPrice,
           };
           await Context.AddAsync<OrderTrackOrderItem>(p2, CancellationToken.None);
         }
@@ -110,7 +111,8 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
               OrderTrackOrderId = order.Id,
               Order = order,
               ProductionId = p.ProductionId,
-              Quantity = p.Quantity
+              Quantity = p.Quantity,
+              OrderPrice = p.OrderPrice,
             };
             await Context.AddAsync<OrderTrackOrderItem>(p2, CancellationToken.None);
           }
@@ -119,7 +121,9 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
             var p2 = Context.Query<OrderTrackOrderItem>(false).FirstOrDefault(b => b.Id == p.Id);
             if (p2 != null)
             {
+              p2.ProductionId = p.ProductionId;
               p2.Quantity = p.Quantity;
+              p2.OrderPrice = p.OrderPrice;
             }
           }
         }

@@ -16,6 +16,7 @@ namespace OrderTrackBlazor.Entities
     public DateTime? IncomeDate { get; set; }
     public DateTime? SoftDeleteUntil { get; set; }
     public string? Note { get; set; }
+    public decimal? PackageNumber { get; set; }
     public virtual List<OrderTrackDispatchItem>? Items { get; set; }
 
   }
