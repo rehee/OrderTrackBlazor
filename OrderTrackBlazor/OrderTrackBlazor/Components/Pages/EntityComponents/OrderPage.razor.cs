@@ -26,7 +26,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     public async Task RefreshTable()
     {
 
-      Orders = await orderService.Query().OrderBy(b => b.OrderDate).ToListAsync();
+      Orders = await orderService.Query().OrderByDescending(b => b.OrderDate).ThenByDescending(b => b.Id).ToListAsync();
       StateHasChanged();
     }
 

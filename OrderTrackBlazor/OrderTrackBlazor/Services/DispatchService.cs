@@ -65,7 +65,7 @@ namespace OrderTrackBlazor.Services
       {
         foreach (var item in dto.EditItems)
         {
-          if (item.Id <= 0)
+          if (item.Id == null || item.Id <= 0)
           {
             if (item.Number == 0)
             {

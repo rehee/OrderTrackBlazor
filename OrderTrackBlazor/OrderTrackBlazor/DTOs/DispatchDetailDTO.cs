@@ -32,6 +32,10 @@ namespace OrderTrackBlazor.DTOs
     {
       get
       {
+        if (Items == null)
+        {
+          Items = new List<DispatchDetailItemDTO>();
+        }
         if (OrderItems == null)
         {
           return Items;

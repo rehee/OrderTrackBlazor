@@ -30,18 +30,29 @@ namespace OrderTrackBlazor.Workers
           var nextCurrent = DateTime.UtcNow.AddMinutes(deleteMins);
 
           var dispatchs = await context.Query<OrderTrackDispatchRecord>(false)
-            .Where(b =>
-              (b.SoftDeleteUntil != null && b.SoftDeleteUntil < current) ||
-              (b.Status == EnumDispatchStatus.Error &&
-                (
-                  (b.UpdateDate != null && b.UpdateDate < nextCurrent) ||
-                  b.CreateDate < nextCurrent)
-                )
-
-            ).ToListAsync();
+            .Where(b => b.Status== EnumDispatchStatus.Error)
+             .ToListAsync();
           foreach (var b in dispatchs)
           {
-            context.Delete<OrderTrackDispatchRecord>(b);
+            if ((b.UpdateDate != null && b.UpdateDate < nextCurrent) ||
+                  b.CreateDate < nextCurrent)
+            {
+              context.Delete<OrderTrackDispatchRecord>(b);
+            }
+          }
+          await context.SaveChangesAsync(null);
+
+          var dispatchItemss = await context.Query<OrderTrackDispatchItem>(false)
+            .Where(b => b.Quantity == 0).ToListAsync();
+
+          foreach (var b in dispatchItemss)
+          {
+            if ((b.UpdateDate != null && b.UpdateDate < nextCurrent) ||
+                  b.CreateDate < nextCurrent)
+            {
+              context.Delete<OrderTrackDispatchItem>(b);
+            }
+            
           }
           await context.SaveChangesAsync(null);
 
