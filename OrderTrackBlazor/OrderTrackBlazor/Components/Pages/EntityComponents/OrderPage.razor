@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Authorization
 @* @attribute [Authorize] *@
 @inherits OrderPageComponent
-
+@attribute [Authorize]
 
 <div>
   <Button Color="Color.Primary" Icon="fa-solid fa-font-awesome" Text="添加订单" OnClickWithoutRender="()=>CreateProduction()" />

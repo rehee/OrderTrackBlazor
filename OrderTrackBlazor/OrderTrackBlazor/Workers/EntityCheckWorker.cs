@@ -76,6 +76,20 @@ namespace OrderTrackBlazor.Workers
             }
           }
           await context.SaveChangesAsync(null);
+
+          var emptyOrderItem = await context.Query<OrderTrackOrderItem>(false)
+            .Where(b => b.Quantity == 0).ToListAsync();
+
+          foreach (var b in emptyOrderItem)
+          {
+            if ((b.UpdateDate != null && b.UpdateDate < nextCurrent) ||
+                  b.CreateDate < nextCurrent)
+            {
+              context.Delete<OrderTrackOrderItem>(b);
+            }
+
+          }
+          await context.SaveChangesAsync(null);
         }
       }
       catch (Exception ex)
