@@ -71,6 +71,11 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
         Title = "dispatch",
         Size = Size.ExtraLarge,
         Component = comp,
+        OnCloseAsync = async () =>
+        {
+          await Task.CompletedTask;
+          //System.Console.WriteLine("11111111111111111");
+        }
       };
       await dialogService!.Show(dotion);
     }

@@ -14,5 +14,6 @@ namespace OrderTrackBlazor.Entities
     public virtual OrderTrackProduction? Production { get; set; }
     public decimal? OrderPrice { get; set; }
     public int Quantity { get; set; }
+    public virtual List<OrderTrackDispatchItem>? DispatchItems { get; set; }
   }
 }

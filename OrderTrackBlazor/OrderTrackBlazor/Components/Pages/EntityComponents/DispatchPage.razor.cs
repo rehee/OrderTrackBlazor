@@ -49,6 +49,11 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
           }
           await RefreshPage();
           return result;
+        },
+        OnCloseAsync = async () =>
+        {
+          await Task.CompletedTask;
+          System.Console.WriteLine("22222222222222222");
         }
       };
       await dialogService!.Show(dotion);
@@ -69,6 +74,11 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
         Title = "Dispatch",
         Size = Size.ExtraLarge,
         Component = comp,
+        OnCloseAsync = async () =>
+        {
+          await Task.CompletedTask;
+          System.Console.WriteLine("1");
+        }
       };
       await dialogService!.Show(dotion);
     }
