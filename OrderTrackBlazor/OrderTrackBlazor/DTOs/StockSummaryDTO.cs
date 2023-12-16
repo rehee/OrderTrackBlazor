@@ -4,7 +4,26 @@
   {
     public long? Id { get; set; }
     public string? Name { get; set; }
-    public int? CurrentStock { get; set; }
+    public int? CurrentStock
+    {
+      get
+      {
+        return currentStock;
+      }
+      set
+      {
+        currentStock = value;
+        if (value.HasValue)
+        {
+          if (value > 0)
+          {
+            ColumnColor = BootstrapBlazor.Components.Color.Success;
+          }
+        }
+      }
+    }
+    public BootstrapBlazor.Components.Color ColumnColor { get; set; }
+    private int? currentStock { get; set; }
   }
 
   public class StockListDTO

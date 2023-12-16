@@ -12,6 +12,9 @@
       </TableColumn>
 
       <TableColumn @bind-Field="@context.CurrentStock" Text="库存">
+        <Template Context="value">
+          <span class="@(value.Value>0?"text-success":"")">@value.Value</span>
+        </Template>
       </TableColumn>
 
       <TableColumn @bind-Field="@context.Id" Text="操作">

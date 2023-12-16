@@ -29,7 +29,7 @@ namespace OrderTrackBlazor.Components.Pages
     public List<StockSummaryDTO> SummaryDTOs { get; set; } = new List<StockSummaryDTO>();
     public async Task Refresh()
     {
-      SummaryDTOs = await stockService.QuerySummary().OrderByDescending(b => b.CurrentStock).ToListAsync();
+      SummaryDTOs = await stockService.QuerySummary().OrderByDescending(b => b.CurrentStock).ThenBy(b => b.Id).ToListAsync();
       StateHasChanged();
     }
 
