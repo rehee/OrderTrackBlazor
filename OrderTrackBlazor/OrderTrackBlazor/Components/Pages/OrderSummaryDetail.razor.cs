@@ -41,7 +41,7 @@ namespace OrderTrackBlazor.Components.Pages
           });
       var dotion = new DialogOption()
       {
-        Title = "Create Dispatch",
+        Title = $"{(id == null ? "Create" : "Edit")} Purchase",
         Size = Size.ExtraLarge,
         Component = comp,
         ShowSaveButton = true,

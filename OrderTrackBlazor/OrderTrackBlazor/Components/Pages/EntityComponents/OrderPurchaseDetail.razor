@@ -40,8 +40,9 @@
                 @{
                   var item = Model.Items.FirstOrDefault(b => b.RowId == value.Value);
                 }
-                <BootstrapInputNumber @bind-Value="item.Quantity"
-                                      ShowLabel="false" />
+                <BootstrapInputNumber @bind-Value="item.QuantityDisplay"
+                                      ShowLabel="false"
+                                      Color="Color.Success" />
               </Template>
             </TableColumn>
 
@@ -61,7 +62,8 @@
                 @{
                   var item = Model.EditOrderItem.FirstOrDefault(b => b.RowId == value.Value);
                 }
-                <BootstrapInputNumber @bind-Value="item.Quantity"
+                <BootstrapInputNumber @bind-Value="item.QuantityDisplay"
+                                      Color="Color.Success"
                                       ShowLabel="false" />
               </Template>
             </TableColumn>

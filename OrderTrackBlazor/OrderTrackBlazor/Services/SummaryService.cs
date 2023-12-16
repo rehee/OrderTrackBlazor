@@ -1,4 +1,5 @@
 ﻿
+using BootstrapBlazor.Components;
 using Microsoft.EntityFrameworkCore;
 using OrderTrackBlazor.Components.Pages.EntityComponents;
 using ReheeCmf.Contexts;
@@ -60,11 +61,11 @@ namespace OrderTrackBlazor.Services
         {
           var itemRecord = context.Query<OrderTrackPurchaseItem>(false).Where(b => b.Id == item.Id).FirstOrDefault();
           if (itemRecord == null) continue;
-          itemRecord.Quantity = item.Quantity;
+          itemRecord.Quantity = item.Quantity ?? 0;
         }
         else
         {
-          if (item.Quantity == 0)
+          if (!item.Quantity.HasValue || item.Quantity == 0)
           {
             continue;
           }
@@ -73,7 +74,7 @@ namespace OrderTrackBlazor.Services
             ProductionId = item.ProductionId,
             PurchaseRecordId = record.Id,
             PurchaseRecord = record,
-            Quantity = item.Quantity,
+            Quantity = item.Quantity ?? 0,
           };
           await context.AddAsync<OrderTrackPurchaseItem>(itemRecord, CancellationToken.None);
         }
@@ -83,11 +84,24 @@ namespace OrderTrackBlazor.Services
     }
     public async Task<OrderPurchaseSummaryDTO?> FindOrderPurchaseSummaryDTO(long purchaseId)
     {
-      return await GetOrderSummary(0).Where(b => b.Id == purchaseId).FirstOrDefaultAsync();
+      var patch = await context.Query<OrderTrackPurchaseRecord>(false).Where(b => b.Id == purchaseId).FirstOrDefaultAsync();
+      if (patch == null) return null;
+
+      return await GetOrderSummary(patch.OrderId ?? 0).Where(b => b.Id == purchaseId).FirstOrDefaultAsync();
     }
 
     public IQueryable<OrderPurchaseSummaryDTO> GetOrderSummary(long orderId)
     {
+      var orderItem = context.Query<OrderTrackOrder>(false)
+        .Where(b => b.Id == orderId)
+        .SelectMany(b => b.Items)
+        .Select(b => new OrderPurchaseItemDTO
+        {
+          Id = 0,
+          RowId = Guid.NewGuid(),
+          ProductionId = b.ProductionId,
+          ProductionName = b.Production.Name,
+        }).ToList();
       return
         from purchase in context.Query<OrderTrackPurchaseRecord>(true).Where(b => orderId <= 0 || b.OrderId == orderId)
         let currentItem = purchase.Items.Select(b => new OrderPurchaseItemDTO
@@ -98,15 +112,6 @@ namespace OrderTrackBlazor.Services
           ProductionName = b.Production.Name,
           Quantity = b.Quantity,
         })
-        let orderItem = purchase.Order.Items.Select(b => new OrderPurchaseItemDTO
-        {
-          Id = 0,
-          RowId = Guid.NewGuid(),
-          ProductionId = b.ProductionId,
-          ProductionName = b.Production.Name,
-          Quantity = 0,
-        })
-
         select new OrderPurchaseSummaryDTO
         {
           OrderId = purchase.OrderId,
