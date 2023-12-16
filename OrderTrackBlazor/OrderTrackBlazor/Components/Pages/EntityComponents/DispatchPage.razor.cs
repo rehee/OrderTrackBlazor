@@ -13,6 +13,18 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     public IDispatchService? dispatchService { get; set; }
 
     public List<DispatchDetailDTO> Dispatches { get; set; } = new List<DispatchDetailDTO>();
+
+    public List<(string?, decimal?, decimal)> Summary
+    {
+      get
+      {
+        var result = Dispatches.GroupBy(b => b.Status).OrderBy(b => b.Key).Select(b => (b.Key.ToString(), b.Sum(b => b.PackageNumber), b.Sum(b => b.TotalIncome))).ToList();
+        return result;
+      }
+    }
+
+
+
     public async Task RefreshPage()
     {
       Dispatches = await dispatchService.GetDispatch(Id ?? 0)

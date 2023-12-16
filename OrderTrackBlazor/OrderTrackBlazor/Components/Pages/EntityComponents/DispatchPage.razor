@@ -5,6 +5,15 @@
   </div>
 
 </div>
+<hr />
+<div class="row g-3">
+  @foreach (var s in Summary)
+  {
+    <span class="col-12 col-sm-4">状态: @s.Item1</span>
+    <span class="col-12 col-sm-4">箱数: @s.Item2</span>
+    <span class="col-12 col-sm-4">收入: @s.Item3</span>
+  }
+</div>
 @foreach (var item in Dispatches)
 {
   <hr />
