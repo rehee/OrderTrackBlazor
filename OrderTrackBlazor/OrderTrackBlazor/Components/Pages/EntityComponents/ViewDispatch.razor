@@ -52,12 +52,12 @@
           </TableColumn>
         </TableColumns>
         <TableFooter>
-          <TableFooterCell Text="合计：" />
-          <TableFooterCell Text="@DTO.Items.Sum(b=>b.Number).ToString()">
+          <TableFooterCell Text="合计" />
+          <TableFooterCell Text="@($"{DTO.Items.Sum(b=>b.Number).ToString()}")">
 
           </TableFooterCell>
-          <TableFooterCell />
-          <TableFooterCell Text="@DTO.Items.Sum(b=>b.TotalPrice).ToString()">
+          <TableFooterCell Text=" " />
+          <TableFooterCell Text="@($"£{DTO.Items.Sum(b=>b.TotalPrice).ToString()}")">
 
           </TableFooterCell>
         </TableFooter>
