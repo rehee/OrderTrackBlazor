@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace OrderTrackBlazor.DTOs
+﻿namespace OrderTrackBlazor.DTOs
 {
   public class DispatchDetailDTO
   {
@@ -55,6 +53,29 @@ namespace OrderTrackBlazor.DTOs
     public long? ProductionId { get; set; }
     public string? ProductionName { get; set; }
     public int Number { get; set; }
+    public string? NumberInput
+    {
+      get
+      {
+        if (Number == 0)
+        {
+          return null;
+        }
+        return Number.ToString();
+      }
+      set
+      {
+        if (int.TryParse(value, out var v))
+        {
+          Number = v;
+          
+        }
+        else
+        {
+          Number = 0;
+        }
+      }
+    }
     public decimal? DispatchPrice { get; set; }
     public decimal TotalPrice
     {
@@ -68,6 +89,7 @@ namespace OrderTrackBlazor.DTOs
       }
       set
       {
+
       }
     }
   }

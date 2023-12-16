@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OrderTrackBlazor.Components.Pages.EntityComponents;
 using ReheeCmf.Contexts;
-using System.Xml.XPath;
 
 namespace OrderTrackBlazor.Services
 {
@@ -156,7 +154,6 @@ namespace OrderTrackBlazor.Services
         DispatchDate = DateTime.UtcNow,
         Items = order.Items?.Select(b => new DispatchDetailItemDTO
         {
-          Number = 0,
           RowId = Guid.NewGuid(),
           ProductionId = b.ProductionId,
           ProductionName = b.Production?.Name,
@@ -175,6 +172,14 @@ namespace OrderTrackBlazor.Services
           Items = new List<DispatchDetailItemDTO>()
         };
       }
+      var OrderItems = dispatch.Order.Items.Select(b => new DispatchDetailItemDTO
+      {
+        RowId = Guid.NewGuid(),
+        ProductionId = b.ProductionId,
+        ProductionName = b.Production.Name,
+        OrderProductionId = b.Id,
+        DispatchPrice = b.OrderPrice != null ? b.OrderPrice : b.Production.OriginalPrice
+      }).ToList();
       return new DispatchDetailDTO
       {
         OrderId = dispatch.OrderTrackOrderId,
@@ -195,14 +200,7 @@ namespace OrderTrackBlazor.Services
           ProductionName = b.Production?.Name,
           DispatchPrice = b.DispatchPrice != null ? b.DispatchPrice : b.OrderProduction != null ? b.OrderProduction.OrderPrice != null ? b.OrderProduction.OrderPrice : b.Production.OriginalPrice : b.Production.OriginalPrice
         }).ToList(),
-        OrderItems = dispatch.Order.Items.Select(b => new DispatchDetailItemDTO
-        {
-          Number = 0,
-          ProductionId = b.ProductionId,
-          ProductionName = b.Production.Name,
-          OrderProductionId = b.Id,
-          DispatchPrice = b.OrderPrice != null ? b.OrderPrice : b.Production.OriginalPrice
-        })
+        OrderItems = OrderItems
       };
     }
 

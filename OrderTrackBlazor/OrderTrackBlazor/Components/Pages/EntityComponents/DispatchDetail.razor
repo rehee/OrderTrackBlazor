@@ -44,8 +44,9 @@
             @{
               var item = Source.FirstOrDefault(b => b.RowId == value.Value);
             }
-            <BootstrapInputNumber @bind-Value="item.Number"
-                                  ShowLabel="false" />
+            <BootstrapInput @bind-Value="item.NumberInput"
+                            Color="Color.Success"
+                            ShowLabel="false" />
           </Template>
         </TableColumn>
         <TableColumn @bind-Field="@context.RowId" Text="单价" Width="100">
