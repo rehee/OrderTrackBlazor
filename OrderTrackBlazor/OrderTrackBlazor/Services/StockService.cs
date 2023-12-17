@@ -22,7 +22,7 @@ namespace OrderTrackBlazor.Services
           Id = production.Id,
           Name = production.Name,
           CurrentStock =
-            production.PurchaseItems.Sum(b => b.Quantity) - production.DispatchItems.Where(b => b.DispatchRecord.Status != EnumDispatchStatus.Error).Sum(b => b.Quantity),
+            production.PurchaseItems.Sum(b => b.Quantity) - production.DispatchItems.Where(b => b.DispatchRecord.Status != EnumDispatchStatus.Error).Sum(b => b.Quantity + b.PackageQuantity),
         };
     }
     public IQueryable<StockListDTO> QueryDetail()

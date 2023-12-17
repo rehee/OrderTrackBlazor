@@ -9,5 +9,6 @@
     public virtual List<OrderTrackOrderItem>? Items { get; set; }
     public virtual List<OrderTrackDispatchRecord>? DispatchRecords { get; set; }
     public virtual List<OrderTrackPurchaseRecord>? PurchaseRecords { get; set; }
+    public virtual List<OrderTrackPackage>? Packages { get; set; }
   }
 }

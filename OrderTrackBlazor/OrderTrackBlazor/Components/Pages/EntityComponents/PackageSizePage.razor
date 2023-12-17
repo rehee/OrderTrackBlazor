@@ -1,0 +1,33 @@
+﻿@page "/entity/packagesize"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@inherits PackageSizePageComponent
+
+
+
+@if (Packages == null)
+{
+  <div>null</div>
+}
+else
+{
+  <div>
+    <Button Color="Color.Primary" Text="添加shop" OnClick="()=>NormalShowDialog()" />
+  </div>
+  <div>
+    <Table TItem="OrderTrackPackageSize" Items="@Packages">
+      <TableColumns>
+        <TableColumn @bind-Field="@context.Name" />
+        <TableColumn @bind-Field="@context.DisplayOrder" />
+        <TableColumn @bind-Field="@context.Id">
+          <Template Context="value">
+            <Button Color="Color.Success" Text="修改" OnClick="()=>NormalShowDialog(value.Value)" />
+          </Template>
+        </TableColumn>
+
+      </TableColumns>
+    </Table>
+  </div>
+  <Dialog></Dialog>
+}

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderTrackBlazor.Data;
 
@@ -11,9 +12,11 @@ using OrderTrackBlazor.Data;
 namespace OrderTrackBlazor.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231217030135_add_package_related_entity2")]
+    partial class add_package_related_entity2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,16 +159,10 @@ namespace OrderTrackBlazor.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("BriefDiscribtion")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discribtion")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Number")

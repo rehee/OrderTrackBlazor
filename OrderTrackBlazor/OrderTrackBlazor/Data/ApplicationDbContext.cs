@@ -18,5 +18,9 @@ namespace OrderTrackBlazor.Data
     public DbSet<OrderTrackPurchaseItem> OrderTrackPurchaseItems { get; set; }
     public DbSet<OrderTrackPurchaseRecord> OrderTrackPurchaseRecords { get; set; }
     public DbSet<OrderTrackShop> OrderTrackShops { get; set; }
+    public DbSet<OrderTrackDispatchPackage> OrderTrackDispatchPackages { get; set; }
+    public DbSet<OrderTrackPackage> OrderTrackPackages { get; set; }
+    public DbSet<OrderTrackPackageItem> OrderTrackPackageItems { get; set; }
+    public DbSet<OrderTrackPackageSize> OrderTrackPackageSizes { get; set; }
   }
 }

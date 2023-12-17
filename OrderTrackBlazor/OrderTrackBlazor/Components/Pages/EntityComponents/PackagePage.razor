@@ -1,0 +1,33 @@
+﻿@inherits PackagePageComponent
+<div class="row g-3">
+  <div class="col-6 col-sm-6">
+    <Button Color="Color.Primary" Text="调配包装" OnClickWithoutRender="()=>CreatePackage()" />
+  </div>
+
+</div>
+<hr />
+<div class="col-12">
+  <Table TItem="PackageDetailDTO" Items="Lists">
+    <TableColumns>
+      <TableColumn @bind-Field="@context.Id" Text="Id">
+
+      </TableColumn>
+      <TableColumn @bind-Field="@context.BriefDiscribtion" Text="备注">
+
+      </TableColumn>
+      <TableColumn @bind-Field="@context.Confirmed" Text="已确认">
+
+      </TableColumn>
+      <TableColumn @bind-Field="@context.Id" Text="操作">
+        <Template Context="value">
+          @{
+            var item = Lists.FirstOrDefault(b => b.Id == value.Value);
+          }
+          <Button Color="Color.Success" OnClickWithoutRender="()=>CreatePackage(value.Value)"> 编辑</Button>
+          <Button Color="Color.Warning" OnClickWithoutRender="()=>CreatePackage(value.Value,true)"> 查看</Button>
+        </Template>
+      </TableColumn>
+    </TableColumns>
+
+  </Table>
+</div>

@@ -18,6 +18,7 @@ namespace OrderTrackBlazor.Entities
     public string? Note { get; set; }
     public int? PackageNumber { get; set; }
     public virtual List<OrderTrackDispatchItem>? Items { get; set; }
+    public virtual List<OrderTrackDispatchPackage>? PackageRecords { get; set; }
 
   }
   [EntityChangeTracker<OrderTrackDispatchRecord>]

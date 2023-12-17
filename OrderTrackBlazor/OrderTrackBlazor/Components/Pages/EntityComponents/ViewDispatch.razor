@@ -15,7 +15,7 @@
       收入调整 <span>@DTO.Income</span>
     </div>
     <div class="col-3 col-sm-6">
-      箱数 <span>@DTO.PackageNumber</span>
+      箱数 <span>@DTO.CalculatePackageNumber</span>
     </div>
     <div class="col-6">
       合计收入: @DTO.TotalIncome
@@ -23,7 +23,7 @@
     @if (ShowDetail)
     {
       <div class="col-6">
-        总采购数: @DTO.EditItems.Sum(b => b.Number)
+        总采购数: @DTO.EditItems.Sum(b => b.CalculateNumber)
       </div>
 
       <div class="col-12">
@@ -36,7 +36,7 @@
         <TableColumns>
           <TableColumn @bind-Field="@context.ProductionName" Text="产品">
           </TableColumn>
-          <TableColumn @bind-Field="@context.Number" Text="数量" Width="100">
+          <TableColumn @bind-Field="@context.CalculateNumber" Text="数量" Width="100">
           </TableColumn>
           <TableColumn @bind-Field="@context.DispatchPrice" Text="单价" Width="100">
           </TableColumn>
@@ -45,7 +45,7 @@
         </TableColumns>
         <TableFooter>
           <TableFooterCell Text="合计" />
-          <TableFooterCell Text="@($"{DTO.Items.Sum(b=>b.Number).ToString()}")">
+          <TableFooterCell Text="@($"{DTO.Items.Sum(b=>b.CalculateNumber).ToString()}")">
 
           </TableFooterCell>
           <TableFooterCell Text=" " />

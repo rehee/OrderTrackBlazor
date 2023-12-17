@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderTrackBlazor.Data;
 
@@ -11,9 +12,11 @@ using OrderTrackBlazor.Data;
 namespace OrderTrackBlazor.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231217010021_add_package_related_entity")]
+    partial class add_package_related_entity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,16 +159,10 @@ namespace OrderTrackBlazor.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("BriefDiscribtion")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discribtion")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Number")
@@ -397,6 +394,9 @@ namespace OrderTrackBlazor.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
+                    b.Property<long?>("OrderTrackPackageId")
+                        .HasColumnType("bigint");
+
                     b.Property<long?>("PackageId")
                         .HasColumnType("bigint");
 
@@ -413,6 +413,8 @@ namespace OrderTrackBlazor.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderTrackPackageId");
 
                     b.HasIndex("PackageId");
 
@@ -926,7 +928,7 @@ namespace OrderTrackBlazor.Migrations
             modelBuilder.Entity("OrderTrackBlazor.Entities.OrderTrackPackage", b =>
                 {
                     b.HasOne("OrderTrackBlazor.Entities.OrderTrackOrder", "Order")
-                        .WithMany("Packages")
+                        .WithMany()
                         .HasForeignKey("OrderId");
 
                     b.HasOne("OrderTrackBlazor.Entities.OrderTrackPackageSize", "Size")
@@ -940,8 +942,12 @@ namespace OrderTrackBlazor.Migrations
 
             modelBuilder.Entity("OrderTrackBlazor.Entities.OrderTrackPackageItem", b =>
                 {
-                    b.HasOne("OrderTrackBlazor.Entities.OrderTrackPackage", "Package")
+                    b.HasOne("OrderTrackBlazor.Entities.OrderTrackPackage", null)
                         .WithMany("Items")
+                        .HasForeignKey("OrderTrackPackageId");
+
+                    b.HasOne("OrderTrackBlazor.Entities.OrderTrackPackageItem", "Package")
+                        .WithMany()
                         .HasForeignKey("PackageId");
 
                     b.HasOne("OrderTrackBlazor.Entities.OrderTrackProduction", "Production")
@@ -1055,8 +1061,6 @@ namespace OrderTrackBlazor.Migrations
                     b.Navigation("DispatchRecords");
 
                     b.Navigation("Items");
-
-                    b.Navigation("Packages");
 
                     b.Navigation("PurchaseRecords");
                 });

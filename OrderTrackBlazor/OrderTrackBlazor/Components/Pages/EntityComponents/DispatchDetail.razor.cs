@@ -1,8 +1,5 @@
 using BootstrapBlazor.Components;
-using Google.Api;
 using Microsoft.AspNetCore.Components;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace OrderTrackBlazor.Components.Pages.EntityComponents
 {
@@ -28,6 +25,38 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       }
       return Task.CompletedTask;
     }
+    private async Task recalculatePackageNumber()
+    {
+      await Task.CompletedTask;
+      var map = new Dictionary<long?, int>();
+      foreach (var package in Model.SourcePackages)
+      {
+        foreach (var item in package.Source)
+        {
+          if (!map.ContainsKey(item.ProductionId))
+          {
+            map.Add(item.ProductionId, 0);
+          }
+          map[item.ProductionId] = map[item.ProductionId] + ((package.Number ?? 0) * item.Number);
+        }
+      }
+      foreach (var item in Source)
+      {
+        if (!map.ContainsKey(item.ProductionId))
+        {
+          continue;
+        }
+        item.NumberFromPackage = map[item.ProductionId];
+      }
+      StateHasChanged();
+    }
+    public Task PackageUpdate(int? value)
+    {
+      return Task.Run(async () =>
+      {
+        await recalculatePackageNumber();
+      });
+    }
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync();
@@ -46,6 +75,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
         Model = await dispatchService!.FindDispatchDetailDTO(Id.Value);
         SelectedStatusItem = StatusItem.Where(b => b.Value == ((int)Model.Status).ToString()).FirstOrDefault();
       }
+      await recalculatePackageNumber();
       StateHasChanged();
     }
     public override async Task<bool> SaveFunction()

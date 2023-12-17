@@ -25,9 +25,9 @@ namespace OrderTrackBlazor.Services
         IncomeDate = dto.IncomeDate,
       };
       await context.AddAsync<OrderTrackDispatchRecord>(record, CancellationToken.None);
-      foreach (var item in dto.Items ?? new List<DispatchDetailItemDTO>())
+      foreach (var item in dto.Items.DistinctBy(b => b.ProductionId) ?? new List<DispatchDetailItemDTO>())
       {
-        if (item.Number == 0)
+        if (item.CalculateNumber == 0)
         {
           continue;
         }
@@ -37,10 +37,24 @@ namespace OrderTrackBlazor.Services
           DispatchRecord = record,
           ProductionId = item.ProductionId,
           Quantity = item.Number,
+          PackageQuantity = item.NumberFromPackage,
           OrderProductionId = item.OrderProductionId,
           DispatchPrice = item.DispatchPrice
         };
         await context.AddAsync<OrderTrackDispatchItem>(recordItem, CancellationToken.None);
+      }
+      foreach (var item in dto.SourcePackages.DistinctBy(b => b.PackageId) ?? new List<PackageDetailDTO>())
+      {
+        var dispatchPackage = new OrderTrackDispatchPackage
+        {
+          RecordId = record.Id,
+          Record = record,
+          PackageId = item.PackageId,
+          BriefDiscribtion = item.BriefDiscribtionFromDispatch,
+          Discribtion = item.DiscribtionFromDispatch,
+          Number = item.Number,
+        };
+        await context.AddAsync<OrderTrackDispatchPackage>(dispatchPackage, CancellationToken.None);
       }
       await context.SaveChangesAsync(null);
       return true;
@@ -65,7 +79,7 @@ namespace OrderTrackBlazor.Services
         {
           if (item.Id == null || item.Id <= 0)
           {
-            if (item.Number == 0)
+            if (item.CalculateNumber == 0)
             {
               continue;
             }
@@ -75,6 +89,7 @@ namespace OrderTrackBlazor.Services
               DispatchRecord = dispatch,
               ProductionId = item.ProductionId,
               Quantity = item.Number,
+              PackageQuantity = item.NumberFromPackage,
               OrderProductionId = item.OrderProductionId,
               DispatchPrice = item.DispatchPrice
 
@@ -91,7 +106,40 @@ namespace OrderTrackBlazor.Services
             record.DispatchPrice = item.DispatchPrice;
             record.ProductionId = item.ProductionId;
             record.OrderProductionId = item.OrderProductionId;
+            record.PackageQuantity = item.NumberFromPackage;
           }
+        }
+        foreach (var item in dto.SourcePackages.DistinctBy(b => b.PackageId) ?? new List<PackageDetailDTO>())
+        {
+          if (item.Id <= 0)
+          {
+            if (item.Number == 0)
+            {
+              continue;
+            }
+            var dispatchPackage = new OrderTrackDispatchPackage
+            {
+              RecordId = dispatch.Id,
+              Record = dispatch,
+              PackageId = item.PackageId,
+              BriefDiscribtion = item.BriefDiscribtionFromDispatch,
+              Discribtion = item.DiscribtionFromDispatch,
+              Number = item.Number,
+            };
+            await context.AddAsync<OrderTrackDispatchPackage>(dispatchPackage, CancellationToken.None);
+          }
+          else
+          {
+            var record = dispatch.PackageRecords.FirstOrDefault(b => b.Id == item.Id);
+            if (record == null)
+            {
+              continue;
+            }
+            record.Number = item.Number;
+            record.BriefDiscribtion = item.BriefDiscribtionFromDispatch;
+            record.Discribtion = item.DiscribtionFromDispatch;
+          }
+
         }
       }
       try
@@ -127,10 +175,21 @@ namespace OrderTrackBlazor.Services
             Id = b.Id,
             RowId = Guid.NewGuid(),
             Number = b.Quantity,
+            NumberFromPackage = b.PackageQuantity,
             DispatchPrice = b.DispatchPrice != null ? b.DispatchPrice : b.OrderProduction != null ? b.OrderProduction.OrderPrice != null ? b.OrderProduction.OrderPrice : b.Production.OriginalPrice : b.Production.OriginalPrice,
             ProductionId = b.ProductionId,
             ProductionName = b.Production.Name,
             OrderProductionId = b.OrderProductionId
+          }),
+          Packages = dispatch.PackageRecords.Select(b => new PackageDetailDTO()
+          {
+            Id = b.Id,
+            PackageId = b.PackageId,
+            Number = b.Number,
+            BriefDiscribtion = b.Package.BriefDiscribtion,
+            Discribtion = b.Package.Discribtion,
+            BriefDiscribtionFromDispatch = b.BriefDiscribtion,
+            DiscribtionFromDispatch = b.Discribtion
           })
 
         };
@@ -147,7 +206,18 @@ namespace OrderTrackBlazor.Services
           Items = new List<DispatchDetailItemDTO>()
         };
       }
-
+      var oPackage = order.Packages.Where(b => b.Confirmed == true)
+        .Select(b => new PackageDetailDTO
+        {
+          RowId = Guid.NewGuid(),
+          PackageId = b.Id,
+          BriefDiscribtion = b.BriefDiscribtion,
+          OrderItems = b.Items.Select(bi => new PackageItemDTO
+          {
+            ProductionId = bi.ProductionId,
+            Number = bi.Number,
+          }).Where(b => b.Number > 0).ToList(),
+        }).ToList();
       return new DispatchDetailDTO
       {
         OrderId = orderId,
@@ -160,6 +230,7 @@ namespace OrderTrackBlazor.Services
           OrderProductionId = b.Id,
           DispatchPrice = b.OrderPrice != null ? b.OrderPrice : b.Production?.OriginalPrice
         }).ToList(),
+        OrderPackages = oPackage,
       };
     }
     public async Task<DispatchDetailDTO?> FindDispatchDetailDTO(long dispatchId)
@@ -179,6 +250,33 @@ namespace OrderTrackBlazor.Services
         ProductionName = b.Production.Name,
         OrderProductionId = b.Id,
         DispatchPrice = b.OrderPrice != null ? b.OrderPrice : b.Production.OriginalPrice
+      }).ToList();
+      var orderPackage = dispatch.Order.Packages.Where(b => b.Confirmed == true)
+        .Select(b => new PackageDetailDTO
+        {
+          RowId = Guid.NewGuid(),
+          PackageId = b.Id,
+          BriefDiscribtion = b.BriefDiscribtion,
+          OrderItems = b.Items.Select(bi => new PackageItemDTO
+          {
+            ProductionId = bi.ProductionId,
+            Number = bi.Number,
+          }).Where(b => b.Number > 0).ToList(),
+        }).ToList();
+      var dispatchPackage = dispatch.PackageRecords.Select(b => new PackageDetailDTO
+      {
+        Id = b.Id,
+        PackageId = b.PackageId,
+        Number = b.Number,
+        BriefDiscribtion = b.Package.BriefDiscribtion,
+        Discribtion = b.Package.Discribtion,
+        BriefDiscribtionFromDispatch = b.BriefDiscribtion,
+        DiscribtionFromDispatch = b.Discribtion,
+        Items = b.Package.Items.Select(p => new PackageItemDTO
+        {
+          ProductionId = p.ProductionId,
+          Number = p.Number,
+        }).ToList()
       }).ToList();
       return new DispatchDetailDTO
       {
@@ -200,7 +298,9 @@ namespace OrderTrackBlazor.Services
           ProductionName = b.Production?.Name,
           DispatchPrice = b.DispatchPrice != null ? b.DispatchPrice : b.OrderProduction != null ? b.OrderProduction.OrderPrice != null ? b.OrderProduction.OrderPrice : b.Production.OriginalPrice : b.Production.OriginalPrice
         }).ToList(),
-        OrderItems = OrderItems
+        OrderItems = OrderItems,
+        OrderPackages = orderPackage,
+        Packages = dispatchPackage
       };
     }
 

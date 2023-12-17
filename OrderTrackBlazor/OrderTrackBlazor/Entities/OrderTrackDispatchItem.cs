@@ -19,5 +19,7 @@ namespace OrderTrackBlazor.Entities
 
     public decimal? DispatchPrice { get; set; }
     public int Quantity { get; set; }
+
+    public int PackageQuantity { get; set; }
   }
 }

@@ -79,7 +79,26 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       };
       await dialogService!.Show(dotion);
     }
-
+    public async Task PackageList(long? id = null)
+    {
+      var comp = BootstrapDynamicComponent.CreateComponent<PackagePage>(
+          new Dictionary<string, object?>()
+          {
+            ["Id"] = id,
+          });
+      var dotion = new DialogOption()
+      {
+        Title = "Packages",
+        Size = Size.ExtraLarge,
+        Component = comp,
+        OnCloseAsync = async () =>
+        {
+          await Task.CompletedTask;
+          //System.Console.WriteLine("11111111111111111");
+        }
+      };
+      await dialogService!.Show(dotion);
+    }
     public OrderTrackProduction? Model { get; set; }
 
   }

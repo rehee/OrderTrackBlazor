@@ -43,7 +43,7 @@ namespace OrderTrackBlazor.Workers
           await context.SaveChangesAsync(null);
 
           var dispatchItemss = await context.Query<OrderTrackDispatchItem>(false)
-            .Where(b => b.Quantity == 0).ToListAsync();
+            .Where(b => (b.Quantity + b.PackageQuantity) == 0).ToListAsync();
 
           foreach (var b in dispatchItemss)
           {

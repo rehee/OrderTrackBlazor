@@ -23,14 +23,32 @@
                           ShowLabel="true"
                           DisplayText="箱数" />
   </div>
-  <div class="col-6">
+  <div class="col-4">
     合计收入: @Model.TotalIncome
   </div>
-  <div class="col-6">
+  <div class="col-4">
     总采购数: @Model.EditItems.Sum(b => b.Number)
+  </div>
+  <div class="col-4">
+    总箱数: @Model.CalculatePackageNumber
   </div>
   <div class="col-12">
     <Textarea placeholder="备注" rows="4" @bind-Value="Model!.Note" DisplayText="备注" ShowLabel="true" />
+  </div>
+  <div class="col-12">
+    <p>总配货箱数: @Model.SourcePackages.Sum(b => b.Number) </p>
+    @foreach (var item in Model.SourcePackages)
+    {
+      <div class="row g-3">
+        <p class="col-12">箱号: @item.PackageId 备注: @item.BriefDiscribtion</p>
+        <div class="col-10">
+          <BootstrapInput @bind-Value="@item.BriefDiscribtionFromDispatch" DisplayText="备注" ShowLabel="true" />
+        </div>
+        <div class="col-2">
+          <BootstrapInputNumber @bind-Value="@item.NumberInput" OnValueChanged="PackageUpdate" DisplayText="箱数" ShowLabel="true" />
+        </div>
+      </div>
+    }
   </div>
 
   <div class="col-12">
@@ -47,6 +65,9 @@
             <BootstrapInput @bind-Value="item.NumberInput"
                             Color="Color.Success"
                             ShowLabel="false" />
+            <span> </span>
+            (<span>@item.NumberFromPackage</span>)
+            <span> @item.CalculateNumber</span>
           </Template>
         </TableColumn>
         <TableColumn @bind-Field="@context.RowId" Text="单价" Width="100">
@@ -70,7 +91,7 @@
       </TableColumns>
       <TableFooter>
         <TableFooterCell Text="合计" />
-        <TableFooterCell Text="@($"{Source.Sum(b=>b.Number).ToString()}")">
+        <TableFooterCell Text="@($"{Source.Sum(b=>b.CalculateNumber).ToString()}")">
 
         </TableFooterCell>
         <TableFooterCell />

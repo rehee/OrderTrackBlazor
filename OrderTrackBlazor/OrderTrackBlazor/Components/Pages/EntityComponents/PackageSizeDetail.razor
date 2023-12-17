@@ -1,0 +1,23 @@
+﻿@inherits PackageSizeDetailComponent
+@if (PackageSize != null)
+{
+  <div class="row g-3">
+    <div class="col-12">
+      <BootstrapInput TValue="string"
+                      @bind-Value="PackageSize.Name"
+                      ShowLabel="true"
+                      DisplayText="包装大小" />
+    </div>
+    <div class="col-12">
+      <BootstrapInputNumber @bind-Value="PackageSize.DisplayOrder"
+                            ShowLabel="true"
+                            DisplayText="排序" />
+
+    </div>
+    <div class="col-12">
+      <Switch @bind-Value="DeleteOnSave" OnColor="Color.Danger" ShowLabel="true" DisplayText="是否删除"></Switch>
+    </div>
+  </div>
+}
+
+

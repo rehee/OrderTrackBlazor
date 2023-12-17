@@ -28,6 +28,7 @@ else
           <Template Context="value">
             <Button Color="Color.Primary" Icon="fas fa-square-pen" Text="编辑" OnClickWithoutRender="()=>CreateProduction(value.Value)" />
             <Button Color="Color.Secondary" Icon="fas fa-square-pen" Text="出库" OnClickWithoutRender="()=>DispatchList(value.Value)" />
+            <Button Color="Color.Warning" Icon="fas fa-square-pen" Text="装箱" OnClickWithoutRender="()=>PackageList(value.Value)" />
           </Template>
         </TableColumn>
       </TableColumns>

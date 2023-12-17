@@ -159,8 +159,8 @@ namespace OrderTrackBlazor.Services
         {
           ProductionId = b.ProductionId,
           Required = b.Quantity,
-          Purchased = b.Production.PurchaseItems.Sum(b => b.Quantity) - b.Production.DispatchItems.Where(b => b.DispatchRecord.Status != EnumDispatchStatus.Error).Sum(b => b.Quantity),
-          Dispatched = b.Production.DispatchItems.Where(b => b.DispatchRecord.OrderTrackOrderId == order.Id && b.DispatchRecord.Status != EnumDispatchStatus.Error).Sum(b => b.Quantity),
+          Purchased = b.Production.PurchaseItems.Sum(b => b.Quantity) - b.Production.DispatchItems.Where(b => b.DispatchRecord.Status != EnumDispatchStatus.Error).Sum(b => b.Quantity + b.PackageQuantity),
+          Dispatched = b.Production.DispatchItems.Where(b => b.DispatchRecord.OrderTrackOrderId == order.Id && b.DispatchRecord.Status != EnumDispatchStatus.Error).Sum(b => b.Quantity + b.PackageQuantity),
           ProductionName = b.Production.Name,
         })
         select new SummaryDTO

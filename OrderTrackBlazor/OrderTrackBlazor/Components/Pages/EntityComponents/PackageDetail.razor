@@ -1,0 +1,45 @@
+﻿@inherits PackageDetailComponent
+@if (Model != null)
+{
+  <div class="row g-3">
+    <div class="col-12 col-sm-4">
+      <Select Items="PackageSizes" OnSelectedItemChanged="OnItemChanged" @bind-Value="SelectedItem"
+              ShowLabel="true"
+              DisplayText="箱子种类" IsDisabled="Model.Confirmed||ReadOnly==true"></Select>
+    </div>
+    <div class="col-12 col-sm-4">
+      <BootstrapInputNumber @bind-Value="@Model.Weight" IsDisabled="ReadOnly==true" Color="Color.Success" DisplayText="重量 (公斤)" ShowLabel="true" />
+    </div>
+    <div class="col-12 col-sm-4">
+      <Switch @bind-Value="Model.Confirmed" OnColor="Color.Danger" IsDisabled="ReadOnly==true" ShowLabel="true" DisplayText="确定"></Switch>
+    </div>
+    <div class="col-12">
+      <BootstrapInput @bind-Value="@Model.BriefDiscribtion" IsDisabled="ReadOnly==true" DisplayText="简要备注" ShowLabel="true" />
+    </div>
+    <div class="col-12">
+      <Textarea placeholder="备注" rows="4" @bind-Value="Model!.Discribtion" IsDisabled="ReadOnly==true" DisplayText="备注" ShowLabel="true" />
+    </div>
+  </div>
+  <hr />
+  <div class="col-12">
+    <Table TItem="PackageItemDTO" Items="Model.Source.Where(b=>ReadOnly==true? b.Number>0 :true)">
+      <TableColumns>
+        <TableColumn @bind-Field="@context.ProductionName" Text="产品">
+
+        </TableColumn>
+
+        <TableColumn @bind-Field="@context.RowId" Text="数量">
+          <Template Context="value">
+            @{
+              var item = Model.Source.FirstOrDefault(b => b.RowId == value.Value);
+            }
+            <BootstrapInputNumber @bind-Value="@item.NumberInput" IsDisabled="Model.Confirmed||ReadOnly==true" Color="Color.Success" ShowLabel="false" />
+
+          </Template>
+        </TableColumn>
+      </TableColumns>
+
+    </Table>
+  </div>
+}
+

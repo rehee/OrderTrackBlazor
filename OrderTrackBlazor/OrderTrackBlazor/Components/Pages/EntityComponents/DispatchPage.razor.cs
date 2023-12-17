@@ -23,6 +23,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       }
     }
 
+    
 
 
     public async Task RefreshPage()
