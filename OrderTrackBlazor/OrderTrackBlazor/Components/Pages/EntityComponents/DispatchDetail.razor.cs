@@ -25,7 +25,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       }
       return Task.CompletedTask;
     }
-    private async Task recalculatePackageNumber()
+    public async Task recalculatePackageNumber()
     {
       await Task.CompletedTask;
       var map = new Dictionary<long?, int>();
@@ -80,6 +80,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     }
     public override async Task<bool> SaveFunction()
     {
+      await recalculatePackageNumber();
       if (Id == null)
       {
         return await dispatchService.CreateDispatch(Model);

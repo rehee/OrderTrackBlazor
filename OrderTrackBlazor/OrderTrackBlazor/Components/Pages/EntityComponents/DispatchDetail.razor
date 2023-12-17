@@ -36,7 +36,7 @@
     <Textarea placeholder="备注" rows="4" @bind-Value="Model!.Note" DisplayText="备注" ShowLabel="true" />
   </div>
   <div class="col-12">
-    <p>总配货箱数: @Model.SourcePackages.Sum(b => b.Number) </p>
+    <p>总配货箱数: @Model.SourcePackages.Sum(b => b.Number) <Button OnClickWithoutRender="recalculatePackageNumber">刷新</Button></p>
     @foreach (var item in Model.SourcePackages)
     {
       <div class="row g-3">
