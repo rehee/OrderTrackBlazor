@@ -22,7 +22,7 @@
       }
     }
     public string? Note { get; set; }
-    public decimal? PackageNumber { get; set; }
+    public int? PackageNumber { get; set; }
     public IEnumerable<DispatchDetailItemDTO>? Items { get; set; }
     public IEnumerable<DispatchDetailItemDTO>? OrderItems { get; set; }
 

@@ -14,7 +14,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
 
     public List<DispatchDetailDTO> Dispatches { get; set; } = new List<DispatchDetailDTO>();
 
-    public List<(string?, decimal?, decimal)> Summary
+    public List<(string?, int?, decimal)> Summary
     {
       get
       {
