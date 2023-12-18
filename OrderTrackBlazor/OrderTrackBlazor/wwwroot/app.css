@@ -121,3 +121,7 @@ h1:focus {
 .nav-item .nav-link {
   padding-left: 0.5rem;
 }
+.table-cell span {
+  word-break: break-word;
+  word-wrap: break-word;
+}
