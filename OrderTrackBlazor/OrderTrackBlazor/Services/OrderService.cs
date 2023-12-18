@@ -28,6 +28,9 @@ namespace OrderTrackBlazor.Services
                   ProductionId = b.ProductionId,
                   Quantity = b.Quantity,
                   OrderPrice = b.OrderPrice != null ? b.OrderPrice : b.Production.OriginalPrice,
+                  RecommandShopId = b.RecommendShopId,
+                  RecommandShopName = b.RecommendShop == null ? null : b.RecommendShop.Name,
+                  Note = b.Note
                 }).ToList()
              };
     }

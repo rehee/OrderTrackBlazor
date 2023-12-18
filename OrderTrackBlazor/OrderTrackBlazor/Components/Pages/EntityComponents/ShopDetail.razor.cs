@@ -36,7 +36,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
         {
           Note = Shop?.Note,
           PostCode = Shop?.PostCode,
-          ShopName = Shop?.ShopName,
+          Name = Shop?.Name,
           DisplayOrder = Shop?.DisplayOrder ?? 1
         }, CancellationToken.None);
         await Context.SaveChangesAsync(null);
@@ -55,7 +55,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
         {
           record.Note = Shop?.Note;
           record.PostCode = Shop?.PostCode;
-          record.ShopName = Shop?.ShopName;
+          record.Name = Shop?.Name;
           record.DisplayOrder = Shop?.DisplayOrder ?? 1;
         }
         await Context.SaveChangesAsync(null);

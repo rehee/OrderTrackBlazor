@@ -15,5 +15,10 @@ namespace OrderTrackBlazor.Entities
     public decimal? OrderPrice { get; set; }
     public int Quantity { get; set; }
     public virtual List<OrderTrackDispatchItem>? DispatchItems { get; set; }
+
+    [ForeignKey(nameof(OrderTrackShop))]
+    public long? RecommendShopId { get; set; }
+    public virtual OrderTrackShop? RecommendShop { get; set; }
+    public string? Note { get; set; }
   }
 }

@@ -49,6 +49,7 @@ namespace OrderTrackBlazor
       context.Services!.AddHostedService<EntityCheckWorker>();
       context.Services!.AddScoped<IShopService, ShopService>();
       context.Services!.AddScoped<IPackageService, PackageService>();
+      context.Services!.AddScoped<ISelectedItemService, SelectedItemService>();
     }
     public override async Task BeforePreApplicationInitializationAsync(ServiceConfigurationContext context)
     {

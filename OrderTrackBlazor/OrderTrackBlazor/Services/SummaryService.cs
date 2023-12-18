@@ -122,7 +122,7 @@ namespace OrderTrackBlazor.Services
           ShopId = purchase.ShopId,
           Items = currentItem,
           OrderItems = orderItem,
-          ShopName = purchase.Shop.ShopName
+          ShopName = purchase.Shop.Name
         };
     }
 
@@ -162,6 +162,8 @@ namespace OrderTrackBlazor.Services
           Purchased = b.Production.PurchaseItems.Sum(b => b.Quantity) - b.Production.DispatchItems.Where(b => b.DispatchRecord.Status != EnumDispatchStatus.Error).Sum(b => b.Quantity + b.PackageQuantity),
           Dispatched = b.Production.DispatchItems.Where(b => b.DispatchRecord.OrderTrackOrderId == order.Id && b.DispatchRecord.Status != EnumDispatchStatus.Error).Sum(b => b.Quantity + b.PackageQuantity),
           ProductionName = b.Production.Name,
+          RecommandShopName = b.RecommendShop.Name,
+          Note = b.Note
         })
         select new SummaryDTO
         {

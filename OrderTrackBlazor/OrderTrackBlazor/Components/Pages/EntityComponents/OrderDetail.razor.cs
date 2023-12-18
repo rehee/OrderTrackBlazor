@@ -11,8 +11,12 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     public long? Id { get; set; }
 
     public List<OrderTrackProduction> Productions { get; set; } = new List<OrderTrackProduction>();
+
+    public IEnumerable<SelectedItem> ShopSelect { get; set; } = Enumerable.Empty<SelectedItem>();
     [Inject]
     public IOrderService? orderService { get; set; }
+    [Inject]
+    public ISelectedItemService? selectedItemService { get; set; }
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync();
@@ -29,6 +33,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       {
         Model = await orderService.FindAsync(Id);
       }
+      ShopSelect = (await selectedItemService.GetEntitySelection<OrderTrackShop>()).ToList();
       StateHasChanged();
     }
     public OrderDTO? Model { get; set; }
@@ -44,6 +49,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
             ["OnSave"] = onsave,
             ["Productions"] = Productions,
             ["FromTable"] = fromTable,
+            ["ShopSelect"]= ShopSelect,
             ["DTO"] = dto == null ? new OrderProductionDTO { ParentId = Model?.Id, Parent = Model } : dto
           }); ;
 
@@ -89,6 +95,8 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
             ProductionId = p.ProductionId,
             Quantity = p.Quantity,
             OrderPrice = p.OrderPrice,
+            RecommendShopId = p.RecommandShopId,
+            Note = p.Note,
           };
           await Context.AddAsync<OrderTrackOrderItem>(p2, CancellationToken.None);
         }
@@ -101,6 +109,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
           order.Note = Model.Note;
           order.ShortNote = Model.ShortNote;
           order.OrderDate = Model.OrderDate;
+
         }
         foreach (var p in Model.Productions ?? new List<OrderProductionDTO>())
         {
@@ -113,6 +122,8 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
               ProductionId = p.ProductionId,
               Quantity = p.Quantity,
               OrderPrice = p.OrderPrice,
+              RecommendShopId = p.RecommandShopId,
+              Note = p.Note,
             };
             await Context.AddAsync<OrderTrackOrderItem>(p2, CancellationToken.None);
           }
@@ -124,6 +135,8 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
               p2.ProductionId = p.ProductionId;
               p2.Quantity = p.Quantity;
               p2.OrderPrice = p.OrderPrice;
+              p2.RecommendShopId = p.RecommandShopId;
+              p2.Note = p.Note;
             }
           }
         }

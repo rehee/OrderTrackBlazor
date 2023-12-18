@@ -23,6 +23,10 @@ namespace OrderTrackBlazor.DTOs
     public int Quantity { get; set; }
     public decimal? OrderPrice { get; set; }
     public DateTime? CreateDate { get; set; }
+
+    public long? RecommandShopId { get; set; }
+    public string? RecommandShopName { get; set; }
+    public string? Note { get; set; }
   }
 
   public interface IWithOrderProductionsDTO

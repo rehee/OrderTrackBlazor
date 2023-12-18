@@ -18,7 +18,7 @@ namespace OrderTrackBlazor.Services
         from shop in context.Query<OrderTrackShop>(true).OrderBy(b => b.DisplayOrder).ThenBy(b => b.Id)
         select new SelectedItem
         {
-          Text = shop.ShopName == null ? "" : shop.ShopName,
+          Text = shop.Name == null ? "" : shop.Name,
           Value = shop.Id.ToString()
         };
       var result = new SelectedItem[] { new SelectedItem("", "select") };

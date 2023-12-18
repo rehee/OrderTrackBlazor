@@ -38,7 +38,7 @@ namespace OrderTrackBlazor.Services
           Date = purchaes.PurchaseRecord.PurchaseDate,
           IsPurchase = true,
           Number = purchaes.Quantity,
-          Shop = purchaes.PurchaseRecord.Shop.ShopName,
+          Shop = purchaes.PurchaseRecord.Shop.Name,
           OrderShortNote = ""
         };
       var dispatchQuery =

@@ -11,5 +11,11 @@
     <div class="col-12">
       <BootstrapInputNumber @bind-Value="DTO.OrderPrice" ShowLabel="true" DisplayText="单价" />
     </div>
+    <div class="col-12">
+      <Select Items="ShopSelect" @bind-Value="SelectedShop" ShowLabel="true" DisplayText="推荐商店" ShowSearch="true" OnSelectedItemChanged="ShopItemChange"> </Select>
+    </div>
+    <div class="col-12">
+      <BootstrapInput @bind-Value="DTO.Note" ShowLabel="true" DisplayText="备注" />
+    </div>
   }
 </div>
