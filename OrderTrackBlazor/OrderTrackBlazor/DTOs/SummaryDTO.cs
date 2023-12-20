@@ -16,8 +16,10 @@
     public int Required { get; set; }
     public int Purchased { get; set; }
     public int Dispatched { get; set; }
-    public int NeedToBuy { get => (Required - Purchased - Dispatched) > 0 ? (Required - Purchased - Dispatched) : 0; set { } }
+    public int Shortage { get => Required - Dispatched; set { } }
+    public int NeedToBuy { get => Shortage > 0 ? (Shortage - Purchased) > 0 ? Shortage - Purchased : 0 : 0; set { } }
     public string? RecommandShopName { get; set; }
     public string? Note { get; set; }
+    public int Avaliable { get; set; }
   }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OrderTrackBlazor.Entities;
 using ReheeCmf.Commons;
 using ReheeCmf.Contexts;
 
@@ -21,12 +22,12 @@ namespace OrderTrackBlazor.Workers
 
           await Task.Delay(1000
           //);
-          * 60);
+          *60);
           using var scope = sp.CreateScope();
           using var context = scope.ServiceProvider.GetService<IContext>();
           var current = DateTime.UtcNow;
-          double deleteMins = -15;
-          //double deleteMins = 0;
+          //double deleteMins = -15;
+          double deleteMins = 0;
           var nextCurrent = DateTime.UtcNow.AddMinutes(deleteMins);
 
           var dispatchs = await context.Query<OrderTrackDispatchRecord>(false)
@@ -97,6 +98,56 @@ namespace OrderTrackBlazor.Workers
 
           }
           await context.SaveChangesAsync(null);
+
+          var emptyStockDispatchItem = await context.Query<OrderTrackStockDispatchPackageItem>(false)
+            .Where(b => b.Number == 0).ToListAsync();
+          foreach (var b in emptyStockDispatchItem)
+          {
+            if ((b.UpdateDate != null && b.UpdateDate < nextCurrent) ||
+                  b.CreateDate < nextCurrent)
+            {
+              foreach (var d in await context.Query<OrderTrackDispatchItem>(false)
+                .Where(d => d.OrderTrackStockDispatchPackageId == b.PackageId).ToListAsync())
+              {
+                context.Delete(d);
+              }
+              context.Delete(b);
+            }
+          }
+          await context.SaveChangesAsync(null);
+
+          var emptyStockPackage = await context.Query<OrderTrackStockDispatchPackage>(false)
+            .Where(b => b.Number == 0 && b.Items.Any() != true).ToListAsync();
+          foreach (var b in emptyStockPackage)
+          {
+            if ((b.UpdateDate != null && b.UpdateDate < nextCurrent) ||
+                  b.CreateDate < nextCurrent)
+            {
+              context.Delete(b);
+            }
+          }
+          await context.SaveChangesAsync(null);
+          var errorDispatch = await context.Query<OrderTrackStockDispatch>(false).Where(b => b.Status == EnumDispatchStatus.Error).ToArrayAsync();
+          foreach (var b in errorDispatch)
+          {
+            if ((b.UpdateDate != null && b.UpdateDate < nextCurrent) ||
+                  b.CreateDate < nextCurrent)
+            {
+              context.Delete(b);
+            }
+          }
+          await context.SaveChangesAsync(null);
+          //var errorDispatchItem = await context.Query<OrderTrackDispatchItem>(false)
+          //  .ToArrayAsync();
+          //foreach (var b in errorDispatchItem)
+          //{
+          //  if ((b.UpdateDate != null && b.UpdateDate < nextCurrent) ||
+          //        b.CreateDate < nextCurrent)
+          //  {
+          //    context.Delete(b);
+          //  }
+          //}
+          //await context.SaveChangesAsync(null);
         }
       }
       catch (Exception ex)

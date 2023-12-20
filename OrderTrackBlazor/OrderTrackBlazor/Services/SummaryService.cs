@@ -3,6 +3,7 @@ using BootstrapBlazor.Components;
 using Microsoft.EntityFrameworkCore;
 using OrderTrackBlazor.Components.Pages.EntityComponents;
 using ReheeCmf.Contexts;
+using static Dropbox.Api.TeamLog.AccountCaptureAvailability;
 
 namespace OrderTrackBlazor.Services
 {
@@ -160,7 +161,7 @@ namespace OrderTrackBlazor.Services
           ProductionId = b.ProductionId,
           Required = b.Quantity,
           Purchased = b.Production.PurchaseItems.Sum(b => b.Quantity) - b.Production.DispatchItems.Where(b => b.DispatchRecord.Status != EnumDispatchStatus.Error).Sum(b => b.Quantity + b.PackageQuantity),
-          Dispatched = b.Production.DispatchItems.Where(b => b.DispatchRecord.OrderTrackOrderId == order.Id && b.DispatchRecord.Status != EnumDispatchStatus.Error).Sum(b => b.Quantity + b.PackageQuantity),
+          Dispatched = b.Production.DispatchItems.Where(d => (d.OrderProductionId == b.Id) && d.DispatchRecord.Status != EnumDispatchStatus.Error).Sum(s => s.Quantity + s.PackageQuantity),
           ProductionName = b.Production.Name,
           RecommandShopName = b.RecommendShop.Name,
           Note = b.Note

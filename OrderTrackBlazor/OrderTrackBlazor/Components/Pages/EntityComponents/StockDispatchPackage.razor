@@ -1,0 +1,86 @@
+﻿@inherits StockDispatchPackageComponent
+@if (DTO != null)
+{
+  <div class="row g-3">
+    <div class="col-12 col-sm-4">
+      <Select Items="PackageSizes" OnSelectedItemChanged="OnItemChanged" @bind-Value="SelectedItem"
+              ShowLabel="true"
+              Color="Color.Success"
+              DisplayText="箱子种类"></Select>
+    </div>
+    <div class="col-12 col-sm-4">
+      <BootstrapInputNumber @bind-Value="DTO.PackagePrice"
+                            ShowLabel="true"
+                            Color="Color.Success"
+                            DisplayText="每箱收入 (£)" />
+    </div>
+    <div class="col-12 col-sm-4">
+      <BootstrapInputNumber @bind-Value="DTO.PackageWeight"
+                            Color="Color.Success"
+                            ShowLabel="true" DisplayText="重量 (kg)" />
+    </div>
+    <div class="col-12">
+      <BootstrapInput @bind-Value="DTO.BriefDiscribtion"
+                      Color="Color.Success"
+                      ShowLabel="true" DisplayText="描述" />
+    </div>
+    <div class="col-12">
+      <Textarea rows="4" @bind-Value="DTO.Discribtion"
+                Color="Color.Success"
+                ShowLabel="true" DisplayText="详情" />
+    </div>
+  </div>
+}
+@if (DTO?.Items?.Any() == true)
+{
+  <div class="row g-3">
+    <div class="col-12">
+      <BootstrapInputNumber class="" @bind-Value="DTO.NumberInput"
+                            Color="Color.Success"
+                            ShowLabel="true"
+                            DisplayText="箱数" />
+    </div>
+    <div class="col-12">
+      内容
+    </div>
+    @foreach (var item in DTO.Items)
+    {
+      <div class="col-10">
+        <span>@item.ProductionName</span>
+        <span>库存:(@item.AvaliableStock)</span>
+        <span>剩余:(@item.CalculateStock)</span>
+      </div>
+      <div class="col-2">
+        <BootstrapInputNumber @bind-Value="item.NumberInput"
+                              Color="Color.Success"
+                              ShowLabel="false" />
+      </div>
+    }
+  </div>
+}
+<div class="row g-3">
+  <div class="col-12">
+    详情:
+    <span>
+      箱数: @DTO?.Number
+    </span>
+    <span>
+      收入:£ @DTO?.PackageIncome
+    </span>
+    <span>
+      采购:£ @DTO?.PackageSpend
+    </span>
+    <span>
+      汇总:£ @DTO?.PackageTotal
+    </span>
+  </div>
+  @if (DTO?.OrderItems?.Any() == true)
+  {
+    foreach (var item in DTO.OrderItems)
+    {
+      <div class="col-12">
+        @item.ProductionName @item.Price @item.Number @item.CalculatePrice
+      </div>
+    }
+  }
+</div>

@@ -42,7 +42,7 @@ namespace OrderTrackBlazor.Services
           OrderShortNote = ""
         };
       var dispatchQuery =
-        from dispatch in context.Query<OrderTrackDispatchItem>(true).Where(b => b.Quantity != 0)
+        from dispatch in context.Query<OrderTrackDispatchItem>(true).Where(b => b.Quantity != 0 || b.PackageQuantity != 0)
         join record in context.Query<OrderTrackDispatchRecord>(true)
           .Where(b => b.Status != EnumDispatchStatus.Error) on dispatch.DispatchRecordId equals record.Id
         select new StockListDTO
@@ -52,12 +52,27 @@ namespace OrderTrackBlazor.Services
           CreateDate = dispatch.CreateDate,
           Date = record.DispatchDate,
           IsPurchase = false,
-          Number = dispatch.Quantity,
+          Number = dispatch.Quantity+ dispatch.PackageQuantity,
           OrderShortNote = record.Order.ShortNote,
           //Name = dispatch.Production.Name,
           Shop = "Other"
         };
-      return purchaesQuery.Concat(dispatchQuery);
+      var stockDispatch =
+        from dispatch in context.Query<OrderTrackDispatchItem>(true).Where(b => b.PackageQuantity != 0)
+        join record in context.Query<OrderTrackStockDispatchPackage>(true) on dispatch.OrderTrackStockDispatchPackageId equals record.Id
+        select new StockListDTO
+        {
+          Pk = dispatch.Id,
+          Id = dispatch.ProductionId,
+          CreateDate = dispatch.CreateDate,
+          Date = record.Dispatch.DispatchDate,
+          IsPurchase = false,
+          Number = dispatch.PackageQuantity,
+          OrderShortNote = record.BriefDiscribtion,
+          //Name = dispatch.Production.Name,
+          Shop = "Other"
+        };
+      return purchaesQuery.Concat(dispatchQuery).Concat(stockDispatch);
 
     }
   }

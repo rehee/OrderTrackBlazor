@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderTrackBlazor.Data;
 
@@ -11,9 +12,11 @@ using OrderTrackBlazor.Data;
 namespace OrderTrackBlazor.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231219172755_update_dispatch_related_item")]
+    partial class update_dispatch_related_item
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -765,19 +768,10 @@ namespace OrderTrackBlazor.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Number")
-                        .HasColumnType("int");
-
                     b.Property<long?>("OrderTrackStockDispatchId")
                         .HasColumnType("bigint");
 
                     b.Property<decimal>("PackagePrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<long?>("PackageSizeId")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("PackageWeight")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid?>("TenantID")
@@ -792,8 +786,6 @@ namespace OrderTrackBlazor.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrderTrackStockDispatchId");
-
-                    b.HasIndex("PackageSizeId");
 
                     b.ToTable("OrderTrackStockDispatchPackages");
                 });
@@ -821,10 +813,10 @@ namespace OrderTrackBlazor.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
-                    b.Property<long?>("PackageId")
+                    b.Property<long?>("OrderItemId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("ProductionId")
+                    b.Property<long?>("PackageId")
                         .HasColumnType("bigint");
 
                     b.Property<Guid?>("TenantID")
@@ -838,9 +830,9 @@ namespace OrderTrackBlazor.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PackageId");
+                    b.HasIndex("OrderItemId");
 
-                    b.HasIndex("ProductionId");
+                    b.HasIndex("PackageId");
 
                     b.ToTable("OrderTrackStockDispatchPackageItems");
                 });
@@ -1232,28 +1224,22 @@ namespace OrderTrackBlazor.Migrations
                         .WithMany("Packages")
                         .HasForeignKey("OrderTrackStockDispatchId");
 
-                    b.HasOne("OrderTrackBlazor.Entities.OrderTrackPackageSize", "PackageSize")
-                        .WithMany()
-                        .HasForeignKey("PackageSizeId");
-
                     b.Navigation("Dispatch");
-
-                    b.Navigation("PackageSize");
                 });
 
             modelBuilder.Entity("OrderTrackBlazor.Entities.OrderTrackStockDispatchPackageItem", b =>
                 {
+                    b.HasOne("OrderTrackBlazor.Entities.OrderTrackOrderItem", "OrderItem")
+                        .WithMany()
+                        .HasForeignKey("OrderItemId");
+
                     b.HasOne("OrderTrackBlazor.Entities.OrderTrackStockDispatchPackage", "Package")
                         .WithMany("Items")
                         .HasForeignKey("PackageId");
 
-                    b.HasOne("OrderTrackBlazor.Entities.OrderTrackProduction", "Production")
-                        .WithMany()
-                        .HasForeignKey("ProductionId");
+                    b.Navigation("OrderItem");
 
                     b.Navigation("Package");
-
-                    b.Navigation("Production");
                 });
 
             modelBuilder.Entity("ReheeCmf.ContextModule.Entities.TenantIdentityRoleClaim", b =>

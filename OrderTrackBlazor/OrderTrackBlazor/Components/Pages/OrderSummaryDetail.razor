@@ -19,15 +19,15 @@
   <div>
     <Table TItem="SummaryProductionDTO" Items="@Summary.Productions">
       <TableColumns>
-        <TableColumn @bind-Field="@context.ProductionName" Text="产品" Width="300">
+        <TableColumn @bind-Field="@context.ProductionName" Text="产品" >
         </TableColumn>
-        <TableColumn @bind-Field="@context.RecommandShopName" Text="推荐" Width="300">
+        <TableColumn @bind-Field="@context.RecommandShopName" Text="推荐">
         </TableColumn>
-        <TableColumn @bind-Field="@context.Note" Text="备注" Width="300">
+        <TableColumn @bind-Field="@context.Note" Text="备注" >
         </TableColumn>
         <TableColumn @bind-Field="@context.Required" Text="总需求" Width="50">
         </TableColumn>
-        <TableColumn @bind-Field="@context.Purchased" Text="已采购" Width="50">
+        <TableColumn @bind-Field="@context.Purchased" Text="库存" Width="50">
         </TableColumn>
         <TableColumn @bind-Field="@context.Dispatched" Text="已发货" Width="50">
         </TableColumn>

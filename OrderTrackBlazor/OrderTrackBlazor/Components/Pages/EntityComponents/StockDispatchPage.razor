@@ -1,0 +1,54 @@
+﻿@inherits StockDispatchPageComponent
+
+@if (DTO != null)
+{
+  <div>
+    @DTO.Id
+  </div>
+  <div class="row g-3">
+    <div class="col-6 col-sm-6">
+      <DateTimePicker @bind-Value="@DTO.DispatchDate" Format="dd/MM/yyyy" ShowLabel="true" DisplayText="出库日期" />
+
+
+    </div>
+    <div class="col-6 col-sm-6">
+      <Select Items="StatusItem" OnSelectedItemChanged="OnItemChanged" @bind-Value="SelectedStatusItem"
+              ShowLabel="true"
+              DisplayText="状态"></Select>
+    </div>
+    <div class="col-6 col-sm-6">
+      <DateTimePicker @bind-Value="@DTO.CompletedDate" Format="dd/MM/yyyy" ShowLabel="true" DisplayText="结账日期" />
+    </div>
+    <div class="col-6 col-sm-3">
+      <BootstrapInputNumber @bind-Value="DTO!.Income"
+                            ShowLabel="true"
+                            DisplayText="收入调整" />
+    </div><div class="col-6 col-sm-3">
+      <span>实际收入 £:</span>
+      <span>@DTO.CalculateIncome</span>
+    </div>
+    <div class="col-12">
+      <BootstrapInput @bind-Value="@DTO.BriefNote" DisplayText="备注" ShowLabel="true" />
+    </div>
+    <div class="col-12">
+      <Textarea rows="4" @bind-Value="DTO!.Note" DisplayText="详细备注" ShowLabel="true" />
+    </div>
+  </div>
+  <div class="row g-3">
+    <div class="col-12">
+      <Button Color="Color.Primary" Icon="fas fa-arrow-trend-up" Text="装箱" OnClickWithoutRender="()=>DispatchPackage()" />
+    </div>
+    @if (DTO.Packages?.Any() == true)
+    {
+      foreach (var package in DTO.Packages)
+      {
+        <div>
+          @package.Number
+          <Button Color="Color.Primary" Icon="fas fa-arrow-trend-up" Text="装箱" OnClickWithoutRender="()=>DispatchPackage(package.Id)" />
+        </div>
+      }
+
+    }
+  </div>
+}
+<Dialog></Dialog>

@@ -1,0 +1,30 @@
+﻿@page "/dispatch"
+@rendermode InteractiveServer
+@inherits StockDispatchComponent
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+<PageTitle>出库</PageTitle>
+<div>
+  <Button Color="Color.Primary" Icon="fas fa-arrow-trend-up" Text="出库" OnClickWithoutRender="()=>OpenStockDispatch()" />
+</div>
+<div>
+  <Table TItem="StockDispatchDTO" Items="@DispatchDTO">
+    <TableColumns>
+      <TableColumn @bind-Field="@context.DispatchDate" Text="出库日期">
+      </TableColumn>
+
+      <TableColumn @bind-Field="@context.BriefNote" Text="简介">
+      </TableColumn>
+
+      <TableColumn @bind-Field="@context.Id" Text="操作">
+        <Template Context="value">
+          <Button Color="Color.Primary" Icon="fas fa-arrow-trend-up" Text="修改" OnClickWithoutRender="()=>OpenStockDispatch(value.Value)" />
+        </Template>
+      </TableColumn>
+
+    </TableColumns>
+
+  </Table>
+
+</div>
+<Dialog></Dialog>

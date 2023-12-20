@@ -50,6 +50,7 @@ namespace OrderTrackBlazor
       context.Services!.AddScoped<IShopService, ShopService>();
       context.Services!.AddScoped<IPackageService, PackageService>();
       context.Services!.AddScoped<ISelectedItemService, SelectedItemService>();
+      context.Services!.AddScoped<IStockDispatchService, StockDispatchService>();
     }
     public override async Task BeforePreApplicationInitializationAsync(ServiceConfigurationContext context)
     {
