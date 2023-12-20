@@ -28,16 +28,16 @@
     @if (Model.Productions != null)
     {
       <div class="col-12">
-        <Table TItem="OrderProductionDTO" Items="@Model.Productions" butto>
+        <Table TItem="OrderProductionDTO" Items="@Model.Productions">
           <TableColumns>
-            <TableColumn @bind-Field="@context.ProductionId">
+            <TableColumn @bind-Field="@context.ProductionId" Text="产品">
               <Template Context="value">
                 <span>@Productions.Where(b => b.Id == value.Value).Select(b => b.Name).FirstOrDefault()</span>
               </Template>
             </TableColumn>
-            <TableColumn @bind-Field="@context.Quantity" />
-            <TableColumn @bind-Field="@context.OrderPrice" />
-            <TableColumn @bind-Field="@context.RecommandShopName" />
+            <TableColumn @bind-Field="@context.Quantity" Text="数量" />
+            <TableColumn @bind-Field="@context.OrderPrice" Text="价格" />
+            <TableColumn @bind-Field="@context.RecommandShopName" Text="推荐" />
             <TableColumn @bind-Field="@context.Gid" Text="操作">
               <Template Context="value">
                 <Button Color="Color.Primary" Icon="fas fa-square-pen" Text="编辑" OnClickWithoutRender="()=>

@@ -36,51 +36,79 @@
   <div class="row g-3">
     <div class="col-12">
       <BootstrapInputNumber class="" @bind-Value="DTO.NumberInput"
-                            Color="Color.Success"
+                            Color="DTO.ColumnColor"
                             ShowLabel="true"
                             DisplayText="箱数" />
     </div>
     <div class="col-12">
-      内容
+      <Table TItem="StockDispatchPackageItemDTO" Items="@DTO.Items">
+        <TableColumns>
+          <TableColumn @bind-Field="@context.ProductionName" Text="产品">
+
+          </TableColumn>
+          <TableColumn @bind-Field="@context.ProductionId" Text="库存" Width="80">
+            <Template Context="value">
+              @{
+                var item = DTO.Items.FirstOrDefault(b => b.ProductionId == value.Value);
+                <BootstrapInputNumber @bind-Value="item.AvaliableStock"
+                                      Color="Color.None"
+                                      IsDisabled="true"
+                                      ShowLabel="false" />
+              }
+
+            </Template>
+          </TableColumn>
+          <TableColumn @bind-Field="@context.ProductionId" Text="剩余" Width="80">
+
+            <Template Context="value">
+              @{
+                var item = DTO.Items.FirstOrDefault(b => b.ProductionId == value.Value);
+                <BootstrapInputNumber @bind-Value="item.CalculateStock"
+                                      Color="item.ColumnColor"
+                                      IsDisabled="true"
+                                      ShowLabel="false" />
+              }
+
+            </Template>
+          </TableColumn>
+          <TableColumn @bind-Field="@context.ProductionId" Text="操作" Width="100">
+            <Template Context="value">
+              @{
+                var item = DTO.Items.FirstOrDefault(b => b.ProductionId == value.Value);
+                <BootstrapInputNumber @bind-Value="item.NumberInput"
+                                      Color="item.ColumnColor"
+                                      ShowLabel="false" />
+              }
+
+            </Template>
+          </TableColumn>
+        </TableColumns>
+
+      </Table>
     </div>
-    @foreach (var item in DTO.Items)
-    {
-      <div class="col-10">
-        <span>@item.ProductionName</span>
-        <span>库存:(@item.AvaliableStock)</span>
-        <span>剩余:(@item.CalculateStock)</span>
-      </div>
-      <div class="col-2">
-        <BootstrapInputNumber @bind-Value="item.NumberInput"
-                              Color="Color.Success"
-                              ShowLabel="false" />
-      </div>
-    }
   </div>
 }
 <div class="row g-3">
-  <div class="col-12">
-    详情:
-    <span>
-      箱数: @DTO?.Number
-    </span>
-    <span>
-      收入:£ @DTO?.PackageIncome
-    </span>
-    <span>
-      采购:£ @DTO?.PackageSpend
-    </span>
-    <span>
-      汇总:£ @DTO?.PackageTotal
-    </span>
-  </div>
   @if (DTO?.OrderItems?.Any() == true)
   {
-    foreach (var item in DTO.OrderItems)
-    {
-      <div class="col-12">
-        @item.ProductionName @item.Price @item.Number @item.CalculatePrice
-      </div>
-    }
+    <Table TItem="OrderShortDTO" Items="@DTO.OrderItems.Where(b=>b.Number>0)" ShowFooter="true">
+      <TableColumns>
+        <TableColumn @bind-Field="@context.ProductionName" Text="产品" />
+        <TableColumn @bind-Field="@context.Number" Text="数量" Width="80" />
+        <TableColumn @bind-Field="@context.Price" Text="£ 单价" Width="80" />
+        <TableColumn @bind-Field="@context.CalculatePrice" Text="£ 总价" Width="100" />
+      </TableColumns>
+      <TableFooter>
+        <TableFooterCell Text="@($"合计 £${DTO?.PackageTotal}")" />
+        <TableFooterCell Text="@($"{DTO.OrderItems.Sum(b=>b.Number).ToString()}")">
+
+        </TableFooterCell>
+        <TableFooterCell />
+        <TableFooterCell Text="@($"£{DTO?.PackageSpend}")">
+
+        </TableFooterCell>
+      </TableFooter>
+    </Table>
+
   }
 </div>

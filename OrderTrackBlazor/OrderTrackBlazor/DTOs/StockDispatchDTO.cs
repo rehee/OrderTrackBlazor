@@ -1,4 +1,6 @@
-﻿namespace OrderTrackBlazor.DTOs
+﻿using System.Drawing;
+
+namespace OrderTrackBlazor.DTOs
 {
   public class StockDispatchDTO
   {
@@ -6,6 +8,14 @@
     public long Id { get; set; }
     public EnumDispatchStatus? Status { get; set; }
     public DateTime? DispatchDate { get; set; }
+    public string DispatchDateFormat
+    {
+      get
+      {
+        return DispatchDate?.ToString(Common.DataFormat) ?? "";
+      }
+      set { }
+    }
     public DateTime? CompletedDate { get; set; }
     public decimal? Income { get; set; }
     public string? BriefNote { get; set; }
@@ -59,6 +69,8 @@
         Number = value ?? 0;
       }
     }
+    public BootstrapBlazor.Components.Color ColumnColor =>
+      items.Any(b => b.InValid) ? BootstrapBlazor.Components.Color.Danger : BootstrapBlazor.Components.Color.Success;
     public decimal PackageIncome => Number * PackagePrice;
     public decimal PackageSpend => OrderItems?.Sum(b => b.CalculatePrice) ?? 0;
     public decimal PackageTotal => PackageIncome + PackageSpend;
@@ -149,7 +161,14 @@
     public decimal? Price { get; set; }
     public int Number { get; set; }
     public int ShortNumber { get; set; }
-    public decimal CalculatePrice => Number * (Price ?? 0);
+    public decimal CalculatePrice
+    {
+      get
+      {
+        return Number * (Price ?? 0);
+      }
+      set { }
+    }
   }
   public class StockDispatchPackageItemDTO
   {
@@ -158,11 +177,23 @@
     public long? ProductionId { get; set; }
     public string? ProductionName { get; set; }
     public int AvaliableStock { get; set; }
-    public int CalculateStock => Parent == null ? 0 : AvaliableStock - Parent.Number * Number;
+    public int CalculateStock
+    {
+      get
+      {
+        return Parent == null ? 0 : AvaliableStock - Parent.Number * Number;
+      }
+      set { }
+    }
     public IEnumerable<OrderShortDTO>? OrderItems { get; set; }
     public decimal? Price { get; set; }
     public int Number { get; set; }
     public decimal CalculatePrice => (Price ?? 0) * Number;
+    public bool InValid => CalculateStock < 0;
+    public BootstrapBlazor.Components.Color ColumnColor =>
+      InValid ? BootstrapBlazor.Components.Color.Danger :
+      CalculateStock == 0 ? BootstrapBlazor.Components.Color.Warning :
+      BootstrapBlazor.Components.Color.None;
     public int? NumberInput
     {
       get

@@ -31,8 +31,12 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       {
         return;
       }
-      DTO.OrderPrice = selectProduction.OriginalPrice;
-      DTO.ProductionId = id;
+      if (DTO.ProductionId != id)
+      {
+        DTO.OrderPrice = selectProduction.OriginalPrice;
+        DTO.ProductionId = id;
+      }
+      
     }
     public async Task ShopItemChange(SelectedItem item)
     {

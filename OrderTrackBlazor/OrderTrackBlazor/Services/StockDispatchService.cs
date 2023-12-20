@@ -43,6 +43,7 @@ namespace OrderTrackBlazor.Services
         {
           RowId = Guid.NewGuid(),
           Id = dispatch.Id,
+          Status = dispatch.Status,
           DispatchDate = dispatch.DispatchDate == null ? today : dispatch.DispatchDate.Value.Date,
           BriefNote = dispatch.BriefNote,
           Note = dispatch.Note,
@@ -132,7 +133,7 @@ namespace OrderTrackBlazor.Services
           OrderTrackStockDispatchPackage = package,
           DispatchPrice = item.Price,
           PackageQuantity = item.Number,
-          
+
         };
         await context.AddAsync<OrderTrackDispatchItem>(orderDispatchItem, CancellationToken.None);
       }
@@ -183,6 +184,7 @@ namespace OrderTrackBlazor.Services
       record.Income = dto?.Income;
       record.Status = dto?.Status;
       record.CompletedDate = dto?.CompletedDate?.Date;
+      
       await context.SaveChangesAsync(null);
       return true;
     }
@@ -260,7 +262,7 @@ namespace OrderTrackBlazor.Services
       }
       await context.SaveChangesAsync(null);
       return true;
-      
+
     }
     public async Task<StockDispatchPackageDTO> GetCreateStockDispatchPackageDTO(long dispatchId)
     {

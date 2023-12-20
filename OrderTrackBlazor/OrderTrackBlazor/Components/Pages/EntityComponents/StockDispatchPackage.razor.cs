@@ -17,7 +17,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     {
       if (DTO != null && long.TryParse(item.Value, out var result))
       {
-        DTO.StockDispatchId = result;
+        DTO.PackageSizeId = result;
       }
       return Task.CompletedTask;
     }
