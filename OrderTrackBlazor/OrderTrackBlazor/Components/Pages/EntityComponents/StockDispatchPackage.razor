@@ -91,7 +91,7 @@
 <div class="row g-3">
   @if (DTO?.OrderItems?.Any() == true)
   {
-    <Table TItem="OrderShortDTO" Items="@DTO.OrderItems.Where(b=>b.Number>0)" ShowFooter="true">
+    <Table TItem="OrderShortDTO" Items="@DTO.OrderItems" ShowFooter="true">
       <TableColumns>
         <TableColumn @bind-Field="@context.ProductionName" Text="产品" />
         <TableColumn @bind-Field="@context.Number" Text="数量" Width="80" />

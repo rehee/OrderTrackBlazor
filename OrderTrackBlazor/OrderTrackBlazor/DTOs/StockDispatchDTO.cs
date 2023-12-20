@@ -146,7 +146,7 @@ namespace OrderTrackBlazor.DTOs
           }
         }
 
-        return result;
+        return result.Where(b => b.Number > 0);
       }
     }
 
