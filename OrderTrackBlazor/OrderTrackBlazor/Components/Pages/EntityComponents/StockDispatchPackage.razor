@@ -99,7 +99,7 @@
         <TableColumn @bind-Field="@context.CalculatePrice" Text="£ 总价" Width="100" />
       </TableColumns>
       <TableFooter>
-        <TableFooterCell Text="@($"合计 £${DTO?.PackageTotal}")" />
+        <TableFooterCell Text="@($"合计 £{DTO?.PackageTotal}")" />
         <TableFooterCell Text="@($"{DTO.OrderItems.Sum(b=>b.Number).ToString()}")">
 
         </TableFooterCell>
