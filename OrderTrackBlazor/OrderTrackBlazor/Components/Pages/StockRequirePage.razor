@@ -32,7 +32,7 @@
         </TableColumn>
         <TableColumn @bind-Field="@context.ProductionId" Text="操作">
           <Template Context="value">
-            <Button Color="Color.Primary" Text="详情" />
+            <Button Color="Color.Primary" Text="详情" OnClickWithoutRender="()=>ShowDetail(value.Value)" />
           </Template>
         </TableColumn>
 

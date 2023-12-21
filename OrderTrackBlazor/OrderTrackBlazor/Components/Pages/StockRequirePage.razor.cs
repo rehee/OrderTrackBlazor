@@ -81,5 +81,43 @@ namespace OrderTrackBlazor.Components.Pages
       nm.NavigateTo("purchases", false);
       return Task.CompletedTask;
     }
+    public async Task ShowDetail(long? productionId)
+    {
+      var records = DTOs.FirstOrDefault(b => b.ProductionId == productionId);
+      if (records == null || records.Items?.Any() != true)
+      {
+        return;
+      }
+      var onsave = new OnSaveDTO();
+      var comp = BootstrapDynamicComponent.CreateComponent<OrderItemPage>(
+          new Dictionary<string, object?>()
+          {
+            ["OnSave"] = onsave,
+            ["DTOs"] = records.Items.OrderByDescending(b => b.OrderDate),
+            ["Shops"] = Shops
+          });
+      var dotion = new DialogOption()
+      {
+        Size = Size.ExtraLarge,
+        Component = comp,
+        ShowSaveButton = true,
+        OnSaveAsync = async () =>
+        {
+          var result = true;
+          if (onsave.OnSaveFunc != null)
+          {
+            result = await onsave.OnSaveFunc();
+          }
+          if (result)
+          {
+
+          }
+          await Refresh();
+          return result;
+        }
+      };
+      await dialogService!.Show(dotion);
+
+    }
   }
 }

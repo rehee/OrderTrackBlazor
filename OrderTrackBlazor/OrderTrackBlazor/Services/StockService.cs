@@ -122,28 +122,28 @@ namespace OrderTrackBlazor.Services
             .Sum(b => b.Quantity + b.PackageQuantity)
         let purchase = production.PurchaseItems.Where(b => purchaseId.HasValue ? b.PurchaseRecordId != purchaseId : true).Sum(b => b.Quantity)
         let stock = purchase - dispatch
-        let items = production.OrderItems.Select(b =>
+        let items = production.OrderItems.Select(o =>
           new StockRequireDTO
           {
-            OrderItemId = b.Id,
-            OrderId = b.OrderTrackOrderId,
-            OrderNote = b.Order.ShortNote,
-            Note = b.Note,
-            OrderDate = b.Order.OrderDate,
-            OrderPrice = b.OrderPrice == null ? b.OrderPrice : production.OriginalPrice,
+            OrderItemId = o.Id,
+            OrderId = o.OrderTrackOrderId,
+            OrderNote = o.Order.ShortNote,
+            Note = o.Note,
+            OrderDate = o.Order.OrderDate,
+            OrderPrice = o.OrderPrice != null ? o.OrderPrice : production.OriginalPrice,
             ProductionId = production.Id,
             ProductionName = production.Name,
-            RecommandShopId = b.RecommendShopId,
-            RecommandShopName = b.RecommendShop.Name,
-            RequiredNumber = b.Quantity,
+            RecommandShopId = o.RecommendShopId,
+            RecommandShopName = o.RecommendShop.Name,
+            RequiredNumber = o.Quantity,
             StockNumber = stock,
-            DispatchNumber = b.DispatchItems.Where(b =>
-              (b.DispatchRecord != null && b.DispatchRecord.Status != EnumDispatchStatus.Error) ||
-              (b.OrderTrackStockDispatchPackage != null &&
-               b.OrderTrackStockDispatchPackage.Dispatch != null &&
-               b.OrderTrackStockDispatchPackage.Dispatch.Status != EnumDispatchStatus.Error))
-            .Sum(b => b.Quantity + b.PackageQuantity)
-          }).Where(b => b.RequiredNumber > b.DispatchNumber)
+            DispatchNumber = o.DispatchItems.Where(d =>
+              (d.DispatchRecord != null && d.DispatchRecord.Status != EnumDispatchStatus.Error) ||
+              (d.OrderTrackStockDispatchPackage != null &&
+               d.OrderTrackStockDispatchPackage.Dispatch != null &&
+               d.OrderTrackStockDispatchPackage.Dispatch.Status != EnumDispatchStatus.Error))
+            .Sum(s => s.Quantity + s.PackageQuantity)
+          }).Where(w => w.RequiredNumber > w.DispatchNumber)
 
 
         select new StockRequireSummaryDTO
@@ -263,6 +263,30 @@ namespace OrderTrackBlazor.Services
             context.Delete(entityItem);
           }
         }
+      }
+      await context.SaveChangesAsync(null);
+      return true;
+    }
+
+    public async Task<bool> UpdateStockOrderItem(IEnumerable<StockRequireDTO> dtos)
+    {
+      var ids = dtos.Select(b => b.OrderItemId).ToArray();
+      if (ids?.Any() != true)
+      {
+        return false;
+      }
+      var orderItems = await context.Query<OrderTrackOrderItem>(false).Where(b => ids.Contains(b.Id) == true).ToArrayAsync();
+      foreach (var item in orderItems)
+      {
+        var selectedDTO = dtos.FirstOrDefault(b => b.OrderItemId == item.Id);
+        if (selectedDTO == null)
+        {
+          continue;
+        }
+        item.Quantity = selectedDTO.RequiredNumber;
+        item.RecommendShopId = selectedDTO.RecommandShopId;
+        item.Note = selectedDTO.Note;
+        item.OrderPrice = selectedDTO.OrderPrice;
       }
       await context.SaveChangesAsync(null);
       return true;

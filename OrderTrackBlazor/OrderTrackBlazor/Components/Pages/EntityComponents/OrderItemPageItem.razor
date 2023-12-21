@@ -1,0 +1,24 @@
+﻿@inherits OrderItemPageItemComponent
+
+<Card>
+  <HeaderTemplate>
+    Date @DTO.OrderDate?.ToString(DefaultValues.DatFormat) Note: @DTO.OrderNote
+  </HeaderTemplate>
+  <BodyTemplate>
+    <h5>@DTO.ProductionName</h5>
+    <div class="row g-3">
+      <div class="col-6">
+        <BootstrapInputNumber @bind-Value="DTO.RequiredNumber" DisplayText="数量" ShowLabel="true"></BootstrapInputNumber>
+      </div>
+      <div class="col-6">
+        <BootstrapInputNumber @bind-Value="DTO.OrderPrice" DisplayText="价格" ShowLabel="true"></BootstrapInputNumber>
+      </div>
+      <div class="col-12">
+        <Select Items="Shops" @bind-Value="SelectShopItem" OnSelectedItemChanged="OnItemChanged" ShowLabel="true" DisplayText="选择超市"> </Select>
+      </div>
+      <div class="col-12">
+        <BootstrapInput @bind-Value="DTO.Note" DisplayText="备注" ShowLabel="true"></BootstrapInput>
+      </div>
+    </div>
+  </BodyTemplate>
+</Card>

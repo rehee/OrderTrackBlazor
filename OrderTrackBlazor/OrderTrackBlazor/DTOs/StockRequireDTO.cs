@@ -37,7 +37,7 @@
       set { }
     }
     public string? SelectedShop { get; set; }
-    public IEnumerable<string> RecommandShops => Items == null ? Enumerable.Empty<string>() : Items.Where(b => !String.IsNullOrEmpty(b.RecommandShopName)).Select(b => b.RecommandShopName ?? "");
+    public IEnumerable<string> RecommandShops => Items == null ? Enumerable.Empty<string>() : Items.Where(b => !String.IsNullOrEmpty(b.RecommandShopName)).Select(b => b.RecommandShopName ?? "").Distinct();
     public IEnumerable<StockRequireDTO>? Items { get; set; }
   }
 

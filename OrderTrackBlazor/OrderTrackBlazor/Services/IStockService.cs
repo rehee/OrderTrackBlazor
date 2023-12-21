@@ -10,5 +10,7 @@
     Task<bool> CreateStockPurchase(StockPurchaseDTO stockPurchase);
     Task<bool> UpdateStockPurchase(StockPurchaseDTO stockPurchase);
     Task<StockPurchaseDTO> FindStockPurchase(long purchaseId);
+
+    Task<bool> UpdateStockOrderItem(IEnumerable<StockRequireDTO> dtos);
   }
 }
