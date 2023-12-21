@@ -1,0 +1,50 @@
+﻿@inherits StockRequirePageComponent
+<div class="row g-3">
+  <div class="col-12">
+    <Button Color="Color.Success" Text="采购" OnClickWithoutRender="()=>PurchaseDetail()" />
+  </div>
+  <div class="col-12">
+    <Select Items="Shops" @bind-Value="SelectShopItem" OnSelectedItemChanged="OnItemChanged" ShowLabel="true" DisplayText="选择超市"> </Select>
+  </div>
+  <div class="col-12">
+    <Table TItem="StockRequireSummaryDTO" Items="@DisplayDTOs">
+      <TableColumns>
+        <TableColumn @bind-Field="@context.ProductionName" Text="产品">
+        </TableColumn>
+
+        <TableColumn @bind-Field="@context.PendingNumber" Text="待发">
+
+        </TableColumn>
+        <TableColumn @bind-Field="@context.StockNumber" Text="库存">
+
+        </TableColumn>
+        <TableColumn @bind-Field="@context.ProductionId" Text="推荐">
+          <Template Context="value">
+            @{
+              var item = DisplayDTOs.FirstOrDefault(b => b.ProductionId == value.Value);
+              foreach (var shop in item.RecommandShops)
+              {
+                <span class="@(item.SelectedShop==shop?"text-danger":"")">@shop</span>
+                <span>&nbsp;</span>
+              }
+            }
+          </Template>
+        </TableColumn>
+        <TableColumn @bind-Field="@context.ProductionId" Text="操作">
+          <Template Context="value">
+            <Button Color="Color.Primary" Text="详情" />
+          </Template>
+        </TableColumn>
+
+      </TableColumns>
+
+    </Table>
+
+  </div>
+  <div class="col-12">
+    <Button Color="Color.Warning" Text="历史" OnClickWithoutRender="()=>History()" />
+  </div>
+</div>
+
+<Dialog></Dialog>
+@* OnClickWithoutRender="()=>NormalShowDialog(value.Value)" *@

@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using ReheeCmf.Components.ChangeComponents;
+using ReheeCmf.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OrderTrackBlazor.Entities
 {
@@ -16,5 +19,18 @@ namespace OrderTrackBlazor.Entities
     public virtual OrderTrackOrder? Order { get; set; }
 
     public decimal? Price { get; set; }
+  }
+  [EntityChangeTracker<OrderTrackPurchaseRecord>]
+  public class OrderTrackPurchaseRecordHandler : OrderTrackEntityHandler<OrderTrackPurchaseRecord>
+  {
+    public override async Task BeforeDeleteAsync(CancellationToken ct = default)
+    {
+      await base.BeforeDeleteAsync(ct);
+      var items = await context.Query<OrderTrackPurchaseItem>(false).Where(b => b.PurchaseRecordId == entity.Id).ToArrayAsync();
+      foreach (var item in items)
+      {
+        context.Delete(item);
+      }
+    }
   }
 }

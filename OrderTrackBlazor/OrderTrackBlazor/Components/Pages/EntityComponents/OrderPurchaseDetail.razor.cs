@@ -15,11 +15,6 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     public long? Id { get; set; }
     [Parameter]
     public IEnumerable<SelectedItem> Shops { get; set; } = new List<SelectedItem>();
-
-    [Inject]
-    public ISummaryService? summaryService { get; set; }
-    public OrderPurchaseSummaryDTO? Model { get; set; }
-    
     public SelectedItem? SelectedStatusItem { get; set; }
     public Task OnItemChanged(SelectedItem item)
     {
@@ -29,6 +24,12 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       }
       return Task.CompletedTask;
     }
+    [Inject]
+    public ISummaryService? summaryService { get; set; }
+    public OrderPurchaseSummaryDTO? Model { get; set; }
+    
+    
+    
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync();

@@ -22,12 +22,12 @@ namespace OrderTrackBlazor.Workers
 
           await Task.Delay(1000
           //);
-          *60);
+          * 60);
           using var scope = sp.CreateScope();
           using var context = scope.ServiceProvider.GetService<IContext>();
           var current = DateTime.UtcNow;
-          //double deleteMins = -15;
-          double deleteMins = 0;
+          double deleteMins = -15;
+          //double deleteMins = 0;
           var nextCurrent = DateTime.UtcNow.AddMinutes(deleteMins);
 
           var dispatchs = await context.Query<OrderTrackDispatchRecord>(false)
@@ -57,7 +57,11 @@ namespace OrderTrackBlazor.Workers
           }
           await context.SaveChangesAsync(null);
 
-          var emptyPurchaseItem = context.Query<OrderTrackPurchaseItem>(false).Where(b => b.Quantity == 0).ToList();
+          var emptyPurchaseItem = context.Query<OrderTrackPurchaseItem>(false)
+            .Where(b => 
+              (b.ProductionId == null || b.ProductionId <= 0) ||
+              (b.PurchaseRecord != null && b.PurchaseRecord.OrderId != null && b.Quantity == 0)
+            ).ToList();
           foreach (var b2 in emptyPurchaseItem)
           {
             if ((b2.UpdateDate != null && b2.UpdateDate < nextCurrent) ||
@@ -67,7 +71,7 @@ namespace OrderTrackBlazor.Workers
             }
           }
           await context.SaveChangesAsync(null);
-          var emptyPurchase = context.Query<OrderTrackPurchaseRecord>(false).Where(b => b.Items.Any() != true).ToList();
+          var emptyPurchase = context.Query<OrderTrackPurchaseRecord>(false).Where(b => b.Items.Any() != true || b.Items.All(b => b.Quantity == 0)).ToList();
           foreach (var b in emptyPurchase)
           {
             if ((b.UpdateDate != null && b.UpdateDate < nextCurrent) ||

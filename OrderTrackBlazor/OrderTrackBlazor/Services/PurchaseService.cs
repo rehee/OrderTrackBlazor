@@ -28,7 +28,9 @@ namespace OrderTrackBlazor.Services
           PurchaseDate = purchase.PurchaseDate,
           CreateDate = purchase.CreateDate,
           ShopId = purchase.ShopId,
-
+          ShopName = purchase.Shop.Name,
+          ShopPrice = purchase.Price,
+          OrderId = purchase.OrderId,
           Productions = purchase.Items.Select(b =>
            new OrderProductionDTO
            {
