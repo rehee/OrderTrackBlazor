@@ -37,7 +37,14 @@
     public int RequiredNumber { get; set; }
     public int DispatchNumber { get; set; }
     public int PendingNumber { get; set; }
-
+    public int NeedToBuy
+    {
+      get
+      {
+        return PendingNumber - StockNumber;
+      }
+      set { }
+    }
     public int StockNumber { get; set; }
     public int? PurchaseNumber { get; set; }
     public int? Number { get; set; }
