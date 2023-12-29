@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using OrderTrackBlazor.Data;
 using OrderTrackBlazor.DTOs;
 using ReheeCmf.Reflects.ReflectPools;
+using static Dropbox.Api.Files.ListRevisionsMode;
 
 namespace OrderTrackBlazor.Components.Pages.EntityComponents
 {
@@ -11,10 +12,11 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
   {
     [Parameter]
     public string? EntityName { get; set; }
-
     public Type? EntityType { get; set; }
+    public IEnumerable<ProductionDTO>? Productions { get; set; }
 
-    public List<OrderTrackProduction>? Productions { get; set; }
+    [Inject]
+    public IProductionService? ProductionService { get; set; }
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync();
@@ -23,7 +25,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     public async Task RefreshTable()
     {
 
-      Productions = await Context!.Query<OrderTrackProduction>(true).ToListAsync();
+      Productions = await ProductionService.GetAllProductions();
       StateHasChanged();
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -34,68 +36,34 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
 
     public async Task CreateProduction(long? id = null)
     {
-      var model = id == null ?
-        new ProductionDTO() :
-        await Context!.Query<OrderTrackProduction>(true).Where(b => b.Id == id).Select(b => new ProductionDTO() { Id = b.Id, ProductionName = b.Name, OriginalPrice = b.OriginalPrice == null ? null : b.OriginalPrice.ToString() }).FirstOrDefaultAsync();
-      var items = Utility.GenerateEditorItems<ProductionDTO>();
-      if (id != null)
-      {
-
-      }
-      var option = new EditDialogOption<ProductionDTO>()
-      {
-        Title = $"{(id == null ? "create" : "edit")} dialog",
-        Model = model,
-        Items = items,
-        ItemsPerRow = 1,
-        RowType = RowType.Normal,
-        OnCloseAsync = () =>
-        {
-
-          return Task.CompletedTask;
-        },
-        OnEditAsync = async (context) =>
-        {
-          if (context.Model is ProductionDTO mdl)
+      var onsave = new OnSaveDTO();
+      var comp = BootstrapDynamicComponent.CreateComponent<ProductionDetail>(
+          new Dictionary<string, object?>()
           {
-            if (mdl == null)
-            {
-              return true;
-            }
-            if (mdl.Id == null)
-            {
-              if (String.IsNullOrEmpty(mdl.ProductionName))
-              {
-                return false;
-              }
-
-              await Context!.AddAsync<OrderTrackProduction>(new OrderTrackProduction
-              {
-                Name = mdl.ProductionName,
-                OriginalPrice = mdl.Price,
-              }, CancellationToken.None);
-              await Context.SaveChangesAsync(null);
-              await RefreshTable();
-              return true;
-            }
-            else
-            {
-              var p = await Context!.Query<OrderTrackProduction>(false).Where(b => b.Id == mdl.Id).FirstOrDefaultAsync();
-              if (p == null)
-              {
-                return true;
-              }
-              p.Name = mdl.ProductionName;
-              p.OriginalPrice = mdl.Price;
-              await Context!.SaveChangesAsync(null);
-              await RefreshTable();
-              return true;
-            }
+            ["Id"] = id,
+            ["OnSave"] = onsave,
+          });
+      var dotion = new DialogOption()
+      {
+        Title = $"{(id == null ? "create" : "edit")} Product",
+        Size = Size.ExtraLarge,
+        Component = comp,
+        ShowSaveButton = true,
+        OnSaveAsync = async () =>
+        {
+          var result = true;
+          if (onsave.OnSaveFunc != null)
+          {
+            result = await onsave.OnSaveFunc();
           }
-          return true;
+          if (result)
+          {
+            await RefreshTable();
+          }
+          return result;
         }
       };
-      await dialogService.ShowEditDialog(option);
+      await dialogService!.Show(dotion);
     }
     public OrderTrackProduction? Model { get; set; }
 

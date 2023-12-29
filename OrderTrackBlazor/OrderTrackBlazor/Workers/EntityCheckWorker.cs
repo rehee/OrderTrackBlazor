@@ -17,6 +17,16 @@ namespace OrderTrackBlazor.Workers
     {
       try
       {
+        using (var sc = sp.CreateScope())
+        {
+          using var context1 = sc.ServiceProvider.GetService<IContext>();
+          var productions = await context1.Query<OrderTrackProduction>(false).ToArrayAsync();
+          foreach (var production in productions)
+          {
+            production.NormalizationName = production.Name?.Trim().ToUpper() ?? "";
+          }
+          await context1.SaveChangesAsync(null);
+        }
         while (true)
         {
 
@@ -58,7 +68,7 @@ namespace OrderTrackBlazor.Workers
           await context.SaveChangesAsync(null);
 
           var emptyPurchaseItem = context.Query<OrderTrackPurchaseItem>(false)
-            .Where(b => 
+            .Where(b =>
               (b.ProductionId == null || b.ProductionId <= 0) ||
               (b.PurchaseRecord != null && b.PurchaseRecord.OrderId != null && b.Quantity == 0)
             ).ToList();

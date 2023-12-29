@@ -194,7 +194,7 @@ namespace OrderTrackBlazor.Services
           ProductionId = b.ProductionId,
           ProductionName = b.ProductionName,
           Number = b.Number == 0 ? null : b.Number,
-        }).ToArray();
+        }).OrderByDescending(b => b.Number.HasValue && b.Number > 0).ThenBy(b => b.ProductionName).ToArray();
       return result;
     }
 

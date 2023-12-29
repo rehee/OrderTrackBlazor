@@ -10,21 +10,10 @@ namespace OrderTrackBlazor.DTOs
 
     [Display(Name = "原始价格")]
 
-    public string? OriginalPrice { get; set; }
+    public decimal? OriginalPrice { get; set; }
 
-
-    [AutoGenerateColumn(Ignore = true)]
-    public decimal? Price
-    {
-      get
-      {
-        if (decimal.TryParse(OriginalPrice, out var price))
-        {
-          return price;
-        }
-        return null;
-      }
-    }
+    public long NewId { get; set; }
+    
 
   }
 }

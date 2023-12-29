@@ -32,7 +32,7 @@
           <TableColumns>
             <TableColumn @bind-Field="@context.ProductionId" Text="产品">
               <Template Context="value">
-                <span>@Productions.Where(b => b.Id == value.Value).Select(b => b.Name).FirstOrDefault()</span>
+                <span>@Productions.Where(b => b.Id == value.Value).Select(b => b.ProductionName).FirstOrDefault()</span>
               </Template>
             </TableColumn>
             <TableColumn @bind-Field="@context.Quantity" Text="数量" />

@@ -1,0 +1,16 @@
+﻿@inherits ProductionDetailComponent
+@if (Production != null)
+{
+  <Card>
+    <BodyTemplate>
+      <div class="row g-3">
+        <div class="col-12">
+          <BootstrapInput @bind-Value="Production.ProductionName" DisplayText="商品名" ShowLabel="true"></BootstrapInput>
+        </div>
+        <div class="col-12">
+          <BootstrapInputNumber @bind-Value="Production.OriginalPrice" DisplayText="原始价格" ShowLabel="true"></BootstrapInputNumber>
+        </div>
+      </div>
+    </BodyTemplate>
+  </Card>
+}

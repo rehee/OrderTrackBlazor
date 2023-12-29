@@ -1,6 +1,7 @@
 using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace OrderTrackBlazor.Components.Pages.EntityComponents
@@ -12,10 +13,32 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     [Parameter]
     public OrderProductionDTO? DTO { get; set; }
     [Parameter]
-    public List<OrderTrackProduction> Productions { get; set; } = new List<OrderTrackProduction>();
+    public IEnumerable<ProductionDTO> Productions { get; set; } = Enumerable.Empty<ProductionDTO>();
+
+    public IEnumerable<ProductionDTO>? ProductionChanges { get; set; }
+
+    public IEnumerable<ProductionDTO> Source => ProductionChanges ?? Productions;
 
     [Parameter]
     public IEnumerable<SelectedItem>? ShopSelect { get; set; } = Enumerable.Empty<SelectedItem>();
+
+    [Parameter]
+    public Func<Action<IEnumerable<ProductionDTO>, long>, Task>? CreateProduction { get; set; }
+
+    public async Task CreateAndRefresh()
+    {
+      Action<IEnumerable<ProductionDTO>, long> refresh = (list, id) =>
+      {
+        ProductionChanges = list;
+
+        RefreshList(id);
+      };
+      if (CreateProduction != null)
+      {
+        await CreateProduction(refresh);
+      }
+    }
+
     public SelectedItem? SelectedShop { get; set; }
 
     public async Task OrderItemChange(SelectedItem item)
@@ -26,7 +49,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
         return;
       }
       long.TryParse(item.Value, out var id);
-      var selectProduction = Productions.Where(b => b.Id == id).FirstOrDefault();
+      var selectProduction = Source.Where(b => b.Id == id).FirstOrDefault();
       if (selectProduction == null)
       {
         return;
@@ -36,7 +59,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
         DTO.OrderPrice = selectProduction.OriginalPrice;
         DTO.ProductionId = id;
       }
-      
+
     }
     public async Task ShopItemChange(SelectedItem item)
     {
@@ -62,13 +85,17 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync();
-      Items = (new List<SelectedItem>() { new SelectedItem("", "select") }).Concat(Productions.Select(b => new SelectedItem(b.Id.ToString() ?? "", b.Name ?? ""))).ToList();
-      IItem = Items.FirstOrDefault(b => b.Value == DTO?.ProductionId.ToString());
-      SelectedShop = ShopSelect.FirstOrDefault(b => b.Value == DTO?.RecommandShopId.ToString());
-      StateHasChanged();
-
+      RefreshList();
     }
 
+    public void RefreshList(long? inputId = null)
+    {
+      Items = (new List<SelectedItem>() { new SelectedItem("", "select") }).Concat(Source.Select(b => new SelectedItem(b.Id.ToString() ?? "", b.ProductionName ?? ""))).ToList();
+      var selectedId = inputId != null ? inputId.ToString() : DTO?.ProductionId.ToString();
+      IItem = Items.FirstOrDefault(b => b.Value == selectedId);
+      SelectedShop = ShopSelect.FirstOrDefault(b => b.Value == DTO?.RecommandShopId.ToString());
+      StateHasChanged();
+    }
 
     public override async Task<bool> SaveFunction()
     {
@@ -91,7 +118,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       {
         return true;
       }
-      if (DTO.Quantity <= 0)
+      if (DTO.Quantity == null || DTO.Quantity <= 0)
       {
         DTO.Quantity = 0;
       }

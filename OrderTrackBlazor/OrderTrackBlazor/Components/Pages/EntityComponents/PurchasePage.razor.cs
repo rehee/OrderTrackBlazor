@@ -58,7 +58,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
               PurchaseDate = p.PurchaseDate,
               CreateDate = item.CreateDate,
               ShopId = p.ShopId,
-              Quantity = item.Quantity,
+              Quantity = item.Quantity ?? 0,
             });
         }
       }

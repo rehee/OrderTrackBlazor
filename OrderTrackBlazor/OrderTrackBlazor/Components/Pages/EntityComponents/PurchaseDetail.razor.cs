@@ -105,7 +105,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
             PurchaseRecordId = purcher.Id,
             PurchaseRecord = purcher,
             ProductionId = p.ProductionId,
-            Quantity = p.Quantity,
+            Quantity = p.Quantity ?? 0,
           };
           await Context.AddAsync<OrderTrackPurchaseItem>(production, CancellationToken.None);
         }
@@ -128,7 +128,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
                 PurchaseRecordId = purcher.Id,
                 PurchaseRecord = purcher,
                 ProductionId = p.ProductionId,
-                Quantity = p.Quantity,
+                Quantity = p.Quantity ?? 0,
               };
               await Context.AddAsync<OrderTrackPurchaseItem>(production, CancellationToken.None);
             }
@@ -140,7 +140,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
               {
                 continue;
               }
-              production.Quantity = p.Quantity;
+              production.Quantity = p.Quantity ?? 0;
               production.ProductionId = p.ProductionId;
             }
 

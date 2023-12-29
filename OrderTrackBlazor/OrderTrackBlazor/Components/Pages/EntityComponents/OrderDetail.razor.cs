@@ -2,6 +2,7 @@ using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using OrderTrackBlazor.Entities;
+using static Dropbox.Api.Files.ListRevisionsMode;
 
 namespace OrderTrackBlazor.Components.Pages.EntityComponents
 {
@@ -10,17 +11,25 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     [Parameter]
     public long? Id { get; set; }
 
-    public List<OrderTrackProduction> Productions { get; set; } = new List<OrderTrackProduction>();
+    public IEnumerable<ProductionDTO> Productions { get; set; } = Enumerable.Empty<ProductionDTO>();
 
     public IEnumerable<SelectedItem> ShopSelect { get; set; } = Enumerable.Empty<SelectedItem>();
     [Inject]
     public IOrderService? orderService { get; set; }
     [Inject]
     public ISelectedItemService? selectedItemService { get; set; }
+    [Inject]
+    public IProductionService productionService { get; set; }
+
+    public async Task RefreshProduction()
+    {
+      Productions = await productionService.GetAllProductions();
+    }
+
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync();
-      Productions = await Context.Query<OrderTrackProduction>(true).ToListAsync();
+      await RefreshProduction();
       if (Id == null || Id <= 0)
       {
         Model = new OrderDTO
@@ -39,8 +48,50 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     public OrderDTO? Model { get; set; }
     public Func<Task<bool>>? onSaveAsync = null;
 
+    public async Task CreateProduction(Action<IEnumerable<ProductionDTO>, long> parantAction)
+    {
+      var onsave = new OnSaveDTO();
+      var comp = BootstrapDynamicComponent.CreateComponent<ProductionDetail>(
+          new Dictionary<string, object?>()
+          {
+            ["OnSave"] = onsave,
+          });
+      var dotion = new DialogOption()
+      {
+        Title = $"create Product",
+        Size = Size.ExtraLarge,
+        Component = comp,
+        ShowSaveButton = true,
+        OnSaveAsync = async () =>
+        {
+          var result = true;
+          if (onsave.OnSaveFunc != null)
+          {
+            result = await onsave.OnSaveFunc();
+          }
+          if (result)
+          {
+            await RefreshProduction();
+            StateHasChanged();
+            long id = 0;
+            if (onsave.ResultValue != null)
+            {
+              if (onsave.ResultValue is long longId)
+              {
+                id = longId;
+              }
+            }
+            parantAction(Productions, id);
+          }
+          return result;
+        }
+      };
+      await dialogService!.Show(dotion);
+    }
+
     public async Task AddProduction(OrderProductionDTO? dto = null)
     {
+      Func<Action<IEnumerable<ProductionDTO>, long>, Task> createProductionFunc = t => CreateProduction(t);
       var fromTable = dto != null;
       var onsave = new OnSaveDTO();
       var comp = BootstrapDynamicComponent.CreateComponent<OrderProduction>(
@@ -49,8 +100,9 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
             ["OnSave"] = onsave,
             ["Productions"] = Productions,
             ["FromTable"] = fromTable,
-            ["ShopSelect"]= ShopSelect,
-            ["DTO"] = dto == null ? new OrderProductionDTO { ParentId = Model?.Id, Parent = Model } : dto
+            ["ShopSelect"] = ShopSelect,
+            ["DTO"] = dto == null ? new OrderProductionDTO { ParentId = Model?.Id, Parent = Model } : dto,
+            ["CreateProduction"] = createProductionFunc
           }); ;
 
       var dotion = new DialogOption()
@@ -93,7 +145,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
             OrderTrackOrderId = order.Id,
             Order = order,
             ProductionId = p.ProductionId,
-            Quantity = p.Quantity,
+            Quantity = p.Quantity ?? 0,
             OrderPrice = p.OrderPrice,
             RecommendShopId = p.RecommandShopId,
             Note = p.Note,
@@ -120,7 +172,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
               OrderTrackOrderId = order.Id,
               Order = order,
               ProductionId = p.ProductionId,
-              Quantity = p.Quantity,
+              Quantity = p.Quantity ?? 0,
               OrderPrice = p.OrderPrice,
               RecommendShopId = p.RecommandShopId,
               Note = p.Note,
@@ -133,7 +185,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
             if (p2 != null)
             {
               p2.ProductionId = p.ProductionId;
-              p2.Quantity = p.Quantity;
+              p2.Quantity = p.Quantity ?? 0;
               p2.OrderPrice = p.OrderPrice;
               p2.RecommendShopId = p.RecommandShopId;
               p2.Note = p.Note;

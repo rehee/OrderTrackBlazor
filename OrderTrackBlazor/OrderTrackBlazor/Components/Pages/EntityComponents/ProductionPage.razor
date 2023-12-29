@@ -5,8 +5,12 @@
 @inherits ProductionPageComponent
 
 <Dialog></Dialog>
-<div>
-  <Button Color="Color.Primary" Icon="fa-solid fa-font-awesome" Text="添加产品" OnClickWithoutRender="()=>CreateProduction()" />
+<div class="sticky-top">
+  <div class="row g-3">
+    <div class="col-12">
+      <Button Color="Color.Primary" Text="添加产品" OnClickWithoutRender="()=>CreateProduction()" />
+    </div>
+  </div>
 </div>
 
 @if (Productions == null)
@@ -16,14 +20,13 @@
 else
 {
   <div>
-    <Table TItem="OrderTrackProduction" Items="@Productions" butto>
+    <Table TItem="ProductionDTO" Items="@Productions" butto>
       <TableColumns>
-        <TableColumn @bind-Field="@context.Id" Width="10" />
-        <TableColumn @bind-Field="@context.Name" />
-        <TableColumn @bind-Field="@context.OriginalPrice" />
-        <TableColumn @bind-Field="@context.Id" Text="操作">
+        <TableColumn @bind-Field="@context.ProductionName" />
+        <TableColumn @bind-Field="@context.OriginalPrice" Width="150" />
+        <TableColumn @bind-Field="@context.Id" Text="操作" Width="100">
           <Template Context="value">
-            <Button Color="Color.Primary" Icon="fas fa-square-pen" Text="编辑" OnClickWithoutRender="()=>CreateProduction(value.Value)" />
+            <Button Color="Color.Success" Text="编辑" OnClickWithoutRender="()=>CreateProduction(value.Value)" />
           </Template>
         </TableColumn>
       </TableColumns>
