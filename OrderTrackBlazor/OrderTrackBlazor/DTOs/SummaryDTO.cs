@@ -19,6 +19,15 @@
     public int Shortage { get => Required - Dispatched; set { } }
     public int NeedToBuy { get => Shortage > 0 ? (Shortage - Purchased) > 0 ? Shortage - Purchased : 0 : 0; set { } }
     public string? RecommandShopName { get; set; }
+    public string? RecommandShopName2 { get; set; }
+    public string? RecommandShopNameDisplay
+    {
+      get
+      {
+        return (RecommandShopName+ " " + RecommandShopName2).Trim();
+      }
+      set { }
+    }
     public string? Note { get; set; }
     public int Avaliable { get; set; }
   }

@@ -37,7 +37,7 @@
             </TableColumn>
             <TableColumn @bind-Field="@context.Quantity" Text="数量" />
             <TableColumn @bind-Field="@context.OrderPrice" Text="价格" />
-            <TableColumn @bind-Field="@context.RecommandShopName" Text="推荐" />
+            <TableColumn @bind-Field="@context.RecommandShopNameDisplay" Text="推荐" />
             <TableColumn @bind-Field="@context.Gid" Text="操作">
               <Template Context="value">
                 <Button Color="Color.Primary" Icon="fas fa-square-pen" Text="编辑" OnClickWithoutRender="()=>

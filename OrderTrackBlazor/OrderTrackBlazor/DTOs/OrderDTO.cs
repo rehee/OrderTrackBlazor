@@ -1,4 +1,5 @@
 ﻿using BootstrapBlazor.Components;
+using Microsoft.IdentityModel.Tokens;
 
 namespace OrderTrackBlazor.DTOs
 {
@@ -26,6 +27,26 @@ namespace OrderTrackBlazor.DTOs
 
     public long? RecommandShopId { get; set; }
     public string? RecommandShopName { get; set; }
+    public long? RecommandShopId2 { get; set; }
+    public string? RecommandShopName2 { get; set; }
+    public IEnumerable<string?> RecommandShopNames
+    {
+      get
+      {
+        return new string?[] { RecommandShopName, RecommandShopName2 };
+      }
+      set { }
+    }
+    public string? RecommandShopNameDisplay
+    {
+      get
+      {
+        
+        return String.Join(" ", RecommandShopNames.Where(b => !String.IsNullOrEmpty(b)));
+      }
+      set { }
+    }
+
     public string? Note { get; set; }
   }
 

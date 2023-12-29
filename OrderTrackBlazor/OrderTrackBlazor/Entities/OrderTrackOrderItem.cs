@@ -16,9 +16,17 @@ namespace OrderTrackBlazor.Entities
     public int Quantity { get; set; }
     public virtual List<OrderTrackDispatchItem>? DispatchItems { get; set; }
 
-    [ForeignKey(nameof(OrderTrackShop))]
+    [ForeignKey(nameof(RecommendShopId))]
     public long? RecommendShopId { get; set; }
-    public virtual OrderTrackShop? RecommendShop { get; set; }
+
+    [ForeignKey(nameof(RecommendShopId))]
+    public virtual OrderTrackShop RecommendShop { get; set; }
+
+    [ForeignKey(nameof(RecommendShopId2))]
+    public long? RecommendShopId2 { get; set; }
+
+    [ForeignKey(nameof(RecommendShopId2))]
+    public virtual OrderTrackShop RecommendShop2 { get; set; }
     public string? Note { get; set; }
   }
 }

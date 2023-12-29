@@ -17,6 +17,9 @@
         <Select Items="Shops" @bind-Value="SelectShopItem" OnSelectedItemChanged="OnItemChanged" ShowLabel="true" DisplayText="选择超市"> </Select>
       </div>
       <div class="col-12">
+        <Select Items="Shops" @bind-Value="SelectShopItem2" OnSelectedItemChanged="OnItemChanged2" ShowLabel="true" DisplayText="选择超市2"> </Select>
+      </div>
+      <div class="col-12">
         <BootstrapInput @bind-Value="DTO.Note" DisplayText="备注" ShowLabel="true"></BootstrapInput>
       </div>
     </div>

@@ -30,6 +30,8 @@ namespace OrderTrackBlazor.Services
                   OrderPrice = b.OrderPrice != null ? b.OrderPrice : b.Production.OriginalPrice,
                   RecommandShopId = b.RecommendShopId,
                   RecommandShopName = b.RecommendShop == null ? null : b.RecommendShop.Name,
+                  RecommandShopId2 = b.RecommendShopId2,
+                  RecommandShopName2 = b.RecommendShop2 == null ? null : b.RecommendShop2.Name,
                   Note = b.Note
                 }).ToList()
              };

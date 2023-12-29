@@ -97,6 +97,8 @@ namespace OrderTrackBlazor.Services
           ProductionName = orderItem.Production.Name,
           RecommandShopId = orderItem.RecommendShopId,
           RecommandShopName = orderItem.RecommendShop.Name,
+          RecommandShopId2 = orderItem.RecommendShopId2,
+          RecommandShopName2 = orderItem.RecommendShop2.Name,
           RequiredNumber = orderItem.Quantity,
           DispatchNumber = orderItem.DispatchItems.Where(b =>
               b.DispatchRecord == null || b.DispatchRecord.Status != EnumDispatchStatus.Error)
@@ -135,6 +137,8 @@ namespace OrderTrackBlazor.Services
             ProductionName = production.Name,
             RecommandShopId = o.RecommendShopId,
             RecommandShopName = o.RecommendShop.Name,
+            RecommandShopId2 = o.RecommendShopId2,
+            RecommandShopName2 = o.RecommendShop2.Name,
             RequiredNumber = o.Quantity,
             StockNumber = stock,
             DispatchNumber = o.DispatchItems.Where(d =>
@@ -285,6 +289,7 @@ namespace OrderTrackBlazor.Services
         }
         item.Quantity = selectedDTO.RequiredNumber;
         item.RecommendShopId = selectedDTO.RecommandShopId;
+        item.RecommendShopId2 = selectedDTO.RecommandShopId2;
         item.Note = selectedDTO.Note;
         item.OrderPrice = selectedDTO.OrderPrice;
       }

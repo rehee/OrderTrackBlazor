@@ -164,6 +164,7 @@ namespace OrderTrackBlazor.Services
           Dispatched = b.Production.DispatchItems.Where(d => (d.OrderProductionId == b.Id) && d.DispatchRecord.Status != EnumDispatchStatus.Error).Sum(s => s.Quantity + s.PackageQuantity),
           ProductionName = b.Production.Name,
           RecommandShopName = b.RecommendShop.Name,
+          RecommandShopName2 = b.RecommendShop2.Name,
           Note = b.Note
         })
         select new SummaryDTO

@@ -10,6 +10,18 @@
     public string? ProductionName { get; set; }
     public long? RecommandShopId { get; set; }
     public string? RecommandShopName { get; set; }
+    public long? RecommandShopId2 { get; set; }
+    public string? RecommandShopName2 { get; set; }
+
+    public IEnumerable<string?> RecommandShopNames
+    {
+      get
+      {
+        return new string?[] { RecommandShopName, RecommandShopName2 };
+      }
+      set { }
+    }
+
     public string? Note { get; set; }
     public decimal? OrderPrice { get; set; }
     public int RequiredNumber { get; set; }
@@ -37,7 +49,7 @@
       set { }
     }
     public string? SelectedShop { get; set; }
-    public IEnumerable<string> RecommandShops => Items == null ? Enumerable.Empty<string>() : Items.Where(b => !String.IsNullOrEmpty(b.RecommandShopName)).Select(b => b.RecommandShopName ?? "").Distinct();
+    public IEnumerable<string> RecommandShops => Items == null ? Enumerable.Empty<string>() : Items.SelectMany(b => b.RecommandShopNames).Where(b => !String.IsNullOrEmpty(b)).Select(b => b as string).Distinct().OrderBy(b => b);
     public IEnumerable<StockRequireDTO>? Items { get; set; }
   }
 

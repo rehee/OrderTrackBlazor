@@ -148,6 +148,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
             Quantity = p.Quantity ?? 0,
             OrderPrice = p.OrderPrice,
             RecommendShopId = p.RecommandShopId,
+            RecommendShopId2 = p.RecommandShopId2,
             Note = p.Note,
           };
           await Context.AddAsync<OrderTrackOrderItem>(p2, CancellationToken.None);
@@ -175,6 +176,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
               Quantity = p.Quantity ?? 0,
               OrderPrice = p.OrderPrice,
               RecommendShopId = p.RecommandShopId,
+              RecommendShopId2 = p.RecommandShopId2,
               Note = p.Note,
             };
             await Context.AddAsync<OrderTrackOrderItem>(p2, CancellationToken.None);
@@ -188,6 +190,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
               p2.Quantity = p.Quantity ?? 0;
               p2.OrderPrice = p.OrderPrice;
               p2.RecommendShopId = p.RecommandShopId;
+              p2.RecommendShopId2 = p.RecommandShopId2;
               p2.Note = p.Note;
             }
           }

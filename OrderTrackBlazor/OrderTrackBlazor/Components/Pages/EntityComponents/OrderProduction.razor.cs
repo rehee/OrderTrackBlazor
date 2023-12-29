@@ -21,6 +21,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
 
     [Parameter]
     public IEnumerable<SelectedItem>? ShopSelect { get; set; } = Enumerable.Empty<SelectedItem>();
+    
 
     [Parameter]
     public Func<Action<IEnumerable<ProductionDTO>, long>, Task>? CreateProduction { get; set; }
@@ -40,7 +41,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     }
 
     public SelectedItem? SelectedShop { get; set; }
-
+    public SelectedItem? SelectedShop2 { get; set; }
     public async Task OrderItemChange(SelectedItem item)
     {
       await Task.CompletedTask;
@@ -80,6 +81,25 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       }
 
     }
+    public async Task ShopItemChange2(SelectedItem item)
+    {
+      await Task.CompletedTask;
+      if (item == null || DTO == null)
+      {
+        return;
+      }
+      if (long.TryParse(item.Value, out var id))
+      {
+        DTO.RecommandShopId2 = id;
+        DTO.RecommandShopName2 = item.Text;
+      }
+      else
+      {
+        DTO.RecommandShopId2 = null;
+        DTO.RecommandShopName2 = null;
+      }
+
+    }
     public List<SelectedItem> Items = new List<SelectedItem>();
     public SelectedItem? IItem { get; set; }
     protected override async Task OnInitializedAsync()
@@ -94,6 +114,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       var selectedId = inputId != null ? inputId.ToString() : DTO?.ProductionId.ToString();
       IItem = Items.FirstOrDefault(b => b.Value == selectedId);
       SelectedShop = ShopSelect.FirstOrDefault(b => b.Value == DTO?.RecommandShopId.ToString());
+      SelectedShop2 = ShopSelect.FirstOrDefault(b => b.Value == DTO?.RecommandShopId2.ToString());
       StateHasChanged();
     }
 
