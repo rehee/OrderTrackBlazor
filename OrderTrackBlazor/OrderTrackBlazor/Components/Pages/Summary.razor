@@ -3,32 +3,35 @@
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 <PageTitle>Home</PageTitle>
-<Dialog></Dialog>
-@foreach (var summary in SummaryDTOs)
-{
-  <hr />
-  <div>
-    订单日期: @summary.OrderDate?.ToString("dd/MM/yyyy"),
-    备注: @summary.ShortNote
-    <div>
-      <Table TItem="SummaryProductionDTO" Items="@summary.Productions">
-        <TableColumns>
-          <TableColumn @bind-Field="@context.ProductionName" Text="产品" Width="300">
-          </TableColumn>
+<MainPage>
+  <Main>
+    @foreach (var summary in SummaryDTOs)
+    {
+      <hr />
+      <div>
+        订单日期: @summary.OrderDate?.ToString("dd/MM/yyyy"),
+        备注: @summary.ShortNote
+        <div>
+          <Table TItem="SummaryProductionDTO" Items="@summary.Productions">
+            <TableColumns>
+              <TableColumn @bind-Field="@context.ProductionName" Text="产品" Width="300">
+              </TableColumn>
 
-          <TableColumn @bind-Field="@context.Required" Text="总需求" Width="50">
-          </TableColumn>
-          <TableColumn @bind-Field="@context.Purchased" Text="已采购" Width="50">
-          </TableColumn>
-          <TableColumn @bind-Field="@context.Dispatched" Text="已发货" Width="50">
-          </TableColumn>
+              <TableColumn @bind-Field="@context.Required" Text="总需求" Width="50">
+              </TableColumn>
+              <TableColumn @bind-Field="@context.Purchased" Text="已采购" Width="50">
+              </TableColumn>
+              <TableColumn @bind-Field="@context.Dispatched" Text="已发货" Width="50">
+              </TableColumn>
 
-          <TableColumn @bind-Field="@context.NeedToBuy" Text="需采购" Width="50">
-          </TableColumn>
+              <TableColumn @bind-Field="@context.NeedToBuy" Text="需采购" Width="50">
+              </TableColumn>
 
-        </TableColumns>
+            </TableColumns>
 
-      </Table>
-    </div>
-  </div>
-}
+          </Table>
+        </div>
+      </div>
+    }
+  </Main>
+</MainPage>

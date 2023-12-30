@@ -5,27 +5,27 @@
 @attribute [Authorize]
 <PageTitle>stock</PageTitle>
 
-<div>
-  <Table TItem="StockSummaryDTO" Items="@SummaryDTOs">
-    <TableColumns>
-      <TableColumn @bind-Field="@context.Name" Text="产品">
-      </TableColumn>
+<MainPage>
+  <Main>
+    <Table TItem="StockSummaryDTO" Items="@SummaryDTOs">
+      <TableColumns>
+        <TableColumn @bind-Field="@context.Name" Text="产品">
+        </TableColumn>
 
-      <TableColumn @bind-Field="@context.CurrentStock" Text="库存">
-        <Template Context="value">
-          <span class="@(value.Value>0?"text-success":"")">@value.Value</span>
-        </Template>
-      </TableColumn>
+        <TableColumn @bind-Field="@context.CurrentStock" Text="库存">
+          <Template Context="value">
+            <span class="@(value.Value>0?"text-success":"")">@value.Value</span>
+          </Template>
+        </TableColumn>
 
-      <TableColumn @bind-Field="@context.Id" Text="操作">
-        <Template Context="value">
-          <Button Color="Color.Primary" Icon="fas fa-arrow-trend-up" Text="入库详情" OnClickWithoutRender="()=>NormalShowDialog(value.Value)" />
-        </Template>
-      </TableColumn>
+        <TableColumn @bind-Field="@context.Id" Text="操作">
+          <Template Context="value">
+            <Button Color="Color.Primary" Icon="fas fa-arrow-trend-up" Text="入库详情" OnClickWithoutRender="()=>NormalShowDialog(value.Value)" />
+          </Template>
+        </TableColumn>
 
-    </TableColumns>
+      </TableColumns>
 
-  </Table>
-
-</div>
-<Dialog></Dialog>
+    </Table>
+  </Main>
+</MainPage>

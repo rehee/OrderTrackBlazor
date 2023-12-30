@@ -33,6 +33,7 @@ namespace OrderTrackBlazor.Services
           Id = b.Id,
           OriginalPrice = b.OriginalPrice,
           ProductionName = b.Name,
+          ExtendUrl = b.ExtendUrl,
         }).Where(b => b.Id == id).FirstOrDefaultAsync();
     }
     public async Task<bool> SaveChange(ProductionDTO? dto)
@@ -49,6 +50,7 @@ namespace OrderTrackBlazor.Services
           {
             Name = dto.ProductionName,
             OriginalPrice = dto.OriginalPrice,
+            ExtendUrl = dto.ExtendUrl,
           };
           await context.AddAsync<OrderTrackProduction>(entity);
           var result = (await context.SaveChangesAsync()) >= 0;
@@ -62,6 +64,7 @@ namespace OrderTrackBlazor.Services
           {
             production.Name = dto.ProductionName;
             production.OriginalPrice = dto.OriginalPrice;
+            production.ExtendUrl = dto.ExtendUrl;
           }
           return (await context.SaveChangesAsync()) >= 0;
         }

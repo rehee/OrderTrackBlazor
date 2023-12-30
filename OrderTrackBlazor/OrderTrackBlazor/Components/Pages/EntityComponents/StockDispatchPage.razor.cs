@@ -76,6 +76,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
           });
       var dotion = new DialogOption()
       {
+        IsScrolling = true,
         Title = packageId == null ? "add package" : "edit package",
         Size = Size.ExtraLarge,
         Component = comp,

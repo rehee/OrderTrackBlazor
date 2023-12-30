@@ -2,7 +2,9 @@ using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using OrderTrackBlazor.Components.Pages.EntityComponents;
+using System.Diagnostics.CodeAnalysis;
 using static Dropbox.Api.Files.ListRevisionsMode;
+using static Dropbox.Api.Files.SearchMatchType;
 
 namespace OrderTrackBlazor.Components.Pages
 {
@@ -22,6 +24,44 @@ namespace OrderTrackBlazor.Components.Pages
     public ISelectedItemService SelectedItemService { get; set; }
     [Inject]
     public IStockService service { get; set; }
+
+    public async Task Copy(string? content)
+    {
+      await clipboardService.Copy(content);
+
+    }
+    public async Task Edit(long? id)
+    {
+      var onsave = new OnSaveDTO();
+      var comp = BootstrapDynamicComponent.CreateComponent<ProductionDetail>(
+          new Dictionary<string, object?>()
+          {
+            ["Id"] = id,
+            ["OnSave"] = onsave,
+          });
+      var dotion = new DialogOption()
+      {
+        IsScrolling = true,
+        Title = $"{(id == null ? "create" : "edit")} Product",
+        Size = Size.ExtraLarge,
+        Component = comp,
+        ShowSaveButton = true,
+        OnSaveAsync = async () =>
+        {
+          var result = true;
+          if (onsave.OnSaveFunc != null)
+          {
+            result = await onsave.OnSaveFunc();
+          }
+          if (result)
+          {
+            await Refresh(true);
+          }
+          return result;
+        }
+      };
+      await dialogService!.Show(dotion);
+    }
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync();
@@ -35,9 +75,13 @@ namespace OrderTrackBlazor.Components.Pages
         return DTOs.OrderByDescending(b => b.RecommandShops.Contains(SelectShopItem?.Text)).ThenBy(b => b.ProductionName);
       }
     }
-    public async Task Refresh()
+    public async Task Refresh(bool keepShop = false)
     {
-      SelectShopItem = null;
+      if (!keepShop)
+      {
+        SelectShopItem = null;
+      }
+
       DTOs = await service.QueryRequireSummary().ToListAsync();
       Shops = await SelectedItemService.GetEntitySelection<OrderTrackShop>();
       StateHasChanged();
@@ -55,6 +99,7 @@ namespace OrderTrackBlazor.Components.Pages
           });
       var dotion = new DialogOption()
       {
+        IsScrolling = true,
         Title = purchaseId == null ? "add package" : "edit package",
         Size = Size.ExtraLarge,
         Component = comp,
@@ -98,6 +143,7 @@ namespace OrderTrackBlazor.Components.Pages
           });
       var dotion = new DialogOption()
       {
+        IsScrolling = true,
         Size = Size.ExtraLarge,
         Component = comp,
         ShowSaveButton = true,

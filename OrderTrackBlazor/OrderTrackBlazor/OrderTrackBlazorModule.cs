@@ -33,6 +33,7 @@ namespace OrderTrackBlazor
       context.Services!.AddRazorComponents()
         .AddInteractiveServerComponents();
       context.Services!.AddBootstrapBlazor();
+      
       context.Services!.AddCascadingAuthenticationState();
       context.Services!.AddScoped<IdentityUserAccessor>();
       context.Services!.AddScoped<IdentityRedirectManager>();

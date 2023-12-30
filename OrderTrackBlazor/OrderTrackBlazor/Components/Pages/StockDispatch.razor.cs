@@ -42,6 +42,7 @@ namespace OrderTrackBlazor.Components.Pages
           });
       var dotion = new DialogOption()
       {
+        IsScrolling = true,
         Title = "",
         Size = Size.ExtraLarge,
         Component = comp,

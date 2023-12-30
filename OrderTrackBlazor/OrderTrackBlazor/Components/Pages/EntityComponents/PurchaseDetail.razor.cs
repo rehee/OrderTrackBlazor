@@ -68,6 +68,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
 
       var dotion = new DialogOption()
       {
+        IsScrolling = true,
         Title = dto == null ? "new order production" : "new order production",
         Component = comp,
         ShowSaveButton = true,

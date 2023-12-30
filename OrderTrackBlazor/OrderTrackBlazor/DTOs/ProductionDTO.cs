@@ -11,6 +11,7 @@ namespace OrderTrackBlazor.DTOs
     [Display(Name = "原始价格")]
 
     public decimal? OriginalPrice { get; set; }
+    public string? ExtendUrl { get; set; }
 
     public long NewId { get; set; }
     

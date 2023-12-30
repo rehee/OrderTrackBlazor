@@ -34,9 +34,11 @@
   {
     public long? ProductionId { get; set; }
     public string? ProductionName { get; set; }
+    public string? ExtendUrl { get; set; }
     public int RequiredNumber { get; set; }
     public int DispatchNumber { get; set; }
     public int PendingNumber { get; set; }
+
     public int NeedToBuy
     {
       get

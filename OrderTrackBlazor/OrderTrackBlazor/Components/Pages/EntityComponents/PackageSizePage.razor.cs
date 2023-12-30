@@ -34,6 +34,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
           });
       var dotion = new DialogOption()
       {
+        IsScrolling = true,
         Title = $"{(id == null ? "Create" : "Edit")}  Package Size",
         Size = Size.Medium,
         Component = comp,

@@ -42,7 +42,7 @@ namespace OrderTrackBlazor.DTOs
       get
       {
         
-        return String.Join(" ", RecommandShopNames.Where(b => !String.IsNullOrEmpty(b)));
+        return String.Join(",", RecommandShopNames.Where(b => !String.IsNullOrEmpty(b)));
       }
       set { }
     }

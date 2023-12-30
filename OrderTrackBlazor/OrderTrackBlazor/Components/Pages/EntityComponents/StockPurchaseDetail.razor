@@ -25,10 +25,15 @@
             <Template Context="value">
               @{
                 var item = DisplayDTOs.FirstOrDefault(b => b.ProductionId == value.Value);
+                var count = 0;
                 foreach (var shop in item.RecommandShops)
                 {
+                  if (count > 0)
+                  {
+                    <span>,</span>
+                  }
                   <span class="@(item.SelectedShop==shop?"text-danger":"")">@shop</span>
-                  <span>&nbsp;</span>
+                  count++;
                 }
               }
             </Template>

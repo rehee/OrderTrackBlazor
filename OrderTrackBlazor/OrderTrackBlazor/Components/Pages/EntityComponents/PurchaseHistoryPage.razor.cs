@@ -60,6 +60,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
           });
       var dotion = new DialogOption()
       {
+        IsScrolling = true,
         Title = $"{(purchaseId == null ? "Create" : "Edit")} Purchase",
         Size = Size.ExtraLarge,
         Component = comp,
@@ -90,6 +91,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
           });
       var dotion = new DialogOption()
       {
+        IsScrolling = true,
         Title = "edit purchase",
         Size = Size.ExtraLarge,
         Component = comp,

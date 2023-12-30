@@ -1,50 +1,82 @@
 ﻿@inherits StockRequirePageComponent
-<div class="row g-3">
-  <div class="col-12">
-    <Button Color="Color.Success" Text="采购" OnClickWithoutRender="()=>PurchaseDetail()" />
-  </div>
-  <div class="col-12">
-    <Select Items="Shops" @bind-Value="SelectShopItem" OnSelectedItemChanged="OnItemChanged" ShowLabel="true" DisplayText="选择超市"> </Select>
-  </div>
-  <div class="col-12">
-    <Table TItem="StockRequireSummaryDTO" Items="@DisplayDTOs">
-      <TableColumns>
-        <TableColumn @bind-Field="@context.ProductionName" Text="产品">
-        </TableColumn>
 
-        <TableColumn @bind-Field="@context.NeedToBuy" Text="需求">
 
-        </TableColumn>
-        <TableColumn @bind-Field="@context.StockNumber" Text="库存">
+<MainPage>
+  <Header>
+    <div class="row g-3">
+      <div class="col-12">
+        <Button Color="Color.Success" Text="采购" OnClickWithoutRender="()=>PurchaseDetail()" />
+        <Button Color="Color.Warning" Text="历史" OnClickWithoutRender="()=>History()" />
+      </div>
+    </div>
+  </Header>
+  <Main>
+    <div class="row g-3">
+      <div class="col-12">
+        <Select Items="Shops" @bind-Value="SelectShopItem" OnSelectedItemChanged="OnItemChanged" ShowLabel="true" DisplayText="选择超市"> </Select>
+      </div>
+      <div class="col-12">
+        <Table TItem="StockRequireSummaryDTO" Items="@DisplayDTOs">
+          <TableColumns>
+            <TableColumn @bind-Field="@context.ProductionId" Text="产品">
+              <Template Context="value">
+                @{
+                  var records = DTOs.FirstOrDefault(b => b.ProductionId == value.Value);
+                  <BootstrapInputGroup>
+                    <Display @bind-Value="records.ProductionName"></Display>
+                    <Button Color="Color.Warning" Icon="fas fa-copy" OnClickWithoutRender="()=>Copy(records?.ProductionName)" />
+                    <Button Color="Color.Success" Icon="fas fa-bars" OnClickWithoutRender="()=>Edit(value.Value)" />
+                  </BootstrapInputGroup>
+                }
 
-        </TableColumn>
-        <TableColumn @bind-Field="@context.ProductionId" Text="推荐">
-          <Template Context="value">
-            @{
-              var item = DisplayDTOs.FirstOrDefault(b => b.ProductionId == value.Value);
-              foreach (var shop in item.RecommandShops)
-              {
-                <span class="@(item.SelectedShop==shop?"text-danger":"")">@shop</span>
-                <span>&nbsp;</span>
-              }
-            }
-          </Template>
-        </TableColumn>
-        <TableColumn @bind-Field="@context.ProductionId" Text="操作">
-          <Template Context="value">
-            <Button Color="Color.Primary" Text="详情" OnClickWithoutRender="()=>ShowDetail(value.Value)" />
-          </Template>
-        </TableColumn>
 
-      </TableColumns>
+              </Template>
+            </TableColumn>
 
-    </Table>
 
-  </div>
-  <div class="col-12">
-    <Button Color="Color.Warning" Text="历史" OnClickWithoutRender="()=>History()" />
-  </div>
-</div>
+            <TableColumn @bind-Field="@context.NeedToBuy" Text="需求">
 
-<Dialog></Dialog>
-@* OnClickWithoutRender="()=>NormalShowDialog(value.Value)" *@
+            </TableColumn>
+            <TableColumn @bind-Field="@context.StockNumber" Text="库存">
+
+            </TableColumn>
+            <TableColumn @bind-Field="@context.ProductionId" Text="推荐">
+              <Template Context="value">
+                @{
+                  var item = DisplayDTOs.FirstOrDefault(b => b.ProductionId == value.Value);
+                  var count = 0;
+                  foreach (var shop in item.RecommandShops)
+                  {
+                    if (count > 0)
+                    {
+                      <span>,</span>
+                    }
+                    <span class="@(item.SelectedShop==shop?"text-danger":"")">@shop</span>
+                    count++;
+                  }
+                }
+              </Template>
+            </TableColumn>
+            <TableColumn @bind-Field="@context.ProductionId" Text="操作">
+              <Template Context="value">
+                @{
+                  var records = DTOs.FirstOrDefault(b => b.ProductionId == value.Value);
+                  <Button Color="Color.Primary" Text="详情" OnClickWithoutRender="()=>ShowDetail(value.Value)" />
+
+                  <a href="@records.ExtendUrl" target="_blank" class="btn btn-success">比价</a>
+                }
+
+
+              </Template>
+            </TableColumn>
+
+          </TableColumns>
+
+        </Table>
+
+      </div>
+
+    </div>
+
+  </Main>
+</MainPage>

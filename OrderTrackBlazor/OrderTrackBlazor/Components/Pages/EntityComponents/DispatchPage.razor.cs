@@ -49,6 +49,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
           });
       var dotion = new DialogOption()
       {
+        IsScrolling = true,
         Title = id == null ? "Create Dispatch" : "Edit Dispatch",
         Size = Size.ExtraLarge,
         Component = comp,
@@ -84,6 +85,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
           });
       var dotion = new DialogOption()
       {
+        IsScrolling = true,
         Title = "Dispatch",
         Size = Size.ExtraLarge,
         Component = comp,

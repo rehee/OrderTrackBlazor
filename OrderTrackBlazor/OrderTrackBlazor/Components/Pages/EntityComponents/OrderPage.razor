@@ -4,37 +4,42 @@
 @* @attribute [Authorize] *@
 @inherits OrderPageComponent
 @attribute [Authorize]
+<MainPage>
+  <Header>
+    <Button Color="Color.Primary" Icon="fa-solid fa-font-awesome" Text="添加订单" OnClickWithoutRender="()=>CreateProduction()" />
+  </Header>
+  <Main>
+    @if (Orders == null)
+    {
+      <div>null</div>
+    }
+    else
+    {
+      <div>
+        <Table TItem="OrderDTO" Items="@Orders">
+          <TableColumns>
+            <TableColumn @bind-Field="@context.OrderDate">
+              <Template Context="value">
+                <span>@value.Value?.ToString("dd/MM/yyyy")</span>
+              </Template>
+            </TableColumn>
+            <TableColumn @bind-Field="@context.ShortNote" />
+            <TableColumn @bind-Field="@context.Id" Text="操作">
+              <Template Context="value">
+                <Button Color="Color.Primary" Icon="fas fa-square-pen" Text="编辑" OnClickWithoutRender="()=>CreateProduction(value.Value)" />
+                <Button Color="Color.Secondary" Icon="fas fa-square-pen" Text="出库" OnClickWithoutRender="()=>DispatchList(value.Value)" />
+                <Button Color="Color.Warning" Icon="fas fa-square-pen" Text="装箱" OnClickWithoutRender="()=>PackageList(value.Value)" />
+              </Template>
+            </TableColumn>
+          </TableColumns>
 
-<div>
-  <Button Color="Color.Primary" Icon="fa-solid fa-font-awesome" Text="添加订单" OnClickWithoutRender="()=>CreateProduction()" />
-</div>
+        </Table>
+      </div>
+    }
+  </Main>
+</MainPage>
 
-@if (Orders == null)
-{
-  <div>null</div>
-}
-else
-{
-  <div>
-    <Table TItem="OrderDTO" Items="@Orders">
-      <TableColumns>
-        <TableColumn @bind-Field="@context.OrderDate">
-          <Template Context="value">
-            <span>@value.Value?.ToString("dd/MM/yyyy")</span>
-          </Template>
-        </TableColumn>
-        <TableColumn @bind-Field="@context.ShortNote" />
-        <TableColumn @bind-Field="@context.Id" Text="操作">
-          <Template Context="value">
-            <Button Color="Color.Primary" Icon="fas fa-square-pen" Text="编辑" OnClickWithoutRender="()=>CreateProduction(value.Value)" />
-            <Button Color="Color.Secondary" Icon="fas fa-square-pen" Text="出库" OnClickWithoutRender="()=>DispatchList(value.Value)" />
-            <Button Color="Color.Warning" Icon="fas fa-square-pen" Text="装箱" OnClickWithoutRender="()=>PackageList(value.Value)" />
-          </Template>
-        </TableColumn>
-      </TableColumns>
 
-    </Table>
-  </div>
-}
 
-<Dialog></Dialog>
+
+@* <Dialog></Dialog> *@

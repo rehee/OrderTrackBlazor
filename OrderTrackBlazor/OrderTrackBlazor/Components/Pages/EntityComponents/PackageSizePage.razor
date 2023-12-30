@@ -12,22 +12,27 @@
 }
 else
 {
-  <div>
-    <Button Color="Color.Primary" Text="添加shop" OnClick="()=>NormalShowDialog()" />
-  </div>
-  <div>
-    <Table TItem="OrderTrackPackageSize" Items="@Packages">
-      <TableColumns>
-        <TableColumn @bind-Field="@context.Name" />
-        <TableColumn @bind-Field="@context.DisplayOrder" />
-        <TableColumn @bind-Field="@context.Id">
-          <Template Context="value">
-            <Button Color="Color.Success" Text="修改" OnClick="()=>NormalShowDialog(value.Value)" />
-          </Template>
-        </TableColumn>
+  <MainPage>
+    <Header>
+      <div>
+        <Button Color="Color.Primary" Text="添加包装箱" OnClick="()=>NormalShowDialog()" />
+      </div>
+    </Header>
+    <Main>
+      <div>
+        <Table TItem="OrderTrackPackageSize" Items="@Packages">
+          <TableColumns>
+            <TableColumn @bind-Field="@context.Name" />
+            <TableColumn @bind-Field="@context.DisplayOrder" />
+            <TableColumn @bind-Field="@context.Id">
+              <Template Context="value">
+                <Button Color="Color.Success" Text="修改" OnClick="()=>NormalShowDialog(value.Value)" />
+              </Template>
+            </TableColumn>
 
-      </TableColumns>
-    </Table>
-  </div>
-  <Dialog></Dialog>
+          </TableColumns>
+        </Table>
+      </div>
+    </Main>
+  </MainPage>
 }

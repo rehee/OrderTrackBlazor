@@ -82,6 +82,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       string decodedString = Encoding.UTF8.GetString(utf8Bytes);
       var dotion = new DialogOption()
       {
+        IsScrolling = true,
         Title = decodedString,
         Size = Size.ExtraLarge,
         Component = comp,

@@ -4,29 +4,35 @@
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 <PageTitle>Summary</PageTitle>
-<Dialog></Dialog>
-<Table TItem="SummaryDTO" Items="@SummaryDTOs">
-  <TableColumns>
-    <TableColumn @bind-Field="@context.OrderId" Text="订单" Width="300">
-      <Template Context="value">
-        @{
-          var order = SummaryDTOs.FirstOrDefault(b => b.OrderId == value.Value);
-          <span> 订单日期: @order?.OrderDate?.ToString(DefaultValues.DatFormat) 备注:@order.ShortNote  </span>
-        }
-      </Template>
-    </TableColumn>
+<MainPage>
+  <Header>
 
-    <TableColumn @bind-Field="@context.OrderId" Text="操作" Width="300">
-      <Template Context="value">
-        @{
-          var urls = $"summary/{value.Value}";
-          <NavLink class="btn btn-primary" href="@urls">
-            详情
-          </NavLink>
-        }
-      </Template>
-    </TableColumn>
+  </Header>
+  <Main>
+    <Table TItem="SummaryDTO" Items="@SummaryDTOs">
+      <TableColumns>
+        <TableColumn @bind-Field="@context.OrderId" Text="订单" Width="300">
+          <Template Context="value">
+            @{
+              var order = SummaryDTOs.FirstOrDefault(b => b.OrderId == value.Value);
+              <span> 订单日期: @order?.OrderDate?.ToString(DefaultValues.DatFormat) 备注:@order.ShortNote  </span>
+            }
+          </Template>
+        </TableColumn>
 
-  </TableColumns>
+        <TableColumn @bind-Field="@context.OrderId" Text="操作" Width="300">
+          <Template Context="value">
+            @{
+              var urls = $"summary/{value.Value}";
+              <NavLink class="btn btn-primary" href="@urls">
+                详情
+              </NavLink>
+            }
+          </Template>
+        </TableColumn>
 
-</Table>
+      </TableColumns>
+
+    </Table>
+  </Main>
+</MainPage>

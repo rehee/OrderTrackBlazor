@@ -154,6 +154,7 @@ namespace OrderTrackBlazor.Services
         {
           ProductionId = production.Id,
           ProductionName = production.Name,
+          ExtendUrl = production.ExtendUrl,
           RequiredNumber = required,
           DispatchNumber = dispatch,
           StockNumber = stock,
@@ -178,6 +179,7 @@ namespace OrderTrackBlazor.Services
           Request = record.Items.Select(b => new StockRequireSummaryDTO
           {
             ProductionId = b.ProductionId,
+            ExtendUrl = b.Production.ExtendUrl,
             ProductionName = b.Production.Name,
             Number = b.Quantity,
           })
@@ -192,11 +194,13 @@ namespace OrderTrackBlazor.Services
         {
           ProductionId = b.Key,
           ProductionName = b.Select(b => b.ProductionName).FirstOrDefault(),
+          ExtendUrl = b.Select(b => b.ExtendUrl).FirstOrDefault(),
           Number = b.Sum(b => b.Number)
         }).Select(b => new StockRequireSummaryDTO
         {
           ProductionId = b.ProductionId,
           ProductionName = b.ProductionName,
+          ExtendUrl = b.ExtendUrl,
           Number = b.Number == 0 ? null : b.Number,
         }).OrderByDescending(b => b.Number.HasValue && b.Number > 0).ThenBy(b => b.ProductionName).ToArray();
       return result;

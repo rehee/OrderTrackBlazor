@@ -4,41 +4,44 @@
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 <PageTitle>采购历史</PageTitle>
-<Dialog></Dialog>
 
-<div class="row g-3">
-  <div class="col-5">
-    <DateTimePicker @bind-Value="@QueryBegin" Format="dd/MM/yyyy" ShowLabel="true" DisplayText="开始日期" />
-  </div>
-  <div class="col-5">
-    <DateTimePicker @bind-Value="@QueryEnd" Format="dd/MM/yyyy" ShowLabel="true" DisplayText="结束日期" />
-  </div>
-  <div class="col-2">
-    <br />
-    <Button Icon="fas fa-magnifying-glass-chart" OnClickWithoutRender="()=>Refresh()" />
-  </div>
-  <div class="col-12">
-    <Table TItem="PurchaseDTO" Items="@Purchases">
-      <TableColumns>
-        <TableColumn @bind-Field="@context.PurchaseDateFormat" Text="采购日期">
-        </TableColumn>
-        <TableColumn @bind-Field="@context.ShopName" Text="采购地点" Width="100">
-        </TableColumn>
-        <TableColumn @bind-Field="@context.ShopPrice" Text="金额" Width="100">
-        </TableColumn>
-        <TableColumn @bind-Field="@context.Id" Text="操作" Width="100">
-          <Template Context="value">
-            @{
-              var item = Purchases.FirstOrDefault(b => b.Id == value.Value);
-              <Button Color="Color.Warning" OnClickWithoutRender="()=>Refresh()" Text="查看" />
-              <Button Color="Color.Success" OnClickWithoutRender="()=>EditPurchase(item)" Text="修改" />
-            }
-          </Template>
-        </TableColumn>
+<MainPage>
+  <Main>
+    <div class="row g-3">
+      <div class="col-5">
+        <DateTimePicker @bind-Value="@QueryBegin" Format="dd/MM/yyyy" ShowLabel="true" DisplayText="开始日期" />
+      </div>
+      <div class="col-5">
+        <DateTimePicker @bind-Value="@QueryEnd" Format="dd/MM/yyyy" ShowLabel="true" DisplayText="结束日期" />
+      </div>
+      <div class="col-2">
+        <br />
+        <Button Icon="fas fa-magnifying-glass-chart" OnClickWithoutRender="()=>Refresh()" />
+      </div>
+      <div class="col-12">
+        <Table TItem="PurchaseDTO" Items="@Purchases">
+          <TableColumns>
+            <TableColumn @bind-Field="@context.PurchaseDateFormat" Text="采购日期">
+            </TableColumn>
+            <TableColumn @bind-Field="@context.ShopName" Text="采购地点" Width="100">
+            </TableColumn>
+            <TableColumn @bind-Field="@context.ShopPrice" Text="金额" Width="100">
+            </TableColumn>
+            <TableColumn @bind-Field="@context.Id" Text="操作" Width="100">
+              <Template Context="value">
+                @{
+                  var item = Purchases.FirstOrDefault(b => b.Id == value.Value);
+                  <Button Color="Color.Warning" OnClickWithoutRender="()=>Refresh()" Text="查看" />
+                  <Button Color="Color.Success" OnClickWithoutRender="()=>EditPurchase(item)" Text="修改" />
+                }
+              </Template>
+            </TableColumn>
 
 
-      </TableColumns>
+          </TableColumns>
 
-    </Table>
-  </div>
-</div>
+        </Table>
+      </div>
+    </div>
+  </Main>
+</MainPage>

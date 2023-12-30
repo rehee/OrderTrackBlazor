@@ -5,86 +5,93 @@
 @attribute [Authorize]
 <PageTitle>Summary @Id</PageTitle>
 
-  @if (Summary != null)
+@if (Summary != null)
 {
-  <div>
-    <Button Color="Color.Primary" Icon="fa-solid fa-font-awesome" Text="采购" OnClick="()=>Shopping()" />
-  </div>
-  <div>
-    订单日期: @Summary.OrderDate?.ToString("dd/MM/yyyy"),
-    备注: @Summary.ShortNote
-
-
-  </div>
-  <div>
-    <Table TItem="SummaryProductionDTO" Items="@Summary.Productions">
-      <TableColumns>
-        <TableColumn @bind-Field="@context.ProductionName" Text="产品" >
-        </TableColumn>
-        <TableColumn @bind-Field="@context.RecommandShopNameDisplay" Text="推荐">
-        </TableColumn>
-        <TableColumn @bind-Field="@context.Note" Text="备注" >
-        </TableColumn>
-        <TableColumn @bind-Field="@context.Required" Text="总需求" Width="50">
-        </TableColumn>
-        <TableColumn @bind-Field="@context.Purchased" Text="库存" Width="50">
-        </TableColumn>
-        <TableColumn @bind-Field="@context.Dispatched" Text="已发货" Width="50">
-        </TableColumn>
-
-        <TableColumn @bind-Field="@context.NeedToBuy" Text="需采购" Width="50">
-        </TableColumn>
-
-      </TableColumns>
-
-    </Table>
-  </div>
-  <div style="margin-top:20px;">
-  </div>
-  <div>
-    采购详情
-  </div>
-  foreach (var record in OrderPurchaseSummaryDTO)
-  {
-    <hr />
-    <div class="row g-3">
-      <div class="col-12">
-        <Button Color="Color.Success" Text="编辑" OnClick="()=>Shopping(record.Id)" />
+  <MainPage>
+    <Header>
+      <div>
+        <Button Color="Color.Primary" Icon="fa-solid fa-font-awesome" Text="采购" OnClick="()=>Shopping()" />
       </div>
-      <div class="col-12 col-md-4">
-        采购时间: <span>@record.PurchaseDate?.ToString(DefaultValues.DatFormat)</span>
+      <div>
+        订单日期: @Summary.OrderDate?.ToString("dd/MM/yyyy"),
+        备注: @Summary.ShortNote
+
+
       </div>
-      <div class="col-12 col-md-4">
-        采购超市: <span>@record.ShopName</span>
+    </Header>
+    <Main>
+      <div>
+        <Table TItem="SummaryProductionDTO" Items="@Summary.Productions">
+          <TableColumns>
+            <TableColumn @bind-Field="@context.ProductionName" Text="产品">
+            </TableColumn>
+            <TableColumn @bind-Field="@context.RecommandShopNameDisplay" Text="推荐">
+            </TableColumn>
+            <TableColumn @bind-Field="@context.Note" Text="备注">
+            </TableColumn>
+            <TableColumn @bind-Field="@context.Required" Text="总需求" Width="50">
+            </TableColumn>
+            <TableColumn @bind-Field="@context.Purchased" Text="库存" Width="50">
+            </TableColumn>
+            <TableColumn @bind-Field="@context.Dispatched" Text="已发货" Width="50">
+            </TableColumn>
+
+            <TableColumn @bind-Field="@context.NeedToBuy" Text="需采购" Width="50">
+            </TableColumn>
+
+          </TableColumns>
+
+        </Table>
       </div>
-      <div class="col-12 col-md-4">
-        采购价格: <span>@record.Price</span>
+      <div style="margin-top:20px;">
       </div>
+      <div>
+        采购详情
+      </div>
+      @foreach (var record in OrderPurchaseSummaryDTO)
+      {
+      <hr />
+      <div class="row g-3">
+        <div class="col-12">
+          <Button Color="Color.Success" Text="编辑" OnClick="()=>Shopping(record.Id)" />
+        </div>
+        <div class="col-12 col-md-4">
+          采购时间: <span>@record.PurchaseDate?.ToString(DefaultValues.DatFormat)</span>
+        </div>
+        <div class="col-12 col-md-4">
+          采购超市: <span>@record.ShopName</span>
+        </div>
+        <div class="col-12 col-md-4">
+          采购价格: <span>@record.Price</span>
+        </div>
 
-      <Table TItem="OrderPurchaseItemDTO" Items="@record.Items">
-        <TableColumns>
-          <TableColumn @bind-Field="@context.ProductionName" Text="产品">
+        <Table TItem="OrderPurchaseItemDTO" Items="@record.Items">
+          <TableColumns>
+            <TableColumn @bind-Field="@context.ProductionName" Text="产品">
 
-          </TableColumn>
-          <TableColumn @bind-Field="@context.Id" Text="数量" Width="200">
-            <Template Context="value">
-              @{
-                var item = record.Items.FirstOrDefault(b => b.Id == value.Value);
-              }
-              <BootstrapInputNumber @bind-Value="item.Quantity"
-                                    ShowLabel="false" IsDisabled="true" />
-            </Template>
-          </TableColumn>
+            </TableColumn>
+            <TableColumn @bind-Field="@context.Id" Text="数量" Width="200">
+              <Template Context="value">
+                @{
+                  var item = record.Items.FirstOrDefault(b => b.Id == value.Value);
+                }
+                <BootstrapInputNumber @bind-Value="item.Quantity"
+                                      ShowLabel="false" IsDisabled="true" />
+              </Template>
+            </TableColumn>
 
-        </TableColumns>
+          </TableColumns>
 
-      </Table>
-    </div>
-  }
-  <div class="row g-3">
-    <div class="col-12">
-      总采购价格: @OrderPurchaseSummaryDTO.Sum(b => b.Price)
-    </div>
-  </div>
+        </Table>
+      </div>
+      }
+      <div class="row g-3">
+        <div class="col-12">
+          总采购价格: @OrderPurchaseSummaryDTO.Sum(b => b.Price)
+        </div>
+      </div>
+    </Main>
+  </MainPage>
+ 
+  
 }
-<Dialog></Dialog>

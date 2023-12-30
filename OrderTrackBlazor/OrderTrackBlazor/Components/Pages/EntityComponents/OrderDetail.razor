@@ -3,54 +3,61 @@
 @rendermode InteractiveServer
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
+<MainPage>
+  
+  <Main>
 
-
-<h3>OrderDetail @Id</h3>
-<div class="row g-3">
-
-  @if (Model is not null)
-  {
-
-    <div class="col-12 col-sm-6">
-      <DateTimePicker @bind-Value="@Model.OrderDate" Format="dd/MM/yyyy" ShowLabel="true" DisplayText="订单日期" />
-    </div>
-    <div class="col-12 col-sm-6">
-      <BootstrapInput TValue="string" @bind-Value="@Model.ShortNote" ShowLabel="true" DisplayText="简要备注" />
-    </div>
-    <div class="col-12">
-      <Textarea rows="4" @bind-Value="@Model.Note" ShowLabel="true" DisplayText="详细备注" />
-    </div>
-
-    <div class="col-12">
-      <Button Color="Color.Primary" Icon="fa-solid fa-font-awesome" Text="添加订单产品" OnClickWithoutRender="()=>AddProduction()" />
-    </div>
-
-    @if (Model.Productions != null)
-    {
+    <div class="row g-3">
       <div class="col-12">
-        <Table TItem="OrderProductionDTO" Items="@Model.Productions">
-          <TableColumns>
-            <TableColumn @bind-Field="@context.ProductionId" Text="产品">
-              <Template Context="value">
-                <span>@Productions.Where(b => b.Id == value.Value).Select(b => b.ProductionName).FirstOrDefault()</span>
-              </Template>
-            </TableColumn>
-            <TableColumn @bind-Field="@context.Quantity" Text="数量" />
-            <TableColumn @bind-Field="@context.OrderPrice" Text="价格" />
-            <TableColumn @bind-Field="@context.RecommandShopNameDisplay" Text="推荐" />
-            <TableColumn @bind-Field="@context.Gid" Text="操作">
-              <Template Context="value">
-                <Button Color="Color.Primary" Icon="fas fa-square-pen" Text="编辑" OnClickWithoutRender="()=>
-                  AddProduction(Model.Productions.FirstOrDefault(b=>b.Gid==value.Value))" />
-              </Template>
-            </TableColumn>
-          </TableColumns>
-
-        </Table>
+        <h3>OrderDetail @Id</h3>
       </div>
+      @if (Model is not null)
+      {
 
-    }
-  }
-</div>
+        <div class="col-12 col-sm-6">
+          <DateTimePicker @bind-Value="@Model.OrderDate" Format="dd/MM/yyyy" ShowLabel="true" DisplayText="订单日期" />
+        </div>
+        <div class="col-12 col-sm-6">
+          <BootstrapInput TValue="string" @bind-Value="@Model.ShortNote" ShowLabel="true" DisplayText="简要备注" />
+        </div>
+        <div class="col-12">
+          <Textarea rows="4" @bind-Value="@Model.Note" ShowLabel="true" DisplayText="详细备注" />
+        </div>
+
+        <div class="col-12">
+          <Button Color="Color.Primary" Icon="fa-solid fa-font-awesome" Text="添加订单产品" OnClickWithoutRender="()=>AddProduction()" />
+        </div>
+
+        @if (Model.Productions != null)
+        {
+          <div class="col-12">
+            <Table TItem="OrderProductionDTO" Items="@Model.Productions">
+              <TableColumns>
+                <TableColumn @bind-Field="@context.ProductionId" Text="产品">
+                  <Template Context="value">
+                    <span>@Productions.Where(b => b.Id == value.Value).Select(b => b.ProductionName).FirstOrDefault()</span>
+                  </Template>
+                </TableColumn>
+                <TableColumn @bind-Field="@context.Quantity" Text="数量" />
+                <TableColumn @bind-Field="@context.OrderPrice" Text="价格" />
+                <TableColumn @bind-Field="@context.RecommandShopNameDisplay" Text="推荐" />
+                <TableColumn @bind-Field="@context.Gid" Text="操作">
+                  <Template Context="value">
+                    <Button Color="Color.Primary" Icon="fas fa-square-pen" Text="编辑" OnClickWithoutRender="()=>
+                  AddProduction(Model.Productions.FirstOrDefault(b=>b.Gid==value.Value))" />
+                  </Template>
+                </TableColumn>
+              </TableColumns>
+
+            </Table>
+          </div>
+
+        }
+      }
+    </div>
+
+  </Main>
+</MainPage>
+
 
 

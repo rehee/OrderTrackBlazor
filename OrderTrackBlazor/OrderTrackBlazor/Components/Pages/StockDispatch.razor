@@ -4,28 +4,30 @@
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 <PageTitle>出库</PageTitle>
-<div>
-  <Button Color="Color.Primary" Icon="fas fa-arrow-trend-up" Text="出库" OnClickWithoutRender="()=>OpenStockDispatch()" />
-</div>
-<div>
-  <Table TItem="StockDispatchDTO" Items="@DispatchDTO">
-    <TableColumns>
-      <TableColumn @bind-Field="@context.DispatchDateFormat" Text="出库日期">
-      </TableColumn>
+<MainPage>
+  <Header>
+    <div>
+      <Button Color="Color.Primary" Icon="fas fa-arrow-trend-up" Text="出库" OnClickWithoutRender="()=>OpenStockDispatch()" />
+    </div>
+  </Header>
+  <Main>
+    <Table TItem="StockDispatchDTO" Items="@DispatchDTO">
+      <TableColumns>
+        <TableColumn @bind-Field="@context.DispatchDateFormat" Text="出库日期">
+        </TableColumn>
 
-      <TableColumn @bind-Field="@context.BriefNote" Text="简介">
-      </TableColumn>
-      <TableColumn @bind-Field="@context.Status" Text="状态">
-      </TableColumn>
-      <TableColumn @bind-Field="@context.Id" Text="操作" Width="100">
-        <Template Context="value">
-          <Button Color="Color.Primary" Text="修改" OnClickWithoutRender="()=>OpenStockDispatch(value.Value)" />
-        </Template>
-      </TableColumn>
+        <TableColumn @bind-Field="@context.BriefNote" Text="简介">
+        </TableColumn>
+        <TableColumn @bind-Field="@context.Status" Text="状态">
+        </TableColumn>
+        <TableColumn @bind-Field="@context.Id" Text="操作" Width="100">
+          <Template Context="value">
+            <Button Color="Color.Primary" Text="修改" OnClickWithoutRender="()=>OpenStockDispatch(value.Value)" />
+          </Template>
+        </TableColumn>
 
-    </TableColumns>
+      </TableColumns>
 
-  </Table>
-
-</div>
-<Dialog></Dialog>
+    </Table>
+  </Main>
+</MainPage>

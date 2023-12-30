@@ -1,6 +1,7 @@
 ﻿using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
 using ReheeCmf.Contexts;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OrderTrackBlazor.Components
 {
@@ -14,6 +15,9 @@ namespace OrderTrackBlazor.Components
     protected NavigationManager? nm { get; set; }
     [Inject]
     public DialogService? dialogService { get; set; }
+    [Inject]
+    [NotNull]
+    protected ClipboardService? clipboardService { get; set; }
     public void Dispose()
     {
       DisposeAsync().GetAwaiter().GetResult();

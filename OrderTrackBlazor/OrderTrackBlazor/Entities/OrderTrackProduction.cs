@@ -10,6 +10,7 @@ namespace OrderTrackBlazor.Entities
   {
     public string? NormalizationName { get; set; }
     public decimal? OriginalPrice { get; set; }
+    public string? ExtendUrl { get; set; }
     public virtual List<OrderTrackPurchaseItem>? PurchaseItems { get; set; }
     public virtual List<OrderTrackDispatchItem>? DispatchItems { get; set; }
     public virtual List<OrderTrackOrderItem>? OrderItems { get; set; }
