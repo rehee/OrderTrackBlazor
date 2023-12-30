@@ -18,21 +18,21 @@
       <div class="col-12">
         <Table TItem="StockRequireSummaryDTO" Items="@DisplayDTOs">
           <TableColumns>
-            <TableColumn @bind-Field="@context.ProductionId" Text="产品">
+            <TableColumn @bind-Field="@context.ProductionName" Text="产品">
+
+            </TableColumn>
+            <TableColumn @bind-Field="@context.ProductionId" Text="修改">
               <Template Context="value">
                 @{
                   var records = DTOs.FirstOrDefault(b => b.ProductionId == value.Value);
-                  <BootstrapInputGroup>
-                    <Display @bind-Value="records.ProductionName"></Display>
-                    <Button Color="Color.Warning" Icon="fas fa-copy" OnClickWithoutRender="()=>Copy(records?.ProductionName)" />
-                    <Button Color="Color.Success" Icon="fas fa-bars" OnClickWithoutRender="()=>Edit(value.Value)" />
-                  </BootstrapInputGroup>
+                  <Button Color="Color.Warning" Icon="fas fa-copy" OnClickWithoutRender="()=>Copy(records?.ProductionName)" />
+                  <Button Color="Color.Success" Icon="fas fa-bars" OnClickWithoutRender="()=>Edit(value.Value)" />
+
                 }
 
 
               </Template>
             </TableColumn>
-
 
             <TableColumn @bind-Field="@context.NeedToBuy" Text="需求">
 
@@ -62,8 +62,11 @@
                 @{
                   var records = DTOs.FirstOrDefault(b => b.ProductionId == value.Value);
                   <Button Color="Color.Primary" Text="详情" OnClickWithoutRender="()=>ShowDetail(value.Value)" />
-
-                  <a href="@records.ExtendUrlDisplay" target="_blank" class="btn btn-success">比价</a>
+                  @if (!String.IsNullOrEmpty(records.ExtendUrlDisplay))
+                  {
+                    <a href="@records.ExtendUrlDisplay" target="_blank" class="btn btn-success">比价</a>
+                  }
+                  
                 }
 
 
