@@ -35,6 +35,7 @@
     public long? ProductionId { get; set; }
     public string? ProductionName { get; set; }
     public string? ExtendUrl { get; set; }
+    public string? ExtendUrlDisplay => String.IsNullOrEmpty(ExtendUrl) ? "" : ExtendUrl.ToLower().StartsWith("http") ? ExtendUrl : $"http://{ExtendUrl}";
     public int RequiredNumber { get; set; }
     public int DispatchNumber { get; set; }
     public int PendingNumber { get; set; }

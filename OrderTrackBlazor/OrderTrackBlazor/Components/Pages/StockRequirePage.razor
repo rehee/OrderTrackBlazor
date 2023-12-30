@@ -63,7 +63,7 @@
                   var records = DTOs.FirstOrDefault(b => b.ProductionId == value.Value);
                   <Button Color="Color.Primary" Text="详情" OnClickWithoutRender="()=>ShowDetail(value.Value)" />
 
-                  <a href="@records.ExtendUrl" target="_blank" class="btn btn-success">比价</a>
+                  <a href="@records.ExtendUrlDisplay" target="_blank" class="btn btn-success">比价</a>
                 }
 
 
