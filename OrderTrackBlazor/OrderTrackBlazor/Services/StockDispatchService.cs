@@ -300,7 +300,7 @@ namespace OrderTrackBlazor.Services
       var avaliableProperty = avaliableDTO.Select(b => b.ProductionId);
       StockDispatchPackageItemDTO[] packageItems = packageId == null ? Array.Empty<StockDispatchPackageItemDTO>() :
         await (
-        from package in context.Query<OrderTrackStockDispatchPackageItem>(true)
+        from package in context.Query<OrderTrackStockDispatchPackageItem>(true).Where(b => b.PackageId == packageId)
         select new StockDispatchPackageItemDTO
         {
           Id = package.Id,
