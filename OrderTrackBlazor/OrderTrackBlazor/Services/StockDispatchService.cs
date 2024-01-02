@@ -184,7 +184,7 @@ namespace OrderTrackBlazor.Services
       record.Income = dto?.Income;
       record.Status = dto?.Status;
       record.CompletedDate = dto?.CompletedDate?.Date;
-      
+
       await context.SaveChangesAsync(null);
       return true;
     }
@@ -311,10 +311,10 @@ namespace OrderTrackBlazor.Services
       var orderItems = await (
          from item in context.Query<OrderTrackOrderItem>(true)
          .Where(b => avaliableProperty.Contains(b.ProductionId) == true)
-           .Where(b =>
-              b.Quantity >
-              b.Production.DispatchItems
-                .Where(b => packageId == null ? true : b.OrderTrackStockDispatchPackageId != packageId).Sum(b => b.Quantity + b.PackageQuantity))
+           //.Where(b =>
+           //   b.Quantity >
+           //   b.Production.DispatchItems
+           //     .Where(b => packageId == null ? true : b.OrderTrackStockDispatchPackageId != packageId).Sum(b => b.Quantity + b.PackageQuantity))
 
          select item
            ).ToArrayAsync();
@@ -335,6 +335,19 @@ namespace OrderTrackBlazor.Services
             ShortNumber = o.Quantity - o.DispatchItems.Where(od => packageId == null ? true : od.OrderTrackStockDispatchPackageId != packageId).Sum(b => b.Quantity + b.PackageQuantity)
           })
         }).ToArray();
+      foreach (var p in property)
+      {
+        var avaliableItem = p.OrderItems.Where(b => b.ShortNumber > 0).ToArray();
+        if (avaliableItem.Length > 0)
+        {
+          p.OrderItems = avaliableItem;
+        }
+        else
+        {
+          p.OrderItems = p.OrderItems.OrderByDescending(b => b.OrderDate).Take(1).ToArray();
+        }
+
+      }
       foreach (var p in packageItems)
       {
         var p2 = property.FirstOrDefault(b => b.ProductionId == p.ProductionId);
