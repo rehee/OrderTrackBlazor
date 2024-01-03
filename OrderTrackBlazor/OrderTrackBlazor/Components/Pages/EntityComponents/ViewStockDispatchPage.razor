@@ -17,9 +17,9 @@
             <thead>
               <tr>
 
-                <th>产品名</th>
-                <th>数量</th>
-                <th>总量</th>
+                <th style="width:70%">产品名</th>
+                <th style="width:15%">数量</th>
+                <th style="width:15%">总量</th>
               </tr>
             </thead>
             <tbody>
@@ -56,33 +56,28 @@
             <tr>
 
               <th>产品名</th>
-              <th>采购日期</th>
               <th>单价</th>
               <th>数量</th>
               <th>价格</th>
             </tr>
           </thead>
           <tbody>
-            @foreach (var item in DTO.Packages)
+            @foreach (var item in DTO.Items.GroupBy(b => b.ProductionId))
             {
-              foreach (var orderItem in item.Items)
-              {
-                <tr>
+              <tr>
 
-                  <td> @orderItem.ProductionName </td>
-                  <td> @orderItem.OrderTime?.ToString(DefaultValues.DatFormat)</td>
-                  <td> @orderItem.Price</td>
-                  <td> @orderItem.Number</td>
-                  <td> @(orderItem.Number * orderItem.Price)</td>
-                </tr>
-              }
+                <td> @item.FirstOrDefault()?.ProductionName </td>
+
+                <td> @(Math.Round((item.Sum(b => b.Price * b.Number) / item.Sum(b => b.Number)) ?? 0, 2))</td>
+                <td> @item.Sum(b => b.Number)</td>
+                <td> @(item.Sum(b => b.Price * b.Number))</td>
+              </tr>
 
             }
           </tbody>
           <tfoot>
             <tr>
               <td>  </td>
-              <td> </td>
               <td> </td>
               <td> </td>
               <td> @DTO.Items.Sum(b => b.Number * b.Price) + @DTO.Packages.Sum(b => b.Number * b.PackagePrice) = @(DTO.Items.Sum(b => b.Number * b.Price) + DTO.Packages.Sum(b => b.Number * b.PackagePrice))</td>
