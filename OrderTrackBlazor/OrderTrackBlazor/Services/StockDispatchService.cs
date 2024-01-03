@@ -156,19 +156,27 @@ namespace OrderTrackBlazor.Services
         Packages = record?.Packages.Select(b => new StockDispatchPackageDTO
         {
           Id = b.Id,
+
           BriefDiscribtion = b.BriefDiscribtion,
           Discribtion = b.Discribtion,
           Number = b.Number == null ? 0 : b.Number.Value,
           PackagePrice = b.PackagePrice,
           PackageSizeId = b.PackageSizeId,
+          PackageSizeName = b.PackageSize != null ? b.PackageSize.Name : "",
           PackageWeight = b.PackageWeight,
           StockDispatchId = b.OrderTrackStockDispatchId,
+          PackageItem = b.Items.Select(p => new StockPackageItemDTO
+          {
+            Number = p.Number,
+            ProductionName = p.Production.Name,
+          }),
           Items = b.OrderItems.Select(o => new StockDispatchPackageItemDTO
           {
             ProductionId = o.ProductionId,
             Number = o.PackageQuantity,
             Price = o.DispatchPrice,
             ProductionName = o.Production.Name,
+            OrderTime = o.OrderProduction.Order.OrderDate
           })
         })
       };
@@ -286,6 +294,7 @@ namespace OrderTrackBlazor.Services
           Discribtion = package.Discribtion,
           Number = package.Number == null ? 0 : package.Number.Value,
           PackagePrice = package.PackagePrice,
+          PackageSizeName = package.PackageSize.Name,
           PackageSizeId = package.PackageSizeId,
           PackageWeight = package.PackageWeight,
         }

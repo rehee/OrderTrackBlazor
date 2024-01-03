@@ -1,0 +1,95 @@
+﻿@inherits ViewStockDispatchPageComponent
+@if (DTO != null)
+{
+  if (DTO.Packages?.Any() == true)
+  {
+    var count = 0;
+    foreach (var package in DTO.Packages)
+    {
+      count++;
+      <Card>
+        <HeaderTemplate>
+          箱子种类:@package.PackageSizeName 编号:@count @package.BriefDiscribtion
+        </HeaderTemplate>
+        <BodyTemplate>
+          <h6>箱数: @package.Number</h6>
+          <table class="table">
+            <thead>
+              <tr>
+
+                <th>产品名</th>
+                <th>数量</th>
+                <th>总量</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach (var item in package.PackageItem)
+              {
+                <tr>
+
+                  <td> @item.ProductionName </td>
+                  <td> @item.Number</td>
+                  <td> @item.Number * @package.Number = (@(item.Number * package.Number))</td>
+                </tr>
+              }
+            </tbody>
+            <tfoot>
+              <tr>
+
+                <th></th>
+                <td>@package.PackageItem.Sum(b => b.Number)</td>
+                <td>@(package.PackageItem.Sum(b => b.Number) * package.Number)</td>
+              </tr>
+            </tfoot>
+          </table>
+        </BodyTemplate>
+      </Card>
+    }
+    <Card>
+      <HeaderTemplate>
+        汇总
+      </HeaderTemplate>
+      <BodyTemplate>
+        <h6>总箱数: @DTO.Packages.Sum(b => b.Number)</h6>
+        <table class="table">
+          <thead>
+            <tr>
+
+              <th>产品名</th>
+              <th>采购日期</th>
+              <th>单价</th>
+              <th>数量</th>
+              <th>价格</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach (var item in DTO.Packages)
+            {
+              foreach (var orderItem in item.Items)
+              {
+                <tr>
+
+                  <td> @orderItem.ProductionName </td>
+                  <td> @orderItem.OrderTime?.ToString(DefaultValues.DatFormat)</td>
+                  <td> @orderItem.Price</td>
+                  <td> @orderItem.Number</td>
+                  <td> @(orderItem.Number * orderItem.Price)</td>
+                </tr>
+              }
+
+            }
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>  </td>
+              <td> </td>
+              <td> </td>
+              <td> </td>
+              <td> @DTO.Items.Sum(b => b.Number * b.Price) + @DTO.Packages.Sum(b => b.Number * b.PackagePrice) = @(DTO.Items.Sum(b => b.Number * b.Price) + DTO.Packages.Sum(b => b.Number * b.PackagePrice))</td>
+            </tr>
+          </tfoot>
+        </table>
+      </BodyTemplate>
+    </Card>
+  }
+}

@@ -64,6 +64,25 @@ namespace OrderTrackBlazor.Components.Pages
       await dialogService!.Show(dotion);
     }
 
+    public async Task ViewStockDispatch(long id)
+    {
+      
+      var comp = BootstrapDynamicComponent.CreateComponent<ViewStockDispatchPage>(
+          new Dictionary<string, object?>()
+          {
+            ["Id"] = id,
+       
+          });
+      var dotion = new DialogOption()
+      {
+        IsScrolling = true,
+        Title = "",
+        Size = Size.ExtraLarge,
+        Component = comp,
+        
+      };
+      await dialogService!.Show(dotion);
+    }
   }
 
 }

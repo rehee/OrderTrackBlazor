@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using OrderTrackBlazor.Consts;
+using System.Drawing;
 
 namespace OrderTrackBlazor.DTOs
 {
@@ -12,7 +13,7 @@ namespace OrderTrackBlazor.DTOs
     {
       get
       {
-        return DispatchDate?.ToString(Common.DataFormat) ?? "";
+        return DispatchDate?.ToString(DefaultValues.DatFormat) ?? "";
       }
       set { }
     }
@@ -22,6 +23,7 @@ namespace OrderTrackBlazor.DTOs
     public string? Note { get; set; }
     public IEnumerable<StockDispatchPackageDTO>? Packages { get; set; }
 
+    public IEnumerable<StockDispatchPackageItemDTO> Items => Packages?.Any() != true ? Enumerable.Empty<StockDispatchPackageItemDTO>() : Packages.SelectMany(b => b.Items).OrderBy(b => b.ProductionName).ThenByDescending(b => b.OrderTime);
     public int PackageNumber
     {
       get
@@ -46,11 +48,13 @@ namespace OrderTrackBlazor.DTOs
   {
     public long Id { get; set; }
     public long? PackageSizeId { get; set; }
+    public string? PackageSizeName { get; set; }
     public long? StockDispatchId { get; set; }
     public decimal PackagePrice { get; set; }
     public decimal PackageWeight { get; set; }
     public string? BriefDiscribtion { get; set; }
     public string? Discribtion { get; set; }
+
 
 
     public int Number { get; set; }
@@ -93,7 +97,7 @@ namespace OrderTrackBlazor.DTOs
         }
       }
     }
-
+    public IEnumerable<StockPackageItemDTO>? PackageItem { get; set; }
     public IEnumerable<OrderShortDTO> OrderItems
     {
       get
@@ -173,6 +177,7 @@ namespace OrderTrackBlazor.DTOs
   public class StockDispatchPackageItemDTO
   {
     public long Id { get; set; }
+    public DateTime? OrderTime { get; set; }
     public StockDispatchPackageDTO? Parent { get; set; }
     public long? ProductionId { get; set; }
     public string? ProductionName { get; set; }
@@ -217,5 +222,11 @@ namespace OrderTrackBlazor.DTOs
       public long? ProductionId { get; set; }
       public string? ProductionName { get; set; }
     }
+  }
+
+  public class StockPackageItemDTO
+  {
+    public int Number { get; set; }
+    public string? ProductionName { get; set; }
   }
 }

@@ -23,6 +23,7 @@
         <TableColumn @bind-Field="@context.Id" Text="操作" Width="100">
           <Template Context="value">
             <Button Color="Color.Primary" Text="修改" OnClickWithoutRender="()=>OpenStockDispatch(value.Value)" />
+            <Button Color="Color.Success" Text="查看" OnClickWithoutRender="()=>ViewStockDispatch(value.Value)" />
           </Template>
         </TableColumn>
 
