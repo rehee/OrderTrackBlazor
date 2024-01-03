@@ -33,7 +33,22 @@ namespace OrderTrackBlazor.Components.Pages
       StateHasChanged();
     }
 
-
+    public async Task ShowAvaliable()
+    {
+      var comp = BootstrapDynamicComponent.CreateComponent<AvaliableStock>(
+          new Dictionary<string, object?>()
+          {
+            
+          });
+      
+      var dotion = new DialogOption()
+      {
+        IsScrolling = true,
+        Size = Size.ExtraLarge,
+        Component = comp,
+      };
+      await dialogService!.Show(dotion);
+    }
     public async Task NormalShowDialog(long? productionId)
     {
 

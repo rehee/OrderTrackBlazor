@@ -6,8 +6,13 @@
 <PageTitle>stock</PageTitle>
 
 <MainPage>
+  <Header>
+    <div>
+      <Button Color="Color.Success" OnClickWithoutRender="()=>ShowAvaliable()">可用库存</Button>
+    </div>
+  </Header>
   <Main>
-    <Table TItem="StockSummaryDTO" Items="@SummaryDTOs">
+    <Table TItem=" StockSummaryDTO" Items="@SummaryDTOs">
       <TableColumns>
         <TableColumn @bind-Field="@context.Name" Text="产品">
         </TableColumn>

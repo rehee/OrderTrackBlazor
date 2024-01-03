@@ -1,0 +1,42 @@
+﻿@inherits AvaliableStockComponent
+<Card>
+  <HeaderTemplate>
+
+  </HeaderTemplate>
+  <BodyTemplate>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th style="width:10%"></th>
+          <th style="width:80%">产品名</th>
+          <th style="width:15%">数量</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        @{
+          var index = 0;
+
+          foreach (var dto in SummaryDTOs)
+          {
+            index++;
+            var current = index;
+            <tr>
+              <td>
+                @current
+              </td>
+              <td>
+                @dto.Name
+              </td>
+              <td>
+                @dto.CurrentStock
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+
+    </table>
+  </BodyTemplate>
+</Card>
