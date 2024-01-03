@@ -76,7 +76,7 @@
           <tfoot>
             <tr>
               <td> </td>
-              <td>总种类: @DTO.Items.DistinctBy(b => b.ProductionId).Count() </td>
+              <td>总产品: @DTO.Items.DistinctBy(b => b.ProductionId).Count() </td>
               <td>总数量: @DTO.Items.Sum(b => b.Number) </td>
               <td>总价格: @DTO.Items.Sum(b => b.Number * b.Price) + @DTO.Packages.Sum(b => b.Number * b.PackagePrice) = @(DTO.Items.Sum(b => b.Number * b.Price) + DTO.Packages.Sum(b => b.Number * b.PackagePrice))</td>
             </tr>
