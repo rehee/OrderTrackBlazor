@@ -3,13 +3,11 @@
 {
   if (DTO.Packages?.Any() == true)
   {
-    var count = 0;
     foreach (var package in DTO.Packages)
     {
-      count++;
       <Card>
         <HeaderTemplate>
-          箱子种类:@package.PackageSizeName 编号:@count @package.BriefDiscribtion
+          箱子种类:@package.PackageSizeName @package.BriefDiscribtion
         </HeaderTemplate>
         <BodyTemplate>
           <h6>箱数: @package.Number</h6>
@@ -68,7 +66,7 @@
 
                 <td> @item.FirstOrDefault()?.ProductionName </td>
 
-                <td> @(Math.Round((item.Sum(b => b.Price * b.Number) / item.Sum(b => b.Number)) ?? 0, 2))</td>
+                <td> @(Math.Round((item.Sum(b => b.Price * b.Number) / item.Sum(b => b.Number)) ?? 0, 4))</td>
                 <td> @item.Sum(b => b.Number)</td>
                 <td> @(item.Sum(b => b.Price * b.Number))</td>
               </tr>
@@ -77,9 +75,9 @@
           </tbody>
           <tfoot>
             <tr>
-              <td>  </td>
               <td> </td>
               <td> </td>
+              <td> @DTO.Items.Sum(b => b.Number) </td>
               <td> @DTO.Items.Sum(b => b.Number * b.Price) + @DTO.Packages.Sum(b => b.Number * b.PackagePrice) = @(DTO.Items.Sum(b => b.Number * b.Price) + DTO.Packages.Sum(b => b.Number * b.PackagePrice))</td>
             </tr>
           </tfoot>
