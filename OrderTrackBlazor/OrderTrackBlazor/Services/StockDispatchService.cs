@@ -31,6 +31,7 @@ namespace OrderTrackBlazor.Services
             .Sum(b => b.Quantity + b.PackageQuantity),
         }
         )
+        .AsSplitQuery()
         .Where(b => b.AvaliableStock > 0)
         .OrderByDescending(b => b.AvaliableStock).ThenBy(b => b.ProductionId);
     }
@@ -143,43 +144,45 @@ namespace OrderTrackBlazor.Services
     }
     public async Task<StockDispatchDTO?> FindDTO(long id)
     {
-      var record = await context.Query<OrderTrackStockDispatch>(true).Where(b => b.Id == id).FirstOrDefaultAsync();
-      return new StockDispatchDTO
-      {
-        Id = record?.Id ?? 0,
-        BriefNote = record?.BriefNote,
-        DispatchDate = record?.DispatchDate?.Date,
-        Note = record?.Note,
-        Income = record?.Income,
-        Status = record?.Status,
-        CompletedDate = record?.CompletedDate?.Date,
-        Packages = record?.Packages.Select(b => new StockDispatchPackageDTO
+      var query =
+        from record in context.Query<OrderTrackStockDispatch>(true).Where(b => b.Id == id).AsSplitQuery()
+        select new StockDispatchDTO
         {
-          Id = b.Id,
+          Id = record.Id,
+          BriefNote = record.BriefNote,
+          DispatchDate = record.DispatchDate,
+          Note = record.Note,
+          Income = record.Income,
+          Status = record.Status,
+          CompletedDate = record.CompletedDate,
+          Packages = record.Packages.Select(b => new StockDispatchPackageDTO
+          {
+            Id = b.Id,
 
-          BriefDiscribtion = b.BriefDiscribtion,
-          Discribtion = b.Discribtion,
-          Number = b.Number == null ? 0 : b.Number.Value,
-          PackagePrice = b.PackagePrice,
-          PackageSizeId = b.PackageSizeId,
-          PackageSizeName = b.PackageSize != null ? b.PackageSize.Name : "",
-          PackageWeight = b.PackageWeight,
-          StockDispatchId = b.OrderTrackStockDispatchId,
-          PackageItem = b.Items.Select(p => new StockPackageItemDTO
-          {
-            Number = p.Number,
-            ProductionName = p.Production.Name,
-          }),
-          Items = b.OrderItems.Select(o => new StockDispatchPackageItemDTO
-          {
-            ProductionId = o.ProductionId,
-            Number = o.PackageQuantity,
-            Price = o.OrderProduction.OrderPrice == null ? o.OrderProduction.Production.OriginalPrice : o.OrderProduction.OrderPrice,
-            ProductionName = o.Production.Name,
-            OrderTime = o.OrderProduction.Order.OrderDate
+            BriefDiscribtion = b.BriefDiscribtion,
+            Discribtion = b.Discribtion,
+            Number = b.Number == null ? 0 : b.Number.Value,
+            PackagePrice = b.PackagePrice,
+            PackageSizeId = b.PackageSizeId,
+            PackageSizeName = b.PackageSize != null ? b.PackageSize.Name : "",
+            PackageWeight = b.PackageWeight,
+            StockDispatchId = b.OrderTrackStockDispatchId,
+            PackageItem = b.Items.Select(p => new StockPackageItemDTO
+            {
+              Number = p.Number,
+              ProductionName = p.Production.Name,
+            }),
+            Items = b.OrderItems.Select(o => new StockDispatchPackageItemDTO
+            {
+              ProductionId = o.ProductionId,
+              Number = o.PackageQuantity,
+              Price = o.OrderProduction.OrderPrice == null ? o.OrderProduction.Production.OriginalPrice : o.OrderProduction.OrderPrice,
+              ProductionName = o.Production.Name,
+              OrderTime = o.OrderProduction.Order.OrderDate
+            })
           })
-        })
-      };
+        };
+      return await query.FirstOrDefaultAsync();
     }
 
     public async Task<bool> Update(StockDispatchDTO dto)
@@ -320,6 +323,7 @@ namespace OrderTrackBlazor.Services
       var orderItems = await (
          from item in context.Query<OrderTrackOrderItem>(true)
          .Where(b => avaliableProperty.Contains(b.ProductionId) == true)
+         .AsSplitQuery()
            //.Where(b =>
            //   b.Quantity >
            //   b.Production.DispatchItems
