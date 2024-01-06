@@ -1,6 +1,7 @@
 using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
+using static Dropbox.Api.Files.ListRevisionsMode;
 
 namespace OrderTrackBlazor.Components.Pages.EntityComponents
 {
@@ -25,32 +26,16 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     }
     public async Task NormalShowDialog(long? id = null)
     {
-      var onsave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<PackageSizeDetail>(
-          new Dictionary<string, object?>()
-          {
-            ["Id"] = id,
-            ["OnSave"] = onsave,
-          });
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = $"{(id == null ? "Create" : "Edit")}  Package Size",
-        Size = Size.Medium,
-        Component = comp,
-        ShowSaveButton = true,
-        OnSaveAsync = async () =>
+      await dialogService.ShowComponent<PackageSizeDetail>(
+        new Dictionary<string, object?>()
         {
-          var result = true;
-          if (onsave.OnSaveFunc != null)
-          {
-            result = await onsave.OnSaveFunc();
-          }
-          await RefreshTable();
-          return result;
-        }
-      };
-      await dialogService!.Show(dotion);
+          ["Id"] = id,
+
+        },
+       id == null ? "new Package Size" : "edit Package Size",
+       true,
+       async save => await RefreshTable()
+       );
     }
   }
 }

@@ -23,7 +23,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       }
     }
 
-    
+
 
 
     public async Task RefreshPage()
@@ -39,63 +39,28 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     }
     public async Task CreateDispatch(long? id = null)
     {
-      var onSave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<DispatchDetail>(
-          new Dictionary<string, object?>()
-          {
-            ["OrderId"] = Id,
-            ["Id"] = id,
-            ["OnSave"] = onSave
-          });
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = id == null ? "Create Dispatch" : "Edit Dispatch",
-        Size = Size.ExtraLarge,
-        Component = comp,
-        ShowSaveButton = true,
-        OnSaveAsync = async () =>
+      await dialogService.ShowComponent<DispatchDetail>(
+        new Dictionary<string, object?>
         {
-          var result = true;
-          if (onSave.OnSaveFunc != null)
-          {
-            result = await onSave.OnSaveFunc();
-          }
-          await RefreshPage();
-          return result;
+          ["OrderId"] = Id,
+          ["Id"] = id,
         },
-        OnCloseAsync = async () =>
-        {
-          await Task.CompletedTask;
-          System.Console.WriteLine("22222222222222222");
-        }
-      };
-      await dialogService!.Show(dotion);
+        id == null ? "Create Dispatch" : "Edit Dispatch",
+        true,
+        async (b) => await RefreshPage()
+        );
     }
 
     public async Task ReadDispatch(long? id = null)
     {
-      var onSave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<ViewDispatch>(
-          new Dictionary<string, object?>()
-          {
-            ["DTO"] = Dispatches.FirstOrDefault(b => b.Id == id),
-            ["ShowDetail"] = true,
-            //["OnSave"] = onSave
-          });
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = "Dispatch",
-        Size = Size.ExtraLarge,
-        Component = comp,
-        OnCloseAsync = async () =>
+      await dialogService.ShowComponent<ViewDispatch>(
+        new Dictionary<string, object?>()
         {
-          await Task.CompletedTask;
-          System.Console.WriteLine("1");
-        }
-      };
-      await dialogService!.Show(dotion);
+          ["DTO"] = Dispatches.FirstOrDefault(b => b.Id == id),
+          ["ShowDetail"] = true,
+        },
+        "Dispatch"
+        );
     }
   }
 

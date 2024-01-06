@@ -26,6 +26,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
 
     public override async Task<bool> SaveFunction()
     {
+      await Task.Delay(10000);
       if (Id == null)
       {
         if (DeleteOnSave)

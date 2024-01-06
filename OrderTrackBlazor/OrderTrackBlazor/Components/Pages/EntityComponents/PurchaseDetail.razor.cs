@@ -2,6 +2,7 @@ using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using OrderTrackBlazor.DTOs;
+using static Dropbox.Api.Files.ListRevisionsMode;
 
 namespace OrderTrackBlazor.Components.Pages.EntityComponents
 {
@@ -56,37 +57,17 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     public async Task AddProduction(OrderProductionDTO? dto = null)
     {
       var fromTable = dto != null;
-      var onsave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<OrderProduction>(
-          new Dictionary<string, object?>()
-          {
-            ["OnSave"] = onsave,
-            ["Productions"] = Productions,
-            ["FromTable"] = fromTable,
-            ["DTO"] = dto == null ? new OrderProductionDTO { ParentId = Model?.Id, Parent = Model } : dto
-          }); ;
-
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = dto == null ? "new order production" : "new order production",
-        Component = comp,
-        ShowSaveButton = true,
-        OnSaveAsync = async () =>
+      await dialogService.ShowComponent<OrderProduction>(
+        new Dictionary<string, object?>()
         {
-          var result = true;
-          if (onsave.OnSaveFunc != null)
-          {
-            result = await onsave.OnSaveFunc();
-          }
-          if (result)
-          {
-            StateHasChanged();
-          }
-          return result;
-        }
-      };
-      await dialogService!.Show(dotion);
+          ["Productions"] = Productions,
+          ["FromTable"] = fromTable,
+          ["DTO"] = dto == null ? new OrderProductionDTO { ParentId = Model?.Id, Parent = Model } : dto
+        },
+       dto == null ? "new order production" : "Edit order production",
+       true,
+       async save => StateHasChanged()
+       );
     }
 
     public override async Task<bool> SaveFunction()

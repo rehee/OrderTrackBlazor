@@ -2,6 +2,7 @@ using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using OrderTrackBlazor.Consts;
+using OrderTrackBlazor.Helpers;
 using ReheeCmf.Reflects.ReflectPools;
 using System.Text;
 
@@ -28,32 +29,15 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     }
     public async Task NormalShowDialog(long? id = null)
     {
-      var onsave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<ShopDetail>(
-          new Dictionary<string, object?>()
-          {
-            ["Id"] = id,
-            ["OnSave"] = onsave,
-          });
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = $"{(id == null ? "Create" : "Edit")}  shop",
-        Size = Size.Medium,
-        Component = comp,
-        ShowSaveButton = true,
-        OnSaveAsync = async () =>
+      await dialogService.ShowComponent<ShopDetail>(
+        new Dictionary<string, object?>()
         {
-          var result = true;
-          if (onsave.OnSaveFunc != null)
-          {
-            result = await onsave.OnSaveFunc();
-          }
-          await RefreshTable();
-          return result;
-        }
-      };
-      await dialogService!.Show(dotion);
+          ["Id"] = id,
+        },
+        $"{(id == null ? "Create" : "Edit")}  shop",
+        true,
+        async (b) => await RefreshTable()
+        );
     }
   }
 }

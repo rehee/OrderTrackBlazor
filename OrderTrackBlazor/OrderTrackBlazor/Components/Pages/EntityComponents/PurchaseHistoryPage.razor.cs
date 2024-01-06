@@ -49,69 +49,31 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     }
     public async Task OrderPurchase(long? orderId, long? purchaseId)
     {
-      var onSave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<OrderPurchaseDetail>(
-          new Dictionary<string, object?>()
-          {
-            ["OrderId"] = orderId,
-            ["Id"] = purchaseId,
-            ["OnSave"] = onSave,
-            ["Shops"] = Shops
-          });
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = $"{(purchaseId == null ? "Create" : "Edit")} Purchase",
-        Size = Size.ExtraLarge,
-        Component = comp,
-        ShowSaveButton = true,
-        OnSaveAsync = async () =>
+      await dialogService.ShowComponent<OrderPurchaseDetail>(
+        new Dictionary<string, object?>()
         {
-          var result = true;
-          if (onSave.OnSaveFunc != null)
-          {
-            result = await onSave.OnSaveFunc();
-          }
-          await Refresh();
-          return result;
-        }
-      };
-      await dialogService!.Show(dotion);
+          ["OrderId"] = orderId,
+          ["Id"] = purchaseId,
+          ["Shops"] = Shops
+        },
+       purchaseId == null ? "new Purchase" : "edit Purchase",
+       true,
+       async save => await Refresh()
+       );
     }
 
     public async Task TaskStockPurchase(StockPurchaseDTO dto)
     {
-      var onsave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<StockPurchaseDetail>(
-          new Dictionary<string, object?>()
-          {
-            ["OnSave"] = onsave,
-            ["DTO"] = dto,
-            ["Shops"] = Shops,
-          });
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = "edit purchase",
-        Size = Size.ExtraLarge,
-        Component = comp,
-        ShowSaveButton = true,
-        OnSaveAsync = async () =>
+      await dialogService.ShowComponent<StockPurchaseDetail>(
+        new Dictionary<string, object?>()
         {
-          var result = true;
-          if (onsave.OnSaveFunc != null)
-          {
-            result = await onsave.OnSaveFunc();
-          }
-          if (result)
-          {
-
-          }
-          await Refresh();
-          return result;
-        }
-      };
-      await dialogService!.Show(dotion);
+          ["DTO"] = dto,
+          ["Shops"] = Shops,
+        },
+       "edit purchase",
+       true,
+       async save => await Refresh()
+       );
     }
   }
 }

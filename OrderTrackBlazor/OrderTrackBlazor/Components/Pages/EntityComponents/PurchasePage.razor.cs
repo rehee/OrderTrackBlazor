@@ -67,43 +67,17 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
 
     public async Task NormalShowDialog(PurchaseDTO? dto = null)
     {
-      var onsave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<PurchaseDetail>(
-          new Dictionary<string, object?>()
-          {
-            ["OnSave"] = onsave,
-            ["Productions"] = Productions,
-            ["Shops"] = Shops,
-            ["DTO"] = dto
-          });
-      string chineseString = DefaultValues.PTitle;
-      System.Console.WriteLine(DefaultValues.PTitle);
-      byte[] utf8Bytes = Encoding.UTF8.GetBytes(chineseString);
-      string decodedString = Encoding.UTF8.GetString(utf8Bytes);
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = decodedString,
-        Size = Size.ExtraLarge,
-        Component = comp,
-        ShowSaveButton = true,
-        OnSaveAsync = async () =>
+      await dialogService.ShowComponent<PurchaseDetail>(
+        new Dictionary<string, object?>()
         {
-          var result = true;
-          if (onsave.OnSaveFunc != null)
-          {
-            result = await onsave.OnSaveFunc();
-          }
-          await Refresh();
-          return result;
+          ["Productions"] = Productions,
+          ["Shops"] = Shops,
+          ["DTO"] = dto
         },
-        OnCloseAsync = async () =>
-        {
-
-          System.Console.WriteLine("Close detected 2");
-        },
-      };
-      await dialogService!.Show(dotion);
+       DefaultValues.PTitle,
+       true,
+       async save => await Refresh()
+       );
     }
 
   }

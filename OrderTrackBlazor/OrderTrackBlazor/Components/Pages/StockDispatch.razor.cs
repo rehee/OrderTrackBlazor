@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using OrderTrackBlazor.Components.Pages.EntityComponents;
 using OrderTrackBlazor.Consts;
 using OrderTrackBlazor.Data;
+using OrderTrackBlazor.Helpers;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
@@ -32,56 +33,25 @@ namespace OrderTrackBlazor.Components.Pages
 
     public async Task OpenStockDispatch(long? id = null)
     {
-      var onsave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<StockDispatchPage>(
-          new Dictionary<string, object?>()
-          {
-            ["Id"] = id,
-            ["OnSave"] = onsave
-            
-          });
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = "",
-        Size = Size.ExtraLarge,
-        Component = comp,
-        ShowSaveButton = true,
-        OnSaveAsync = async () =>
+      await dialogService.ShowComponent<StockDispatchPage>(
+        new Dictionary<string, object?>
         {
-          var result = true;
-          if (onsave.OnSaveFunc != null)
-          {
-            result = await onsave.OnSaveFunc();
-          }
-          if (result)
-          {
-            await Refresh();
-          }
-          return result;
-        }
-      };
-      await dialogService!.Show(dotion);
+          ["Id"] = id
+        },
+        "",
+        true,
+        async save => await Refresh()
+        );
     }
 
     public async Task ViewStockDispatch(long id)
     {
-      
-      var comp = BootstrapDynamicComponent.CreateComponent<ViewStockDispatchPage>(
-          new Dictionary<string, object?>()
-          {
-            ["Id"] = id,
-       
-          });
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = "",
-        Size = Size.ExtraLarge,
-        Component = comp,
-        
-      };
-      await dialogService!.Show(dotion);
+
+      await dialogService.ShowComponent<ViewStockDispatchPage>(
+        new Dictionary<string, object?>
+        {
+          ["Id"] = id
+        });
     }
   }
 

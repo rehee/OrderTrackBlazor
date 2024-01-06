@@ -27,34 +27,18 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
 
     public async Task CreatePackage(long? id = null, bool? readOnly = null)
     {
-      var onsave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<PackageDetail>(
-          new Dictionary<string, object?>()
-          {
-            ["Id"] = id,
-            ["OrderId"] = Id,
-            ["PackageSizes"] = PackageSizes,
-            ["OnSave"] = onsave,
-            ["ReadOnly"] = readOnly,
-          });
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = id == null ? "new package" : "edit package",
-        Size = Size.ExtraLarge,
-        Component = comp,
-        ShowSaveButton = readOnly != true,
-        OnSaveAsync = async () =>
+      await dialogService.ShowComponent<PackagePage>(
+        new Dictionary<string, object?>()
         {
-          if (onsave.OnSaveFunc != null)
-          {
-            await onsave.OnSaveFunc();
-          }
-          await Refresh();
-          return true;
-        }
-      };
-      await dialogService!.Show(dotion);
+          ["Id"] = id,
+          ["OrderId"] = Id,
+          ["PackageSizes"] = PackageSizes,
+          ["ReadOnly"] = readOnly,
+        },
+       id == null ? "new package" : "edit package",
+       true,
+       async save => await Refresh()
+       );
     }
   }
 

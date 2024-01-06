@@ -2,6 +2,7 @@ using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using OrderTrackBlazor.Entities;
+using OrderTrackBlazor.Helpers;
 using static Dropbox.Api.Files.ListRevisionsMode;
 
 namespace OrderTrackBlazor.Components.Pages.EntityComponents
@@ -50,83 +51,48 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
 
     public async Task CreateProduction(Action<IEnumerable<ProductionDTO>, long> parantAction)
     {
-      var onsave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<ProductionDetail>(
-          new Dictionary<string, object?>()
-          {
-            ["OnSave"] = onsave,
-          });
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = $"create Product",
-        Size = Size.ExtraLarge,
-        Component = comp,
-        ShowSaveButton = true,
-        OnSaveAsync = async () =>
+      await dialogService.ShowComponent<ProductionDetail>(
+        null,
+        "create Product",
+        true,
+        async save =>
         {
-          var result = true;
-          if (onsave.OnSaveFunc != null)
+          await RefreshProduction();
+          StateHasChanged();
+          long id = 0;
+          if (save.ResultValue != null)
           {
-            result = await onsave.OnSaveFunc();
-          }
-          if (result)
-          {
-            await RefreshProduction();
-            StateHasChanged();
-            long id = 0;
-            if (onsave.ResultValue != null)
+            if (save.ResultValue is long longId)
             {
-              if (onsave.ResultValue is long longId)
-              {
-                id = longId;
-              }
+              id = longId;
             }
-            parantAction(Productions, id);
           }
-          return result;
+          parantAction(Productions, id);
         }
-      };
-      await dialogService!.Show(dotion);
+        );
     }
 
     public async Task AddProduction(OrderProductionDTO? dto = null)
     {
       Func<Action<IEnumerable<ProductionDTO>, long>, Task> createProductionFunc = t => CreateProduction(t);
       var fromTable = dto != null;
-      var onsave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<OrderProduction>(
-          new Dictionary<string, object?>()
-          {
-            ["OnSave"] = onsave,
-            ["Productions"] = Productions,
-            ["FromTable"] = fromTable,
-            ["ShopSelect"] = ShopSelect,
-            ["DTO"] = dto == null ? new OrderProductionDTO { ParentId = Model?.Id, Parent = Model } : dto,
-            ["CreateProduction"] = createProductionFunc
-          }); ;
-
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = dto == null ? "new order production" : "new order production",
-        Component = comp,
-        ShowSaveButton = true,
-        OnSaveAsync = async () =>
+      await dialogService!.ShowComponent<OrderProduction>(
+        new Dictionary<string, object?>
         {
-          var result = true;
-          if (onsave.OnSaveFunc != null)
-          {
-            result = await onsave.OnSaveFunc();
-          }
-          if (result)
-          {
-            StateHasChanged();
-          }
-          return result;
+          ["Productions"] = Productions,
+          ["FromTable"] = fromTable,
+          ["ShopSelect"] = ShopSelect,
+          ["DTO"] = dto == null ? new OrderProductionDTO { ParentId = Model?.Id, Parent = Model } : dto,
+          ["CreateProduction"] = createProductionFunc
+        },
+        dto == null ? "new order production" : "new order production",
+        true,
+        async save =>
+        {
+          await Task.CompletedTask;
+          StateHasChanged();
         }
-      };
-      await dialogService!.Show(dotion);
+        );
     }
 
     public override async Task<bool> SaveFunction()

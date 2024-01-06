@@ -36,35 +36,16 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
 
     public async Task CreateProduction(long? id = null)
     {
-      var onsave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<ProductionDetail>(
-          new Dictionary<string, object?>()
-          {
-            ["Id"] = id,
-            ["OnSave"] = onsave,
-          });
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = $"{(id == null ? "create" : "edit")} Product",
-        Size = Size.ExtraLarge,
-        Component = comp,
-        ShowSaveButton = true,
-        OnSaveAsync = async () =>
+      await dialogService.ShowComponent<ProductionDetail>(
+        new Dictionary<string, object?>()
         {
-          var result = true;
-          if (onsave.OnSaveFunc != null)
-          {
-            result = await onsave.OnSaveFunc();
-          }
-          if (result)
-          {
-            await RefreshTable();
-          }
-          return result;
-        }
-      };
-      await dialogService!.Show(dotion);
+          ["Id"] = id,
+
+        },
+       id == null ? "new Product" : "edit Product",
+       true,
+       async save => await RefreshTable()
+       );
     }
     public OrderTrackProduction? Model { get; set; }
 

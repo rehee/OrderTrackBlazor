@@ -2,6 +2,7 @@
 using BootstrapBlazor.Components;
 using Google.Api;
 using Microsoft.AspNetCore.Components;
+using OrderTrackBlazor.Consts;
 using static Dropbox.Api.Files.ListRevisionsMode;
 
 namespace OrderTrackBlazor.Components.Pages.EntityComponents
@@ -62,42 +63,19 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     }
     public async Task DispatchPackage(long? packageId = null)
     {
-      var onsave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<StockDispatchPackage>(
-          new Dictionary<string, object?>()
-          {
-            ["DTO"] = packageId == null ?
+      await dialogService.ShowComponent<StockDispatchPackage>(
+        new Dictionary<string, object?>()
+        {
+          ["DTO"] = packageId == null ?
               await service.GetCreateStockDispatchPackageDTO(Id ?? 0) :
               await service.FindStockDispatchPackageDTO(packageId.Value, Id ?? 0),
-            ["ParentDTO"] = DTO,
-            ["PackageSizes"] = PackageSizes,
-            ["OnSave"] = onsave
-
-          });
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = packageId == null ? "add package" : "edit package",
-        Size = Size.ExtraLarge,
-        Component = comp,
-        ShowSaveButton = true,
-        OnSaveAsync = async () =>
-        {
-          var result = true;
-          if (onsave.OnSaveFunc != null)
-          {
-            result = await onsave.OnSaveFunc();
-            Id = DTO?.Id;
-          }
-          if (result)
-          {
-
-          }
-          await Refresh();
-          return result;
-        }
-      };
-      await dialogService!.Show(dotion);
+          ["ParentDTO"] = DTO,
+          ["PackageSizes"] = PackageSizes
+        },
+       packageId == null ? "add package" : "edit package",
+       true,
+       async save => await Refresh()
+       );
     }
   }
 }

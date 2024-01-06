@@ -2,6 +2,7 @@ using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using OrderTrackBlazor.Components.Pages.EntityComponents;
+using OrderTrackBlazor.Helpers;
 using System.Diagnostics.CodeAnalysis;
 using static Dropbox.Api.Files.ListRevisionsMode;
 using static Dropbox.Api.Files.SearchMatchType;
@@ -32,35 +33,15 @@ namespace OrderTrackBlazor.Components.Pages
     }
     public async Task Edit(long? id)
     {
-      var onsave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<ProductionDetail>(
-          new Dictionary<string, object?>()
-          {
-            ["Id"] = id,
-            ["OnSave"] = onsave,
-          });
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = $"{(id == null ? "create" : "edit")} Product",
-        Size = Size.ExtraLarge,
-        Component = comp,
-        ShowSaveButton = true,
-        OnSaveAsync = async () =>
+      await dialogService.ShowComponent<ProductionDetail>(
+        new Dictionary<string, object?>
         {
-          var result = true;
-          if (onsave.OnSaveFunc != null)
-          {
-            result = await onsave.OnSaveFunc();
-          }
-          if (result)
-          {
-            await Refresh(true);
-          }
-          return result;
-        }
-      };
-      await dialogService!.Show(dotion);
+          ["Id"] = id
+        },
+        id == null ? "create Product" : "edit Product",
+        true,
+        async save => await Refresh(true)
+        );
     }
     protected override async Task OnInitializedAsync()
     {
@@ -88,38 +69,17 @@ namespace OrderTrackBlazor.Components.Pages
     }
     public async Task PurchaseDetail(long? purchaseId = null)
     {
-      var onsave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<StockPurchaseDetail>(
-          new Dictionary<string, object?>()
-          {
-            ["OnSave"] = onsave,
-            ["DTO"] = new StockPurchaseDTO(DTOs, 0, DateTime.UtcNow.Date, null, null),
-            ["Shops"] = Shops,
-            ["SelectShopItem"] = SelectShopItem,
-          });
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = purchaseId == null ? "add package" : "edit package",
-        Size = Size.ExtraLarge,
-        Component = comp,
-        ShowSaveButton = true,
-        OnSaveAsync = async () =>
+      await dialogService.ShowComponent<StockPurchaseDetail>(
+        new Dictionary<string, object?>
         {
-          var result = true;
-          if (onsave.OnSaveFunc != null)
-          {
-            result = await onsave.OnSaveFunc();
-          }
-          if (result)
-          {
-
-          }
-          await Refresh();
-          return result;
-        }
-      };
-      await dialogService!.Show(dotion);
+          ["DTO"] = new StockPurchaseDTO(DTOs, 0, DateTime.UtcNow.Date, null, null),
+          ["Shops"] = Shops,
+          ["SelectShopItem"] = SelectShopItem,
+        },
+        purchaseId == null ? "add package" : "edit package",
+        true,
+        async save => await Refresh()
+        );
     }
     public Task History()
     {
@@ -133,37 +93,16 @@ namespace OrderTrackBlazor.Components.Pages
       {
         return;
       }
-      var onsave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<OrderItemPage>(
-          new Dictionary<string, object?>()
-          {
-            ["OnSave"] = onsave,
-            ["DTOs"] = records.Items.OrderByDescending(b => b.OrderDate),
-            ["Shops"] = Shops
-          });
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Size = Size.ExtraLarge,
-        Component = comp,
-        ShowSaveButton = true,
-        OnSaveAsync = async () =>
+      await dialogService.ShowComponent<OrderItemPage>(
+        new Dictionary<string, object?>
         {
-          var result = true;
-          if (onsave.OnSaveFunc != null)
-          {
-            result = await onsave.OnSaveFunc();
-          }
-          if (result)
-          {
-
-          }
-          await Refresh();
-          return result;
-        }
-      };
-      await dialogService!.Show(dotion);
-
+          ["DTOs"] = records.Items.OrderByDescending(b => b.OrderDate),
+          ["Shops"] = Shops
+        },
+        "",
+        true,
+        async save => await Refresh()
+        );
     }
   }
 }

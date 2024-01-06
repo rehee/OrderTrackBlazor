@@ -1,4 +1,5 @@
 using BootstrapBlazor.Components;
+using Google.Api;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using OrderTrackBlazor.Components.Pages.EntityComponents;
@@ -30,34 +31,17 @@ namespace OrderTrackBlazor.Components.Pages
     public List<OrderPurchaseSummaryDTO> OrderPurchaseSummaryDTO { get; set; } = new List<OrderPurchaseSummaryDTO>();
     public async Task Shopping(long? id = null)
     {
-      var onSave = new OnSaveDTO();
-      var comp = BootstrapDynamicComponent.CreateComponent<OrderPurchaseDetail>(
-          new Dictionary<string, object?>()
-          {
-            ["OrderId"] = Id,
-            ["Id"] = id,
-            ["OnSave"] = onSave,
-            ["Shops"] = Shops
-          });
-      var dotion = new DialogOption()
-      {
-        IsScrolling = true,
-        Title = $"{(id == null ? "Create" : "Edit")} Purchase",
-        Size = Size.ExtraLarge,
-        Component = comp,
-        ShowSaveButton = true,
-        OnSaveAsync = async () =>
+      await dialogService.ShowComponent<OrderPurchaseDetail>(
+        new Dictionary<string, object?>()
         {
-          var result = true;
-          if (onSave.OnSaveFunc != null)
-          {
-            result = await onSave.OnSaveFunc();
-          }
-          await RefreshPage();
-          return result;
-        }
-      };
-      await dialogService!.Show(dotion);
+          ["OrderId"] = Id,
+          ["Id"] = id,
+          ["Shops"] = Shops
+        },
+       id == null ? "Create Purchase" : "Edit Purchase",
+       true,
+       async save => await RefreshPage()
+       );
     }
   }
 }
