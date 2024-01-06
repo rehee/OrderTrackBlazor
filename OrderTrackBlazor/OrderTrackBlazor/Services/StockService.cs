@@ -2,6 +2,7 @@
 using Dropbox.Api.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using OrderTrackBlazor.Consts;
 using ReheeCmf.Contexts;
 
 namespace OrderTrackBlazor.Services
@@ -37,7 +38,7 @@ namespace OrderTrackBlazor.Services
           //Name = purchaes.Production.Name,
           CreateDate = purchaes.CreateDate,
           Date = purchaes.PurchaseRecord.PurchaseDate,
-          IsPurchase = true,
+          IsPurchase = purchaes.PurchaseRecord.Shop != null ? purchaes.PurchaseRecord.Shop.Name == DefaultValues.VirtualShop ? purchaes.Quantity >= 0 ? EnumInOutStatus.VirtualInput : EnumInOutStatus.VirtualOutPut : EnumInOutStatus.Input : EnumInOutStatus.Input,
           Number = purchaes.Quantity,
           Shop = purchaes.PurchaseRecord.Shop.Name,
           OrderShortNote = ""
@@ -52,7 +53,7 @@ namespace OrderTrackBlazor.Services
           Id = dispatch.ProductionId,
           CreateDate = dispatch.CreateDate,
           Date = record.DispatchDate,
-          IsPurchase = false,
+          IsPurchase = EnumInOutStatus.OutPut,
           Number = dispatch.Quantity + dispatch.PackageQuantity,
           OrderShortNote = record.Order.ShortNote,
           //Name = dispatch.Production.Name,
@@ -67,7 +68,7 @@ namespace OrderTrackBlazor.Services
           Id = dispatch.ProductionId,
           CreateDate = dispatch.CreateDate,
           Date = record.Dispatch.DispatchDate,
-          IsPurchase = false,
+          IsPurchase = EnumInOutStatus.OutPut,
           Number = dispatch.PackageQuantity,
           OrderShortNote = record.BriefDiscribtion,
           //Name = dispatch.Production.Name,
@@ -215,7 +216,7 @@ namespace OrderTrackBlazor.Services
         ShopId = stockPurchase.ShopId,
       };
       await context.AddAsync(purchase, CancellationToken.None);
-      foreach (var item in stockPurchase.Request ?? Enumerable.Empty<StockRequireSummaryDTO>())
+      foreach (var item in stockPurchase.RequestAdding)
       {
         var purchaseItem = new OrderTrackPurchaseItem
         {
@@ -224,6 +225,10 @@ namespace OrderTrackBlazor.Services
           PurchaseRecord = purchase,
           Quantity = item.Number ?? 0,
         };
+        if (purchaseItem.Quantity == 0)
+        {
+          continue;
+        }
         await context.AddAsync(purchaseItem, CancellationToken.None);
       };
       await context.SaveChangesAsync(null);
@@ -241,12 +246,16 @@ namespace OrderTrackBlazor.Services
       record.PurchaseDate = stockPurchase.PurchaseDate;
       record.Price = stockPurchase.Price;
       var items = record.Items.ToArray().GroupBy(b => b.ProductionId).ToArray();
-      foreach (var dto in stockPurchase.Request)
+      foreach (var dto in stockPurchase.RequestAdding)
       {
         var itemfound = items.FirstOrDefault(b => b.Key == dto.ProductionId);
         if (itemfound == null)
         {
           if ((dto.ProductionId ?? 0) <= 0)
+          {
+            continue;
+          }
+          if ((dto.Number ?? 0) == 0)
           {
             continue;
           }

@@ -83,5 +83,11 @@
     public long? ShopId { get; set; }
     public decimal? Price { get; set; }
     public IEnumerable<StockRequireSummaryDTO>? Request { get; set; }
+    public IEnumerable<string> Ids => (RequestInput.Concat(Request)).Select(b => b.ProductionId).Distinct().Select(b => b?.ToString() ?? "");
+
+    public List<StockRequireSummaryDTO> RequestInput = new List<StockRequireSummaryDTO>();
+
+    public IEnumerable<StockRequireSummaryDTO> RequestAdding => (Request ?? Enumerable.Empty<StockRequireSummaryDTO>())
+      .Concat(RequestInput).DistinctBy(b => b.ProductionId);
   }
 }

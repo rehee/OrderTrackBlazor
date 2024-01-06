@@ -8,7 +8,7 @@ namespace OrderTrackBlazor.Helpers
 {
   public static class DialogServiceHelper
   {
-    public static async Task ShowComponent<T>(this DialogService? dialogService, Dictionary<string, object?>? parameter,
+    public static async Task ShowComponent<T>(this DialogService? dialogService, Dictionary<string, object?>? parameter = null,
       string title = "", bool showSave = false, Func<OnSaveDTO, Task>? onSaveSuccess = null, Size size = Size.ExtraLarge
       ) where T : CBase
     {
@@ -46,10 +46,12 @@ namespace OrderTrackBlazor.Helpers
                 await onSaveSuccess(onSave);
               }
             }
+            saveOnProgress = false;
             return result;
           }
           else
           {
+            saveOnProgress = false;
             return true;
           }
         }

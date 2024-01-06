@@ -2,8 +2,6 @@
 <div class="row g-3">
   <div class="col-6 col-sm-4">
     <DateTimePicker @bind-Value="@DTO.PurchaseDate" Format="dd/MM/yyyy" ShowLabel="true" DisplayText="采购日期" />
-
-
   </div>
 
   <div class="col-6 col-sm-4">
@@ -13,6 +11,9 @@
     <BootstrapInputNumber @bind-Value="DTO.Price"
                           ShowLabel="true"
                           DisplayText="采购价格" />
+  </div>
+  <div class="col-12 ">
+    <Button OnClickWithoutRender="()=>AddProduction()">添加产品</Button>
   </div>
   <div class="col-12">
     <Table TItem="StockRequireSummaryDTO" Items="@DisplayDTOs">

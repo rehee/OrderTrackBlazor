@@ -1,0 +1,17 @@
+﻿@inherits StockPurchaseProductionComponent
+<Card>
+  <BodyTemplate>
+    <div style="min-height:400px">
+      <div class="row g-3">
+        <div class="col-12">
+          <Select Items="DisplayProductionSelections" @bind-Value="SelectedItem" ShowSearch="true" ShowLabel="true" DisplayText="选择产品"> </Select>
+        </div>
+        <div class="col-12">
+          <BootstrapInputNumber @bind-Value="Quanty" ShowLabel="true" DisplayText="数量" />
+        </div>
+      </div>
+    </div>
+
+  </BodyTemplate>
+</Card>
+

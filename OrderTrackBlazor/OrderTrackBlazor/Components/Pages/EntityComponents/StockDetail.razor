@@ -4,14 +4,22 @@
   <TableColumns>
     <TableColumn @bind-Field="@context.IsPurchase" Text="(出/入)库">
       <Template Context="value">
-        @if (value.Value == true)
+        @switch (value.Value)
         {
-          <span>入库</span>
+          case OrderTrackBlazor.Enums.EnumInOutStatus.Input:
+            <span>入库</span>
+            break;
+          case OrderTrackBlazor.Enums.EnumInOutStatus.OutPut:
+            <span>出库</span>
+            break;
+          case OrderTrackBlazor.Enums.EnumInOutStatus.VirtualInput:
+            <span>虚入</span>
+            break;
+          case OrderTrackBlazor.Enums.EnumInOutStatus.VirtualOutPut:
+            <span>虚出</span>
+            break;
         }
-        else
-        {
-          <span>出库</span>
-        }
+
 
       </Template>
     </TableColumn>
@@ -25,7 +33,7 @@
       <Template Context="value">
         @{
           var row = StockLists.FirstOrDefault(b => b.RowId == value.Value);
-          if (row.IsPurchase == true)
+          if (row.IsPurchase == OrderTrackBlazor.Enums.EnumInOutStatus.Input)
           {
             <span>@row.Shop</span>
           }

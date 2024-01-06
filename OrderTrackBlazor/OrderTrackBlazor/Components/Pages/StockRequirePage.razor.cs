@@ -76,7 +76,7 @@ namespace OrderTrackBlazor.Components.Pages
           ["Shops"] = Shops,
           ["SelectShopItem"] = SelectShopItem,
         },
-        purchaseId == null ? "add package" : "edit package",
+        purchaseId == null ? "Add Purchase" : "edit Purchase",
         true,
         async save => await Refresh()
         );

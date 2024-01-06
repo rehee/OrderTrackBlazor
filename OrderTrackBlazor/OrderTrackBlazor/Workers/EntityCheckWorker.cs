@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OrderTrackBlazor.Consts;
 using OrderTrackBlazor.Entities;
 using ReheeCmf.Commons;
 using ReheeCmf.Contexts;
@@ -26,13 +27,31 @@ namespace OrderTrackBlazor.Workers
             production.NormalizationName = production.Name?.Trim().ToUpper() ?? "";
           }
           await context1.SaveChangesAsync(null);
+
+          var virtualShop = await context1.Query<OrderTrackShop>(false).Where(b => b.Name == DefaultValues.VirtualShop).ToArrayAsync();
+          if (virtualShop.Length > 0)
+          {
+            foreach (var shop in virtualShop)
+            {
+              shop.DisplayOrder = int.MaxValue;
+            }
+          }
+          else
+          {
+            await context1.AddAsync(new OrderTrackShop
+            {
+              Name = DefaultValues.VirtualShop,
+              DisplayOrder = int.MaxValue,
+            });
+          }
+          await context1.SaveChangesAsync(null);
         }
         while (true)
         {
 
           await Task.Delay(1000
           //);
-          * 60);
+          *60);
           using var scope = sp.CreateScope();
           using var context = scope.ServiceProvider.GetService<IContext>();
           var current = DateTime.UtcNow;
@@ -70,7 +89,9 @@ namespace OrderTrackBlazor.Workers
           var emptyPurchaseItem = context.Query<OrderTrackPurchaseItem>(false)
             .Where(b =>
               (b.ProductionId == null || b.ProductionId <= 0) ||
-              (b.PurchaseRecord != null && b.PurchaseRecord.OrderId != null && b.Quantity == 0)
+              (
+              //b.PurchaseRecord != null && b.PurchaseRecord.OrderId != null && 
+              b.Quantity == 0)
             ).ToList();
           foreach (var b2 in emptyPurchaseItem)
           {

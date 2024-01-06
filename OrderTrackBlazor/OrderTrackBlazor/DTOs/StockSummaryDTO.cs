@@ -32,7 +32,7 @@
     public long? Pk { get; set; }
     public long? Id { get; set; }
     public string? Name { get; set; }
-    public bool? IsPurchase { get; set; }
+    public EnumInOutStatus? IsPurchase { get; set; }
     public DateTime? Date { get; set; }
     public DateTime? CreateDate { get; set; }
     public int? Number { get; set; }

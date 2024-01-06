@@ -25,7 +25,7 @@
 
         <TableColumn @bind-Field="@context.Id" Text="操作">
           <Template Context="value">
-            <Button Color="Color.Primary" Icon="fas fa-arrow-trend-up" Text="入库详情" OnClickWithoutRender="()=>NormalShowDialog(value.Value)" />
+            <Button Color="Color.Primary" Text="出入库" OnClickWithoutRender="()=>NormalShowDialog(value.Value)" />
           </Template>
         </TableColumn>
 

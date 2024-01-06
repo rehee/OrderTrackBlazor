@@ -8,5 +8,6 @@
     //};
     public const string PTitle = "采购";
     public const string DatFormat = "dd/MM/yyyy";
+    public const string VirtualShop = "Virtual";
   }
 }
