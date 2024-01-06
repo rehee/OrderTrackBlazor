@@ -7,7 +7,7 @@
 
     Task<StockDispatchDTO?> GetCreateDTO();
     Task<StockDispatchDTO?> FindDTO(long id);
-
+    Task<StockDispatchDTO[]> FindDTO(IEnumerable<long> ids);
     Task<bool> Create(StockDispatchDTO dto);
     Task<bool> Update(StockDispatchDTO dto);
     Task<bool> Update(StockDispatchPackageDTO dto);

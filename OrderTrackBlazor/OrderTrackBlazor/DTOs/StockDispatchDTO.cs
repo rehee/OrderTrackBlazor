@@ -5,6 +5,7 @@ namespace OrderTrackBlazor.DTOs
 {
   public class StockDispatchDTO
   {
+    public bool Selected { get; set; }
     public Guid RowId { get; set; }
     public long Id { get; set; }
     public EnumDispatchStatus? Status { get; set; }

@@ -8,11 +8,22 @@
   <Header>
     <div>
       <Button Color="Color.Primary" Icon="fas fa-arrow-trend-up" Text="出库" OnClickWithoutRender="()=>OpenStockDispatch()" />
+      @* <Button Color="Color.Primary" Icon="fas fa-arrow-trend-up" Text="查看" OnClickWithoutRender="()=>ViewStockDispatchs()" /> *@
+      <a class="btn btn-success" href="/dispatchs/@SelectIds" target="_blank">查看</a>
     </div>
   </Header>
   <Main>
     <Table TItem="StockDispatchDTO" Items="@DispatchDTO">
       <TableColumns>
+        <TableColumn @bind-Field="@context.Id" Width="100">
+          <Template Context="value">
+            @{
+              var item = DispatchDTO.FirstOrDefault(b => b.Id == value.Value);
+              <Switch @bind-Value="item.Selected" OnColor="Color.Success"></Switch>
+            }
+
+          </Template>
+        </TableColumn>
         <TableColumn @bind-Field="@context.DispatchDateFormat" Text="出库日期">
         </TableColumn>
 

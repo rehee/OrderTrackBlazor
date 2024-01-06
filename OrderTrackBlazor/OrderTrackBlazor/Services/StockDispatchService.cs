@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using ReheeCmf.Contexts;
+using ReheeCmf.DTOProcessors;
 
 namespace OrderTrackBlazor.Services
 {
@@ -184,7 +185,49 @@ namespace OrderTrackBlazor.Services
         };
       return await query.FirstOrDefaultAsync();
     }
+    public async Task<StockDispatchDTO[]> FindDTO(IEnumerable<long> ids)
+    {
+      var queryId = ids.ToArray();
+      var query =
+        from record in context.Query<OrderTrackStockDispatch>(true).Where(b => queryId.Contains(b.Id)).AsSplitQuery()
+        select new StockDispatchDTO
+        {
+          Id = record.Id,
+          BriefNote = record.BriefNote,
+          DispatchDate = record.DispatchDate,
+          Note = record.Note,
+          Income = record.Income,
+          Status = record.Status,
+          CompletedDate = record.CompletedDate,
+          Packages = record.Packages.Select(b => new StockDispatchPackageDTO
+          {
+            Id = b.Id,
 
+            BriefDiscribtion = b.BriefDiscribtion,
+            Discribtion = b.Discribtion,
+            Number = b.Number == null ? 0 : b.Number.Value,
+            PackagePrice = b.PackagePrice,
+            PackageSizeId = b.PackageSizeId,
+            PackageSizeName = b.PackageSize != null ? b.PackageSize.Name : "",
+            PackageWeight = b.PackageWeight,
+            StockDispatchId = b.OrderTrackStockDispatchId,
+            PackageItem = b.Items.Select(p => new StockPackageItemDTO
+            {
+              Number = p.Number,
+              ProductionName = p.Production.Name,
+            }),
+            Items = b.OrderItems.Select(o => new StockDispatchPackageItemDTO
+            {
+              ProductionId = o.ProductionId,
+              Number = o.PackageQuantity,
+              Price = o.OrderProduction.OrderPrice == null ? o.OrderProduction.Production.OriginalPrice : o.OrderProduction.OrderPrice,
+              ProductionName = o.Production.Name,
+              OrderTime = o.OrderProduction.Order.OrderDate
+            })
+          })
+        };
+      return await query.ToArrayAsync();
+    }
     public async Task<bool> Update(StockDispatchDTO dto)
     {
       var record = await context.Query<OrderTrackStockDispatch>(false).Where(b => b.Id == dto.Id).FirstOrDefaultAsync();

@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using BootstrapBlazor.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using OrderTrackBlazor.Components;
 using OrderTrackBlazor.Components.Account;
 using OrderTrackBlazor.Data;
+using OrderTrackBlazor.Services;
 using OrderTrackBlazor.Workers;
 using ReheeCmf;
 using ReheeCmf.Commons.DTOs;
@@ -33,7 +36,7 @@ namespace OrderTrackBlazor
       context.Services!.AddRazorComponents()
         .AddInteractiveServerComponents();
       context.Services!.AddBootstrapBlazor();
-      
+      context.Services!.TryAddSingleton<IHtml2Pdf, DefaultPdfService2>();
       context.Services!.AddCascadingAuthenticationState();
       context.Services!.AddScoped<IdentityUserAccessor>();
       context.Services!.AddScoped<IdentityRedirectManager>();

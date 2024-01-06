@@ -1,0 +1,61 @@
+﻿@page "/dispatchs/{idsfromurl}"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@layout OrderTrackBlazor.Components.Layout.MainLayout2
+@inherits ViewStockDispatchPagesComponent
+@if (DTOs?.Any() == true)
+{
+  <Card>
+    <HeaderTemplate>
+      汇总
+    </HeaderTemplate>
+    <BodyTemplate>
+      <h5>总箱数: @DTOs.SelectMany(b => b.Packages).Sum(b => b.Number)</h5>
+      <h5>总价格: @DTOs.Sum(DTO => DTO.Items.Sum(b => b.Number * b.Price) + DTO.Packages.Sum(b => b.Number * b.PackagePrice))</h5>
+    </BodyTemplate>
+  </Card>
+  foreach (var DTO in DTOs)
+  {
+    <Card>
+      <HeaderTemplate>
+        @DTO.DispatchDate?.ToString(DefaultValues.DatFormat)
+      </HeaderTemplate>
+      <BodyTemplate>
+        <h6>箱数: @DTO.Packages.Sum(b => b.Number)</h6>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>产品名</th>
+              <th>单价</th>
+              <th>数量</th>
+              <th>价格</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach (var item in DTO.Items.GroupBy(b => b.ProductionId))
+            {
+              <tr>
+
+                <td> @item.FirstOrDefault()?.ProductionName </td>
+
+                <td> @(Math.Round((item.Sum(b => b.Price * b.Number) / item.Sum(b => b.Number)) ?? 0, 4))</td>
+                <td> @item.Sum(b => b.Number)</td>
+                <td> @(item.Sum(b => b.Price * b.Number))</td>
+              </tr>
+
+            }
+          </tbody>
+          <tfoot>
+            <tr>
+              <td> </td>
+              <td>总产品: @DTO.Items.DistinctBy(b => b.ProductionId).Count() </td>
+              <td>总数量: @DTO.Items.Sum(b => b.Number) </td>
+              <td>总价格: @DTO.Items.Sum(b => b.Number * b.Price) + @DTO.Packages.Sum(b => b.Number * b.PackagePrice) = @(DTO.Items.Sum(b => b.Number * b.Price) + DTO.Packages.Sum(b => b.Number * b.PackagePrice))</td>
+            </tr>
+          </tfoot>
+        </table>
+      </BodyTemplate>
+    </Card>
+  }
+}
