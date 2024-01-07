@@ -23,6 +23,8 @@ namespace OrderTrackBlazor.Services
         {
           Id = production.Id,
           Name = production.Name,
+          Image = production.AttachmentId,
+          CategoryName = production.Category.Name,
           CurrentStock =
             production.PurchaseItems.Sum(b => b.Quantity) - production.DispatchItems.Where(b => b.DispatchRecord.Status != EnumDispatchStatus.Error).Sum(b => b.Quantity + b.PackageQuantity),
         };

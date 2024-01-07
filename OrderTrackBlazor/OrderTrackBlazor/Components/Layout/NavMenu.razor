@@ -17,50 +17,51 @@
         <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
       </NavLink>
     </div>
-    <div class="nav-item px-3">
-      <NavLink class="nav-link" href="lists" Match="NavLinkMatch.Prefix">
-        <span class="bi fas fa-list-check" aria-hidden="true"></span> list
-      </NavLink>
-    </div>
-
-    <div class="nav-item px-3">
-      <NavLink class="nav-link " href="stock">
-
-        <span class="bi fas fa-table" aria-hidden="true"></span> Stock
-      </NavLink>
-    </div>
-    <div class="nav-item px-3">
-      <NavLink class="nav-link " href="dispatch">
-
-        <span class="bi fas fa-table" aria-hidden="true"></span> Dispatch
-      </NavLink>
-    </div>
-    <div class="nav-item px-3">
-      <NavLink class="nav-link " href="entity/order">
-
-        <span class="bi fas fa-tags" aria-hidden="true"></span> Order
-      </NavLink>
-    </div>
-    <div class="nav-item px-3">
-      <NavLink class="nav-link " href="entity/product">
-
-        <span class="bi fas fa-shop" aria-hidden="true"></span> Product
-      </NavLink>
-    </div>
-    <div class="nav-item px-3">
-      <NavLink class="nav-link " href="entity/shop">
-
-        <span class="bi fas fa-shop" aria-hidden="true"></span> Shop
-      </NavLink>
-    </div>
-    <div class="nav-item px-3">
-      <NavLink class="nav-link " href="entity/packagesize">
-
-        <span class="bi fas fa-shop" aria-hidden="true"></span> Package Size
-      </NavLink>
-    </div>
+    
     <AuthorizeView>
       <Authorized>
+        <div class="nav-item px-3">
+          <NavLink class="nav-link" href="lists" Match="NavLinkMatch.Prefix">
+            <span class="bi fas fa-list-check" aria-hidden="true"></span> list
+          </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+          <NavLink class="nav-link " href="stock">
+
+            <span class="bi fas fa-table" aria-hidden="true"></span> Stock
+          </NavLink>
+        </div>
+        <div class="nav-item px-3">
+          <NavLink class="nav-link " href="dispatch">
+
+            <span class="bi fas fa-table" aria-hidden="true"></span> Dispatch
+          </NavLink>
+        </div>
+        <div class="nav-item px-3">
+          <NavLink class="nav-link " href="entity/order">
+
+            <span class="bi fas fa-tags" aria-hidden="true"></span> Order
+          </NavLink>
+        </div>
+        <div class="nav-item px-3">
+          <NavLink class="nav-link " href="entity/product">
+
+            <span class="bi fas fa-shop" aria-hidden="true"></span> Product
+          </NavLink>
+        </div>
+        <div class="nav-item px-3">
+          <NavLink class="nav-link " href="entity/shop">
+
+            <span class="bi fas fa-shop" aria-hidden="true"></span> Shop
+          </NavLink>
+        </div>
+        <div class="nav-item px-3">
+          <NavLink class="nav-link " href="entity/packagesize">
+
+            <span class="bi fas fa-shop" aria-hidden="true"></span> Package Size
+          </NavLink>
+        </div>
         <div class="nav-item px-3">
           <NavLink class="nav-link" href="Account/Manage">
             <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> @context.User.Identity?.Name
@@ -77,11 +78,11 @@
         </div>
       </Authorized>
       <NotAuthorized>
-        <div class="nav-item px-3">
+        @* <div class="nav-item px-3">
           <NavLink class="nav-link" href="Account/Register">
             <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
           </NavLink>
-        </div>
+        </div> *@
         <div class="nav-item px-3">
           <NavLink class="nav-link" href="Account/Login">
             <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Login

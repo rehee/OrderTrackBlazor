@@ -6,6 +6,9 @@
 @inherits ViewStockDispatchPagesComponent
 @if (DTOs?.Any() == true)
 {
+  <PageTitle>
+    发货: @String.Join(",", DTOs.Select(b => b.DispatchDate?.ToString(DefaultValues.DatFormat)))
+  </PageTitle>
   <Card>
     <HeaderTemplate>
       汇总

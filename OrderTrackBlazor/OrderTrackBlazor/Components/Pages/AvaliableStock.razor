@@ -1,42 +1,60 @@
 ﻿@inherits AvaliableStockComponent
-<Card>
-  <HeaderTemplate>
+@page "/avaliable"
+@rendermode InteractiveServer
+@* @using Microsoft.AspNetCore.Authorization
+@attribute [Authorize] *@
+@layout OrderTrackBlazor.Components.Layout.MainLayout2
+<PageTitle>可用库存</PageTitle>
+@{
+  if (SummaryDTOs?.Any() == true)
+  {
+    var index = 0;
+    foreach (var category in SummaryDTOs.GroupBy(b => b.CategoryName).OrderByDescending(b => !String.IsNullOrEmpty(b.Key)).ThenBy(b => b.Key))
+    {
+      <Card>
+        <HeaderTemplate>
+          @category.Key
+        </HeaderTemplate>
+        <BodyTemplate>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th style="width:10%"></th>
+                <th style="width:80%">产品名</th>
+                <th style="width:15%">数量</th>
+              </tr>
+            </thead>
+            <tbody>
+              @{
+                foreach (var dto in category)
+                {
+                  index++;
+                  var current = index;
+                  <tr>
+                    <td>
+                      @current
+                    </td>
+                    <td>
+                      <div>
+                        <img src="@dto.Image" />
+                      </div>
+                      <div>
+                        @dto.Name
+                      </div>
+                    </td>
+                    <td>
+                      @dto.CurrentStock
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
 
-  </HeaderTemplate>
-  <BodyTemplate>
+          </table>
+        </BodyTemplate>
+      </Card>
+    }
+  }
+  
+}
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th style="width:10%"></th>
-          <th style="width:80%">产品名</th>
-          <th style="width:15%">数量</th>
-
-        </tr>
-      </thead>
-      <tbody>
-        @{
-          var index = 0;
-
-          foreach (var dto in SummaryDTOs)
-          {
-            index++;
-            var current = index;
-            <tr>
-              <td>
-                @current
-              </td>
-              <td>
-                @dto.Name
-              </td>
-              <td>
-                @dto.CurrentStock
-              </td>
-            </tr>
-          }
-        }
-      </tbody>
-
-    </table>
-  </BodyTemplate>
-</Card>

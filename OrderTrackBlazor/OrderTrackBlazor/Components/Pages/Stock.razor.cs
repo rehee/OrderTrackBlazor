@@ -2,6 +2,7 @@
 using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.JSInterop;
 using OrderTrackBlazor.Components.Pages.EntityComponents;
 using OrderTrackBlazor.Consts;
 using OrderTrackBlazor.Data;
@@ -33,12 +34,23 @@ namespace OrderTrackBlazor.Components.Pages
       SummaryDTOs = await stockService.QuerySummary().OrderByDescending(b => b.CurrentStock).ThenBy(b => b.Id).ToListAsync();
       StateHasChanged();
     }
-
-    public async Task ShowAvaliable()
+    [Inject]
+    public IJSRuntime js { get; set; }
+    public async Task ShowAvaliable(bool showAvaliable = true)
     {
-      await dialogService.ShowComponent<AvaliableStock>(
-        null,
-       "");
+      //await dialogService.ShowComponent<AvaliableStock>(
+      //  null,
+      // "");
+      if (showAvaliable)
+      {
+        AvaliableStock.AvaliableUntil = DateTime.UtcNow.AddHours(4);
+        await js.InvokeVoidAsync("open", "avaliable", "_blank");
+      }
+      else
+      {
+        AvaliableStock.AvaliableUntil = null;
+      }
+
     }
     public async Task NormalShowDialog(long? productionId)
     {

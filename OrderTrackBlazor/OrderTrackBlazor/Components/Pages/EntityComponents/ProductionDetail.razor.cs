@@ -67,6 +67,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       StateHasChanged();
       return Task.FromResult(true);
     }
+    public UploadFile File { get; set; } = new UploadFile();
     public async Task OnFileChange(UploadFile file)
     {
       // 未真正保存文件

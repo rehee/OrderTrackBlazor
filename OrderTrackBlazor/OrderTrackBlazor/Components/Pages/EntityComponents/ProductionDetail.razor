@@ -19,8 +19,12 @@
         <div class="col-12">
           <BootstrapInputGroup>
             <Avatar Url="@Production.Attachment" Size="Size.Medium" />
+            @if (!String.IsNullOrEmpty(Production.Attachment))
+            {
+              <Button Color="Color.Danger" OnClickWithoutRender="()=>OnFileDelete()">删除</Button>
+            }
             <InputUpload TValue="string" ShowDeleteButton="false" OnChange="@OnFileChange" ShowLabel="true" DisplayText="产品图片"></InputUpload>
-            <Button Color="Color.Danger" OnClickWithoutRender="()=>OnFileDelete()">删除</Button>
+
           </BootstrapInputGroup>
 
         </div>

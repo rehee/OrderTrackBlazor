@@ -8,7 +8,11 @@
 <MainPage>
   <Header>
     <div>
-      <Button Color="Color.Success" OnClickWithoutRender="()=>ShowAvaliable()">可用库存</Button>
+      <BootstrapInputGroup>
+        <Button Color="Color.Success" OnClickWithoutRender="()=>ShowAvaliable()">可用库存</Button>
+        <Button Color="Color.Warning" OnClickWithoutRender="()=>ShowAvaliable(false)">停止显示</Button>
+      </BootstrapInputGroup>
+
     </div>
   </Header>
   <Main>
