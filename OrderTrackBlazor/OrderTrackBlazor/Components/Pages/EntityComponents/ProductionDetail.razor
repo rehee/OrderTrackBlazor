@@ -13,7 +13,10 @@
         <div class="col-12">
           <BootstrapInput @bind-Value="Production.ExtendUrl" DisplayText="外部连接" ShowLabel="true"></BootstrapInput>
         </div>
+        <InputUpload TValue="string" ShowDeleteButton="true" ShowLabel="true" DisplayText="产品图片"></InputUpload>
       </div>
     </BodyTemplate>
   </Card>
 }
+
+@* OnChange="@OnFileChange" OnDelete="@OnFileDelete" *@

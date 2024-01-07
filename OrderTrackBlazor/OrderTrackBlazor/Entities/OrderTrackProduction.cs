@@ -3,6 +3,7 @@ using ReheeCmf.Components.ChangeComponents;
 using ReheeCmf.Entities;
 using ReheeCmf.Helpers;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OrderTrackBlazor.Entities
 {
@@ -11,6 +12,11 @@ namespace OrderTrackBlazor.Entities
     public string? NormalizationName { get; set; }
     public decimal? OriginalPrice { get; set; }
     public string? ExtendUrl { get; set; }
+    public string? AttachmentId { get; set; }
+    [ForeignKey(nameof(OrderTrackCategory))]
+    public long? CategoryId { get; set; }
+    public virtual OrderTrackCategory? Category { get; set; }
+
     public virtual List<OrderTrackPurchaseItem>? PurchaseItems { get; set; }
     public virtual List<OrderTrackDispatchItem>? DispatchItems { get; set; }
     public virtual List<OrderTrackOrderItem>? OrderItems { get; set; }

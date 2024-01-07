@@ -26,6 +26,6 @@ namespace OrderTrackBlazor.Data
     public DbSet<OrderTrackStockDispatch> OrderTrackStockDispatchs { get; set; }
     public DbSet<OrderTrackStockDispatchPackage> OrderTrackStockDispatchPackages { get; set; }
     public DbSet<OrderTrackStockDispatchPackageItem> OrderTrackStockDispatchPackageItems { get; set; }
-    
+    public DbSet<OrderTrackCategory> OrderTrackCategories { get; set; }
   }
 }
