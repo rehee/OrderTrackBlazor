@@ -14,7 +14,8 @@ namespace OrderTrackBlazor.DTOs
     public string? ExtendUrl { get; set; }
 
     public long NewId { get; set; }
-    
+
+    public string? Attachment { get; set; }
 
   }
 }

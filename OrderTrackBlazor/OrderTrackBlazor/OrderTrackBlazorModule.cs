@@ -1,6 +1,7 @@
 ﻿using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using OrderTrackBlazor.Components;
 using OrderTrackBlazor.Components.Account;
@@ -33,6 +34,7 @@ namespace OrderTrackBlazor
     public override async Task ConfigureServicesAsync(ServiceConfigurationContext context)
     {
       await base.ConfigureServicesAsync(context);
+      context.Services!.Configure<HubOptions>(option => option.MaximumReceiveMessageSize = null);
       context.Services!.AddRazorComponents()
         .AddInteractiveServerComponents();
       context.Services!.AddBootstrapBlazor();
@@ -56,6 +58,7 @@ namespace OrderTrackBlazor
       context.Services!.AddScoped<ISelectedItemService, SelectedItemService>();
       context.Services!.AddScoped<IStockDispatchService, StockDispatchService>();
       context.Services!.AddScoped<IProductionService, ProductionService>();
+      
     }
     public override async Task BeforePreApplicationInitializationAsync(ServiceConfigurationContext context)
     {

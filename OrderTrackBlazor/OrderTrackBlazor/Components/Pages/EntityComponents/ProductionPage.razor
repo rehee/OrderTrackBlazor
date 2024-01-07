@@ -22,6 +22,12 @@
       <div>
         <Table TItem="ProductionDTO" Items="@Productions" butto>
           <TableColumns>
+
+            <TableColumn @bind-Field="@context.Attachment" Text="图片" Width="100">
+              <Template Context="value">
+                <Avatar Url="@value.Value" Size="Size.Small" />
+              </Template>
+            </TableColumn>
             <TableColumn @bind-Field="@context.ProductionName" />
             <TableColumn @bind-Field="@context.OriginalPrice" Width="150" />
             <TableColumn @bind-Field="@context.Id" Text="操作" Width="100">
