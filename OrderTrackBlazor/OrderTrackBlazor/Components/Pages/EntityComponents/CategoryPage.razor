@@ -8,13 +8,14 @@
   <Header>
     <div class="row g-3">
       <div class="col-12">
+        <NavLink class="btn btn-success" href="entity/product">返回产品</NavLink>
         <Button Color="Color.Primary" Text="添加类别" OnClickWithoutRender="()=>MaintainDetail()" />
       </div>
     </div>
   </Header>
   <Main>
     <div>
-      
+
       <Table TItem="OrderTrackCategory" Items="@Categories">
         <TableColumns>
 

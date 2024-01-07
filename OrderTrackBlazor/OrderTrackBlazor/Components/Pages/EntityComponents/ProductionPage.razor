@@ -17,7 +17,6 @@
     @if (Productions == null)
     {
       <div>
-
       </div>
     }
     else
@@ -32,8 +31,10 @@
               </Template>
             </TableColumn>
             <TableColumn @bind-Field="@context.CategoryName" Text="品类" Width="200" />
+            <TableColumn @bind-Field="@context.Id" Text="Id" Width="50" />
             <TableColumn @bind-Field="@context.ProductionName" Text="产品" />
-            <TableColumn @bind-Field="@context.OriginalPrice" Text="原始价格" Width="150" />
+            <TableColumn @bind-Field="@context.OriginalPrice" Text="原始价格" Width="100" />
+            <TableColumn @bind-Field="@context.WeightGrem" Text="重量 (g)" Width="100" />
             <TableColumn @bind-Field="@context.Id" Text="操作" Width="100">
               <Template Context="value">
                 <Button Color="Color.Success" Text="编辑" OnClickWithoutRender="()=>CreateProduction(value.Value)" />

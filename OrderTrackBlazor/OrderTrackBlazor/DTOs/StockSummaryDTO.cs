@@ -6,6 +6,7 @@
     public string? Name { get; set; }
     public string? Image { get; set; }
     public string? CategoryName { get; set; }
+    public int? CategoryDisplayOrder { get; set; }
     public int? CurrentStock
     {
       get

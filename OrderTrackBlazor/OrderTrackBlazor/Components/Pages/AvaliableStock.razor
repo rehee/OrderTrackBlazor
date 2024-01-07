@@ -9,18 +9,20 @@
   if (SummaryDTOs?.Any() == true)
   {
     var index = 0;
-    foreach (var category in SummaryDTOs.GroupBy(b => b.CategoryName).OrderByDescending(b => !String.IsNullOrEmpty(b.Key)).ThenBy(b => b.Key))
+    foreach (var category in SummaryDTOs.GroupBy(b => b.CategoryDisplayOrder)
+    .OrderByDescending(b => b.Key.HasValue)
+    .ThenBy(b => b.Key))
     {
       <Card>
         <HeaderTemplate>
-          @category.Key
+          @category.Select(b => b.CategoryName).FirstOrDefault()
         </HeaderTemplate>
         <BodyTemplate>
           <table class="table table-hover">
             <thead>
               <tr>
-                <th style="width:10%"></th>
-                <th style="width:80%">产品名</th>
+                <th style="width:10%">编号 (Id)</th>
+                <th style="width:80%">(数量) 产品名</th>
                 <th style="width:15%">数量</th>
               </tr>
             </thead>
@@ -32,15 +34,16 @@
                   var current = index;
                   <tr>
                     <td>
-                      @current
+                      @current (@dto.Id)
                     </td>
                     <td>
                       <div>
-                        <img src="@dto.Image" />
+                        (@dto.CurrentStock) @dto.Name
                       </div>
                       <div>
-                        @dto.Name
+                        <img src="@dto.Image" />
                       </div>
+
                     </td>
                     <td>
                       @dto.CurrentStock
@@ -55,6 +58,6 @@
       </Card>
     }
   }
-  
+
 }
 

@@ -41,9 +41,12 @@
                             DisplayText="箱数" />
     </div>
     <div class="col-12">
+      箱中产品种类: @(DTO.Items.Count(b => b.NumberInput.HasValue && b.NumberInput != 0))
+    </div>
+    <div class="col-12">
       <Table TItem="StockDispatchPackageItemDTO" Items="@DTO.Items.OrderByDescending(b => b.Number != 0).ThenBy(b => b.ProductionName)">
         <TableColumns>
-          <TableColumn @bind-Field="@context.ProductionName" Text="产品">
+          <TableColumn @bind-Field="@context.ProductionDisplayName" Text="产品">
 
           </TableColumn>
           <TableColumn @bind-Field="@context.ProductionId" Text="库存" Width="80">

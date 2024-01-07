@@ -182,6 +182,15 @@ namespace OrderTrackBlazor.DTOs
     public StockDispatchPackageDTO? Parent { get; set; }
     public long? ProductionId { get; set; }
     public string? ProductionName { get; set; }
+
+    public string ProductionDisplayName
+    {
+      get
+      {
+        return $"({ProductionId?.ToString() ?? "0"}) {ProductionName}";
+      }
+      set { }
+    }
     public int AvaliableStock { get; set; }
     public int CalculateStock
     {

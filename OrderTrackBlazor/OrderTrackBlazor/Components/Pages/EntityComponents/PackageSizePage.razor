@@ -22,9 +22,10 @@ else
       <div>
         <Table TItem="OrderTrackPackageSize" Items="@Packages">
           <TableColumns>
-            <TableColumn @bind-Field="@context.Name" />
-            <TableColumn @bind-Field="@context.DisplayOrder" />
-            <TableColumn @bind-Field="@context.Id">
+            <TableColumn @bind-Field="@context.Name" Text="类型" />
+            <TableColumn @bind-Field="@context.WeightGram" Text="重量 (g)" />
+            <TableColumn @bind-Field="@context.DisplayOrder" Text="排序" />
+            <TableColumn @bind-Field="@context.Id" Text="操作">
               <Template Context="value">
                 <Button Color="Color.Success" Text="修改" OnClick="()=>NormalShowDialog(value.Value)" />
               </Template>

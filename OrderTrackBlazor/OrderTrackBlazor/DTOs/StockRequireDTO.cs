@@ -32,6 +32,8 @@
   }
   public class StockRequireSummaryDTO
   {
+    public string? CategoryName { get; set; }
+    public int? CategoryDisplayOrder { get; set; }
     public long? ProductionId { get; set; }
     public string? ProductionName { get; set; }
     public string? ExtendUrl { get; set; }

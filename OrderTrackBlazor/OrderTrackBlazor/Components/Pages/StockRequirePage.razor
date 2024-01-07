@@ -18,6 +18,7 @@
       <div class="col-12">
         <Table TItem="StockRequireSummaryDTO" Items="@DisplayDTOs">
           <TableColumns>
+            <TableColumn @bind-Field="@context.CategoryName" Text="品类" />
             <TableColumn @bind-Field="@context.ProductionName" Text="产品">
 
             </TableColumn>
@@ -66,7 +67,7 @@
                   {
                     <a href="@records.ExtendUrlDisplay" target="_blank" class="btn btn-success">比价</a>
                   }
-                  
+
                 }
 
 

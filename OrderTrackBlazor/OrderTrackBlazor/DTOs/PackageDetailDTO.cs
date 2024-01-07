@@ -8,7 +8,7 @@
     public long? DispatchId { get; set; }
 
     public long? PackageId { get; set; }
-
+    
     public int? Number { get; set; }
     public int? NumberInput
     {

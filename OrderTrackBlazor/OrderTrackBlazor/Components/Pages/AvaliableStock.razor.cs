@@ -16,7 +16,8 @@ namespace OrderTrackBlazor.Components.Pages
       {
         return;
       }
-      SummaryDTOs = await stockService.QuerySummary().Where(b => b.CurrentStock > 0).OrderBy(b => b.Name).ToArrayAsync();
+      SummaryDTOs = await stockService.QuerySummary().Where(b => b.CurrentStock > 0)
+        .OrderBy(b => b.Name).ToArrayAsync();
     }
   }
 }

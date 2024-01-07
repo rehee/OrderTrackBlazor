@@ -11,6 +11,7 @@ namespace OrderTrackBlazor.Entities
   {
     public string? NormalizationName { get; set; }
     public decimal? OriginalPrice { get; set; }
+    public decimal? WeightGram { get; set; }
     public string? ExtendUrl { get; set; }
     public string? AttachmentId { get; set; }
     [ForeignKey(nameof(OrderTrackCategory))]

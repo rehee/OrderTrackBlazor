@@ -35,7 +35,8 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
         await Context.AddAsync<OrderTrackPackageSize>(new OrderTrackPackageSize
         {
           Name = PackageSize.Name,
-          DisplayOrder = PackageSize.DisplayOrder
+          DisplayOrder = PackageSize.DisplayOrder,
+          WeightGram = PackageSize.WeightGram,
         }, CancellationToken.None);
         await Context.SaveChangesAsync(null);
       }
@@ -53,6 +54,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
         {
           record.Name = PackageSize?.Name;
           record.DisplayOrder = PackageSize?.DisplayOrder ?? 1;
+          record.WeightGram = PackageSize?.WeightGram;
         }
         await Context.SaveChangesAsync(null);
       }

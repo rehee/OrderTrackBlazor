@@ -25,6 +25,7 @@ namespace OrderTrackBlazor.Services
           Name = production.Name,
           Image = production.AttachmentId,
           CategoryName = production.Category.Name,
+          CategoryDisplayOrder = production.Category.DisplayOrder,
           CurrentStock =
             production.PurchaseItems.Sum(b => b.Quantity) - production.DispatchItems.Where(b => b.DispatchRecord.Status != EnumDispatchStatus.Error).Sum(b => b.Quantity + b.PackageQuantity),
         };
@@ -163,7 +164,9 @@ namespace OrderTrackBlazor.Services
           StockNumber = stock,
           PurchaseNumber = purchase,
           PendingNumber = required - dispatch,
-          Items = items
+          Items = items,
+          CategoryName = production.Category.Name,
+          CategoryDisplayOrder = production.Category.DisplayOrder
         };
 
       return query.Where(b => b.PendingNumber > b.StockNumber && b.PendingNumber > 0);

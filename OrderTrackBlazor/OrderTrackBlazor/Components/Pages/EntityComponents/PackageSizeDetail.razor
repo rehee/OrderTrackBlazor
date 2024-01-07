@@ -9,6 +9,12 @@
                       DisplayText="包装大小" />
     </div>
     <div class="col-12">
+      <BootstrapInputNumber @bind-Value="PackageSize.WeightGram"
+                            ShowLabel="true"
+                            DisplayText="包装重量 (g)" />
+
+    </div>
+    <div class="col-12">
       <BootstrapInputNumber @bind-Value="PackageSize.DisplayOrder"
                             ShowLabel="true"
                             DisplayText="排序" />

@@ -25,6 +25,7 @@ namespace OrderTrackBlazor.Services
           ProductionName = b.Name,
           Attachment = b.AttachmentId,
           CategoryId = b.CategoryId,
+          WeightGrem = b.WeightGram,
           CategoryName = b.Category.Name
         }).ToArrayAsync();
     }
@@ -43,7 +44,8 @@ namespace OrderTrackBlazor.Services
           ExtendUrl = b.ExtendUrl,
           Attachment = b.AttachmentId,
           CategoryId = b.CategoryId,
-          CategoryName = b.Category.Name
+          CategoryName = b.Category.Name,
+          WeightGrem = b.WeightGram,
         }).Where(b => b.Id == id).FirstOrDefaultAsync();
     }
     public async Task<bool> SaveChange(ProductionDTO? dto)
@@ -62,7 +64,8 @@ namespace OrderTrackBlazor.Services
             OriginalPrice = dto.OriginalPrice,
             ExtendUrl = dto.ExtendUrl,
             AttachmentId = dto.Attachment,
-            CategoryId = dto.CategoryId
+            CategoryId = dto.CategoryId,
+            WeightGram = dto.WeightGrem,
           };
           await context.AddAsync<OrderTrackProduction>(entity);
           var result = (await context.SaveChangesAsync()) >= 0;
@@ -79,6 +82,7 @@ namespace OrderTrackBlazor.Services
             production.ExtendUrl = dto.ExtendUrl;
             production.AttachmentId = dto.Attachment;
             production.CategoryId = dto.CategoryId;
+            production.WeightGram = dto.WeightGrem;
           }
           return (await context.SaveChangesAsync()) >= 0;
         }
