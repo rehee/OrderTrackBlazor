@@ -64,7 +64,19 @@ namespace OrderTrackBlazor.Components.Pages
         );
     }
 
+    public async Task Maintain(long? id = null)
+    {
+      await dialogService.ShowComponent<ProductionDetail>(
+        new Dictionary<string, object?>()
+        {
+          ["Id"] = id,
 
+        },
+       id == null ? "new Product" : "edit Product",
+       true,
+       async save => await Refresh()
+       );
+    }
   }
 
 }

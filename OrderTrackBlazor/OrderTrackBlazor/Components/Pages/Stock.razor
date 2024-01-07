@@ -23,15 +23,16 @@
         <TableColumn @bind-Field="@context.Name" Text="产品">
         </TableColumn>
 
-        <TableColumn @bind-Field="@context.CurrentStock" Text="库存">
+        <TableColumn @bind-Field="@context.CurrentStock" Text="库存" Width="100">
           <Template Context="value">
             <span class="@(value.Value>0?"text-success":"")">@value.Value</span>
           </Template>
         </TableColumn>
 
-        <TableColumn @bind-Field="@context.Id" Text="操作">
+        <TableColumn @bind-Field="@context.Id" Text="操作" Width="200">
           <Template Context="value">
             <Button Color="Color.Primary" Text="出入库" OnClickWithoutRender="()=>NormalShowDialog(value.Value)" />
+            <Button Color="Color.Warning" Text="编辑" OnClickWithoutRender="()=> Maintain(value.Value)" />
           </Template>
         </TableColumn>
 
