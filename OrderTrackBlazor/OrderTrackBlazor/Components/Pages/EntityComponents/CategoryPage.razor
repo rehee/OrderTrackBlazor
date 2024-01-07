@@ -1,0 +1,39 @@
+﻿@page "/Category"
+@rendermode InteractiveServer
+@inherits CategoryPageComponent
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@*  *@
+<MainPage>
+  <Header>
+    <div class="row g-3">
+      <div class="col-12">
+        <Button Color="Color.Primary" Text="添加类别" OnClickWithoutRender="()=>MaintainDetail()" />
+      </div>
+    </div>
+  </Header>
+  <Main>
+    <div>
+      
+      <Table TItem="OrderTrackCategory" Items="@Categories">
+        <TableColumns>
+
+          <TableColumn @bind-Field="@context.Name" />
+          <TableColumn @bind-Field="@context.DisplayOrder" Width="150" />
+          <TableColumn @bind-Field="@context.Id" Text="操作" Width="100">
+            <Template Context="value">
+              <Button Color="Color.Success" Text="编辑" OnClickWithoutRender="()=>MaintainDetail(value.Value)" />
+            </Template>
+          </TableColumn>
+
+        </TableColumns>
+
+      </Table>
+    </div>
+  </Main>
+</MainPage>
+
+
+
+
+

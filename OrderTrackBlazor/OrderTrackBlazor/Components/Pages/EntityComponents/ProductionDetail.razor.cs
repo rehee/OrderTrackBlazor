@@ -1,5 +1,6 @@
 using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace OrderTrackBlazor.Components.Pages.EntityComponents
@@ -13,6 +14,13 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     [Inject]
     public IProductionService ProductionService { get; set; }
 
+    [Inject]
+    [NotNull]
+    public ISelectedItemService? SelectedItemService { get; set; }
+
+    public IEnumerable<SelectedItem> Categories { get; set; }
+    public SelectedItem? SelectedCategory { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync();
@@ -21,10 +29,28 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
 
     public async Task Refresh()
     {
+
       Production = await ProductionService.GetProduction(Id);
+      Categories = await SelectedItemService.GetEntitySelection<OrderTrackCategory>();
+      SelectedCategory = Categories.FirstOrDefault(b => b.Value == Production?.CategoryId?.ToString());
       StateHasChanged();
     }
-
+    public async Task CategoryChange(SelectedItem item)
+    {
+      await Task.CompletedTask;
+      if (Production == null)
+      {
+        return;
+      }
+      if (item == null)
+      {
+        Production.CategoryId = null;
+      }
+      if (long.TryParse(item.Value, out var longId))
+      {
+        Production.CategoryId = longId;
+      }
+    }
     public override async Task<bool> SaveFunction()
     {
       var result = await ProductionService.SaveChange(Production);
@@ -35,9 +61,10 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       return result;
 
     }
-    public Task<bool> OnFileDelete(UploadFile item)
+    public Task<bool> OnFileDelete()
     {
       Production.Attachment = null;
+      StateHasChanged();
       return Task.FromResult(true);
     }
     public async Task OnFileChange(UploadFile file)

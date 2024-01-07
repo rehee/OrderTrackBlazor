@@ -5,6 +5,9 @@
     <BodyTemplate>
       <div class="row g-3">
         <div class="col-12">
+          <Select Items="Categories" @bind-Value="SelectedCategory" OnSelectedItemChanged="CategoryChange" ShowLabel="true" DisplayText="选择品类"> </Select>
+        </div>
+        <div class="col-12">
           <BootstrapInput @bind-Value="Production.ProductionName" DisplayText="商品名" ShowLabel="true"></BootstrapInput>
         </div>
         <div class="col-12">
@@ -14,14 +17,14 @@
           <BootstrapInput @bind-Value="Production.ExtendUrl" DisplayText="外部连接" ShowLabel="true"></BootstrapInput>
         </div>
         <div class="col-12">
-          <InputUpload TValue="string" ShowDeleteButton="true" OnChange="@OnFileChange" ShowLabel="true" OnDelete="@OnFileDelete" DisplayText="产品图片"></InputUpload>
+          <BootstrapInputGroup>
+            <Avatar Url="@Production.Attachment" Size="Size.Medium" />
+            <InputUpload TValue="string" ShowDeleteButton="false" OnChange="@OnFileChange" ShowLabel="true" DisplayText="产品图片"></InputUpload>
+            <Button Color="Color.Danger" OnClickWithoutRender="()=>OnFileDelete()">删除</Button>
+          </BootstrapInputGroup>
+
         </div>
-        <div class="col-12">
-          @filesize
-        </div>
-        <div class="col-12">
-          <img src="@Production.Attachment" />
-        </div>
+
       </div>
     </BodyTemplate>
   </Card>

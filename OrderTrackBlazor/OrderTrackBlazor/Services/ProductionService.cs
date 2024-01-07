@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OrderTrackBlazor.Components.Pages.EntityComponents;
 using ReheeCmf.Contexts;
 
 namespace OrderTrackBlazor.Services
@@ -14,12 +15,17 @@ namespace OrderTrackBlazor.Services
     public async Task<IEnumerable<ProductionDTO>> GetAllProductions()
     {
       return await context.Query<OrderTrackProduction>(true)
-        .OrderBy(b => b.Name).Select(b => new ProductionDTO
+        .OrderByDescending(b => b.CategoryId != null)
+        .ThenBy(b => b.Category.DisplayOrder)
+        .ThenBy(b => b.Category.Name)
+        .ThenBy(b => b.Name).Select(b => new ProductionDTO
         {
           Id = b.Id,
           OriginalPrice = b.OriginalPrice,
           ProductionName = b.Name,
           Attachment = b.AttachmentId,
+          CategoryId = b.CategoryId,
+          CategoryName = b.Category.Name
         }).ToArrayAsync();
     }
     public async Task<ProductionDTO?> GetProduction(long? id)
@@ -36,6 +42,8 @@ namespace OrderTrackBlazor.Services
           ProductionName = b.Name,
           ExtendUrl = b.ExtendUrl,
           Attachment = b.AttachmentId,
+          CategoryId = b.CategoryId,
+          CategoryName = b.Category.Name
         }).Where(b => b.Id == id).FirstOrDefaultAsync();
     }
     public async Task<bool> SaveChange(ProductionDTO? dto)
@@ -54,6 +62,7 @@ namespace OrderTrackBlazor.Services
             OriginalPrice = dto.OriginalPrice,
             ExtendUrl = dto.ExtendUrl,
             AttachmentId = dto.Attachment,
+            CategoryId = dto.CategoryId
           };
           await context.AddAsync<OrderTrackProduction>(entity);
           var result = (await context.SaveChangesAsync()) >= 0;
@@ -69,6 +78,7 @@ namespace OrderTrackBlazor.Services
             production.OriginalPrice = dto.OriginalPrice;
             production.ExtendUrl = dto.ExtendUrl;
             production.AttachmentId = dto.Attachment;
+            production.CategoryId = dto.CategoryId;
           }
           return (await context.SaveChangesAsync()) >= 0;
         }

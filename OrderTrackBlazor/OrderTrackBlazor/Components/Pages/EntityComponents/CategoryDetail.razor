@@ -1,0 +1,22 @@
+﻿@inherits CategoryDetailComponent
+<Card>
+  <BodyTemplate>
+    @if (Category != null)
+    {
+      <div class="row g-3">
+        <div class="col-12">
+          <BootstrapInput @bind-Value="Category.Name" DisplayText="品类名" ShowLabel="true"></BootstrapInput>
+        </div>
+        <div class="col-12">
+          <BootstrapInputNumber @bind-Value="Category.DisplayOrder" DisplayText="显示顺序" ShowLabel="true"></BootstrapInputNumber>
+        </div>
+
+      </div>
+    }
+
+  </BodyTemplate>
+</Card>
+
+
+
+

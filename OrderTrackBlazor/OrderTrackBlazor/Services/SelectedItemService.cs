@@ -20,7 +20,7 @@ namespace OrderTrackBlazor.Services
       {
         query = query.Where(display);
       }
-      var result = await query.OrderBy(b => b.DisplayOrder).ThenBy(b => b.Id).Select(b => new SelectedItem { Value = b.Id.ToString(), Text = b.Name == null ? "" : b.Name }).ToArrayAsync();
+      var result = await query.OrderBy(b => b.DisplayOrder).ThenBy(b => b.Name).Select(b => new SelectedItem { Value = b.Id.ToString(), Text = b.Name == null ? "" : b.Name }).ToArrayAsync();
       return (new SelectedItem[] { new SelectedItem("", "selected") }).Concat(result);
     }
   }

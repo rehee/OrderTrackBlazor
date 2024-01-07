@@ -9,6 +9,7 @@
     <div class="row g-3">
       <div class="col-12">
         <Button Color="Color.Primary" Text="添加产品" OnClickWithoutRender="()=>CreateProduction()" />
+        <NavLink class="btn btn-success" href="Category">品类</NavLink>
       </div>
     </div>
   </Header>
@@ -28,8 +29,9 @@
                 <Avatar Url="@value.Value" Size="Size.Small" />
               </Template>
             </TableColumn>
-            <TableColumn @bind-Field="@context.ProductionName" />
-            <TableColumn @bind-Field="@context.OriginalPrice" Width="150" />
+            <TableColumn @bind-Field="@context.CategoryName" Text="品类" Width="200" />
+            <TableColumn @bind-Field="@context.ProductionName" Text="产品" />
+            <TableColumn @bind-Field="@context.OriginalPrice" Text="原始价格" Width="150" />
             <TableColumn @bind-Field="@context.Id" Text="操作" Width="100">
               <Template Context="value">
                 <Button Color="Color.Success" Text="编辑" OnClickWithoutRender="()=>CreateProduction(value.Value)" />
