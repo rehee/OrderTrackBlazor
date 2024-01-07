@@ -36,6 +36,7 @@ namespace OrderTrackBlazor.Components.Pages
     }
     [Inject]
     public IJSRuntime js { get; set; }
+    public int? DisplayHours { get; set; } = 4;
     public async Task ShowAvaliable(bool showAvaliable = true)
     {
       //await dialogService.ShowComponent<AvaliableStock>(
@@ -43,7 +44,7 @@ namespace OrderTrackBlazor.Components.Pages
       // "");
       if (showAvaliable)
       {
-        AvaliableStock.AvaliableUntil = DateTime.UtcNow.AddHours(4);
+        AvaliableStock.AvaliableUntil = DateTime.UtcNow.AddHours(DisplayHours ?? 4);
         await js.InvokeVoidAsync("open", "avaliable", "_blank");
       }
       else

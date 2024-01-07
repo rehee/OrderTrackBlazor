@@ -9,8 +9,10 @@
   <Header>
     <div>
       <BootstrapInputGroup>
-        <Button Color="Color.Success" OnClickWithoutRender="()=>ShowAvaliable()">可用库存</Button>
-        <Button Color="Color.Warning" OnClickWithoutRender="()=>ShowAvaliable(false)">停止显示</Button>
+        <BootstrapInputGroupLabel DisplayText="库存显示小时数量" />
+        <BootstrapInput @bind-Value="DisplayHours" TValue="int?" />
+        <Button Color="Color.Success" OnClickWithoutRender="()=>ShowAvaliable()">显示</Button>
+        <Button Color="Color.Warning" OnClickWithoutRender="()=>ShowAvaliable(false)">停止</Button>
       </BootstrapInputGroup>
 
     </div>
