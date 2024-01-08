@@ -9,9 +9,10 @@
   if (SummaryDTOs?.Any() == true)
   {
     var index = 0;
-    foreach (var category in SummaryDTOs.GroupBy(b => b.CategoryDisplayOrder)
-    .OrderByDescending(b => b.Key.HasValue)
-    .ThenBy(b => b.Key))
+    foreach (var category in SummaryDTOs.GroupBy(b => (b.CategoryName, b.CategoryDisplayOrder))
+    .OrderByDescending(b => b.Key.CategoryDisplayOrder)
+    .ThenBy(b => b.Key.CategoryDisplayOrder)
+    .ThenBy(b => b.Key.CategoryName))
     {
       <Card>
         <HeaderTemplate>
