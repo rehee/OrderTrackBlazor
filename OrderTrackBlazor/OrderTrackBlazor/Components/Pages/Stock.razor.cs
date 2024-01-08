@@ -45,7 +45,8 @@ namespace OrderTrackBlazor.Components.Pages
       if (showAvaliable)
       {
         AvaliableStock.AvaliableUntil = DateTime.UtcNow.AddHours(DisplayHours ?? 4);
-        await js.InvokeVoidAsync("open", "avaliable", "_blank");
+        //await js.InvokeVoidAsync("open", "avaliable", "_blank");
+        nm.NavigateTo("avaliable", false);
       }
       else
       {
