@@ -72,6 +72,23 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
         );
     }
 
+    public async Task EditProduction(OrderProductionDTO? dto = null)
+    {
+      if (dto == null || dto.ProductionId == null || dto.ProductionId <= 0)
+      {
+        return;
+      }
+      await dialogService.ShowComponent<ProductionDetail>(
+        new Dictionary<string, object?>()
+        {
+          ["Id"] = dto.ProductionId,
+
+        },
+       "edit Product",
+       true,
+       async save => await Task.CompletedTask
+       );
+    }
     public async Task AddProduction(OrderProductionDTO? dto = null)
     {
       Func<Action<IEnumerable<ProductionDTO>, long>, Task> createProductionFunc = t => CreateProduction(t);

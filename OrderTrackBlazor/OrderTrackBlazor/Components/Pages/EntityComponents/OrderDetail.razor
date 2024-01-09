@@ -4,7 +4,7 @@
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 <MainPage>
-  
+
   <Main>
 
     <div class="row g-3">
@@ -43,8 +43,10 @@
                 <TableColumn @bind-Field="@context.RecommandShopNameDisplay" Text="推荐" />
                 <TableColumn @bind-Field="@context.Gid" Text="操作">
                   <Template Context="value">
-                    <Button Color="Color.Primary" Icon="fas fa-square-pen" Text="编辑" OnClickWithoutRender="()=>
-                  AddProduction(Model.Productions.FirstOrDefault(b=>b.Gid==value.Value))" />
+                    <Button Color="Color.Primary" Text="编辑" OnClickWithoutRender="()=>
+                    AddProduction(Model.Productions.FirstOrDefault(b=>b.Gid==value.Value))" />
+                    <Button Color="Color.Success" Text="产品详情" OnClickWithoutRender="()=>
+                    EditProduction(Model.Productions.FirstOrDefault(b=>b.Gid==value.Value))" />
                   </Template>
                 </TableColumn>
               </TableColumns>
