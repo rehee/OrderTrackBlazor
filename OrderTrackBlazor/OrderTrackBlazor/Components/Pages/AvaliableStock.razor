@@ -19,42 +19,29 @@
           @category.Select(b => b.CategoryName).FirstOrDefault()
         </HeaderTemplate>
         <BodyTemplate>
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th style="width:10%">编号</th>
-                <th style="width:80%">产品名</th>
-                <th style="width:15%">数量</th>
-              </tr>
-            </thead>
-            <tbody>
-              @{
-                foreach (var dto in category)
-                {
-                  index++;
-                  var current = index;
-                  <tr>
-                    <td>
-                      @current
-                    </td>
-                    <td>
-                      <div>
-                        @dto.Name
-                      </div>
-                      <div>
-                        <img src="@dto.Image" />
-                      </div>
-
-                    </td>
-                    <td>
-                      @dto.CurrentStock
-                    </td>
-                  </tr>
-                }
-              }
-            </tbody>
-
-          </table>
+          <div class="row g-3">
+            @foreach (var dto in category)
+            {
+              index++;
+              var current = index;
+              <div class="col-12 col-sm-6 col-lg-4 col-xl-4">
+                <Card Color="Color.Success">
+                  <HeaderTemplate>
+                    编号: @current
+                  </HeaderTemplate>
+                  <BodyTemplate>
+                    <div>
+                      @dto.Name (@dto.CurrentStock)
+                    </div>
+                    <div>
+                      <img src="@dto.Image" style="max-width:100%" />
+                    </div>
+                  </BodyTemplate>
+                </Card>
+              </div>
+              
+            }
+          </div>
         </BodyTemplate>
       </Card>
     }
@@ -62,3 +49,39 @@
 
 }
 
+@* <table class="table table-hover">
+  <thead>
+    <tr>
+      <th style="width:10%">编号</th>
+      <th style="width:80%">产品名</th>
+      <th style="width:15%">数量</th>
+    </tr>
+  </thead>
+  <tbody>
+    @{
+      foreach (var dto in category)
+      {
+        index++;
+        var current = index;
+        <tr>
+          <td>
+            @current
+          </td>
+          <td>
+            <div>
+              @dto.Name
+            </div>
+            <div>
+              <img src="@dto.Image" />
+            </div>
+
+          </td>
+          <td>
+            @dto.CurrentStock
+          </td>
+        </tr>
+      }
+    }
+  </tbody>
+
+</table> *@
