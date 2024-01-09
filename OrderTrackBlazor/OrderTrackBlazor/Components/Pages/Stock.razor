@@ -12,7 +12,7 @@
         <BootstrapInputGroupLabel DisplayText="库存显示小时数量" />
         <BootstrapInput @bind-Value="DisplayHours" TValue="int?" />
         <Button Color="Color.Success" OnClickWithoutRender="()=>ShowAvaliable()">显示</Button>
-        <Button Color="Color.Warning" OnClickWithoutRender="()=>ShowAvaliable(isVideo:true)">走马灯</Button>
+        @* <Button Color="Color.Warning" OnClickWithoutRender="()=>ShowAvaliable(isVideo:true)">走马灯</Button> *@
         <Button Color="Color.Danger" OnClickWithoutRender="()=>ShowAvaliable(false)">停止</Button>
       </BootstrapInputGroup>
 
