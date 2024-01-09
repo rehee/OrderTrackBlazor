@@ -1,11 +1,43 @@
 ﻿@inherits AvaliableStockComponent
 @page "/avaliable"
+@page "/avaliable/{slide}"
 @rendermode InteractiveServer
 @* @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize] *@
 @layout OrderTrackBlazor.Components.Layout.MainLayout2
 <PageTitle>可用库存</PageTitle>
-@{
+<div class="visually-hidden">
+  <WebSpeech @ref="WebSpeech" ShowSpeechInfo="false" />
+</div>
+
+@if (slide != null)
+{
+  @if (SummaryDTOsArray?.Any() == true)
+  {
+    <Carousel Id="C1" @ref="crousel" Width="640" style="height:480px;" IsFade="true" PlayMode="CarouselPlayMode.AutoPlayOnload">
+      @foreach (var item in SummaryDTOsArray)
+      {
+        <CarouselItem>
+          <CaptionTemplate>
+            <h5>@item.Name (@item.CurrentStock)</h5>
+            <p>@item.CategoryName</p>
+          </CaptionTemplate>
+          <ChildContent>
+            <div style="height:480px;">
+              <img src="@item.Image" alt="demo-image" />
+            </div>
+
+          </ChildContent>
+        </CarouselItem>
+      }
+    </Carousel>
+  }
+ 
+
+
+}
+else
+{
   if (SummaryDTOs?.Any() == true)
   {
     var index = 0;
@@ -39,13 +71,17 @@
                   </BodyTemplate>
                 </Card>
               </div>
-              
+
             }
           </div>
         </BodyTemplate>
       </Card>
     }
   }
+}
+
+@{
+
 
 }
 

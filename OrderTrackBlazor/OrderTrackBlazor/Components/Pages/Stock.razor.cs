@@ -37,7 +37,7 @@ namespace OrderTrackBlazor.Components.Pages
     [Inject]
     public IJSRuntime js { get; set; }
     public int? DisplayHours { get; set; } = 4;
-    public async Task ShowAvaliable(bool showAvaliable = true)
+    public async Task ShowAvaliable(bool showAvaliable = true, bool isVideo = false)
     {
       //await dialogService.ShowComponent<AvaliableStock>(
       //  null,
@@ -46,7 +46,15 @@ namespace OrderTrackBlazor.Components.Pages
       {
         AvaliableStock.AvaliableUntil = DateTime.UtcNow.AddHours(DisplayHours ?? 4);
         //await js.InvokeVoidAsync("open", "avaliable", "_blank");
-        nm.NavigateTo("avaliable", false);
+        if (isVideo)
+        {
+          nm.NavigateTo("avaliable/list", false);
+        }
+        else
+        {
+          nm.NavigateTo("avaliable", false);
+        }
+
       }
       else
       {
