@@ -8,8 +8,13 @@
   <Header>
     <div class="row g-3">
       <div class="col-12">
-        <Button Color="Color.Primary" Text="添加产品" OnClickWithoutRender="()=>CreateProduction()" />
-        <NavLink class="btn btn-success" href="Category">品类</NavLink>
+       
+        <BootstrapInputGroup>
+          <Button Color="Color.Primary" Text="添加产品" OnClickWithoutRender="()=>CreateProduction()" />
+          <NavLink class="btn btn-success" href="Category">品类</NavLink>
+          <Select Items="ProductionsSelection" ShowSearch="true" @bind-Value="ProductionSelected" />
+          <Button Color="Color.Success" Text="修改" OnClickWithoutRender="()=>CreateProduction(SelectedId)" />
+        </BootstrapInputGroup>
       </div>
     </div>
   </Header>

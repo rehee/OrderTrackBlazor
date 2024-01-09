@@ -13,7 +13,20 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
     [Parameter]
     public string? EntityName { get; set; }
     public Type? EntityType { get; set; }
-    public IEnumerable<ProductionDTO>? Productions { get; set; }
+    public IEnumerable<ProductionDTO>? Productions { get; set; } = Enumerable.Empty<ProductionDTO>();
+    public IEnumerable<SelectedItem> ProductionsSelection => Productions?.Select(b => new SelectedItem(b.Id.ToString(), b.ProductionName)) ?? Enumerable.Empty<SelectedItem>();
+    public SelectedItem? ProductionSelected { get; set; }
+    public long? SelectedId
+    {
+      get
+      {
+        if (long.TryParse(ProductionSelected?.Value ?? "", out var longId))
+        {
+          return longId;
+        }
+        return null;
+      }
+    }
 
     [Inject]
     public IProductionService? ProductionService { get; set; }
