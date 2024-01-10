@@ -59,14 +59,14 @@ else
               <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                 <Card Color="Color.Success">
                   <HeaderTemplate>
-                    编号: @current
+                    编号: @current 数量: @dto.CurrentStock
                   </HeaderTemplate>
                   <BodyTemplate>
-                    <div style="font-size:1.5rem;">
-                      @dto.Name (@dto.CurrentStock)
-                    </div>
-                    <div>
+                    <div style="height:400px">
                       <img src="@dto.Image" style="max-width:100%" />
+                    </div>
+                    <div style="font-size:1rem; min-height:2rem">
+                      @dto.Name
                     </div>
                   </BodyTemplate>
                 </Card>
