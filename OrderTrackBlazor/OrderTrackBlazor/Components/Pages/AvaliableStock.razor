@@ -62,8 +62,8 @@ else
                     编号: @current 数量: @dto.CurrentStock
                   </HeaderTemplate>
                   <BodyTemplate>
-                    <div style="height:400px">
-                      <img src="@dto.Image" style="max-width:100%" />
+                    <div style="height:425px">
+                      <ImageViewer Url="@dto.Image" FitMode="ObjectFitMode.Contain" />
                     </div>
                     <div style="font-size:1rem; min-height:2rem">
                       @dto.Name
