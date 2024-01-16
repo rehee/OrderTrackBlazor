@@ -126,7 +126,7 @@ namespace OrderTrackBlazor.Services
                b.OrderTrackStockDispatchPackage.Dispatch != null &&
                b.OrderTrackStockDispatchPackage.Dispatch.Status != EnumDispatchStatus.Error))
             .Sum(b => b.Quantity + b.PackageQuantity)
-        
+
         let purchase = production.PurchaseItems.Where(b => purchaseId.HasValue ? b.PurchaseRecordId != purchaseId : true).Sum(b => b.Quantity)
         let stock = purchase - dispatch
         let items = production.OrderItems.Select(o =>
@@ -170,7 +170,7 @@ namespace OrderTrackBlazor.Services
           CategoryDisplayOrder = production.Category.DisplayOrder
         };
 
-      return query.Where(b => b.PendingNumber > b.StockNumber && b.PendingNumber > 0);
+      return query.Where(b => b.RequiredNumber > b.DispatchNumber && b.PendingNumber > b.StockNumber && b.PendingNumber > 0);
     }
 
     public async Task<StockPurchaseDTO> FindStockPurchase(long purchaseId)
