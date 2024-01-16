@@ -126,6 +126,7 @@ namespace OrderTrackBlazor.Services
                b.OrderTrackStockDispatchPackage.Dispatch != null &&
                b.OrderTrackStockDispatchPackage.Dispatch.Status != EnumDispatchStatus.Error))
             .Sum(b => b.Quantity + b.PackageQuantity)
+        let overBuy = dispatch> required? required: dispatch
         let purchase = production.PurchaseItems.Where(b => purchaseId.HasValue ? b.PurchaseRecordId != purchaseId : true).Sum(b => b.Quantity)
         let stock = purchase - dispatch
         let items = production.OrderItems.Select(o =>
@@ -163,7 +164,7 @@ namespace OrderTrackBlazor.Services
           DispatchNumber = dispatch,
           StockNumber = stock,
           PurchaseNumber = purchase,
-          PendingNumber = required - dispatch,
+          PendingNumber = required - overBuy,
           Items = items,
           CategoryName = production.Category.Name,
           CategoryDisplayOrder = production.Category.DisplayOrder
