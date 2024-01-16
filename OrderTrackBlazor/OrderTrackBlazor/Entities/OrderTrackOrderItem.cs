@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using ReheeCmf.Components.ChangeComponents;
+using ReheeCmf.Contexts;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OrderTrackBlazor.Entities
 {
@@ -28,5 +31,32 @@ namespace OrderTrackBlazor.Entities
     [ForeignKey(nameof(RecommendShopId2))]
     public virtual OrderTrackShop RecommendShop2 { get; set; }
     public string? Note { get; set; }
+    public int OverDeliveredNumber { get; set; }
+    public async Task OverDeliveredCheck(IContext context)
+    {
+      var dispatched = await
+        context.Query<OrderTrackDispatchItem>(true)
+        .Where(b => b.OrderProductionId == Id)
+        .Where(b => b.DispatchRecord == null || b.DispatchRecord.Status != EnumDispatchStatus.Error)
+        .SumAsync(b => b.Quantity + b.PackageQuantity);
+      OverDeliveredNumber = Quantity < dispatched ? Quantity : dispatched;
+    }
+  }
+
+  [EntityChangeTracker<OrderTrackOrderItem>]
+  public class OrderTrackOrderItemHandler : OrderTrackEntityHandler<OrderTrackOrderItem>
+  {
+    public override async Task AfterCreateAsync(CancellationToken ct = default)
+    {
+      await base.AfterCreateAsync(ct);
+      await entity.OverDeliveredCheck(context);
+    }
+    public override async Task AfterUpdateAsync(CancellationToken ct = default)
+    {
+      await base.AfterUpdateAsync(ct);
+      await entity.OverDeliveredCheck(context);
+    }
   }
 }
+
+

@@ -129,8 +129,8 @@ namespace OrderTrackBlazor.Services
             .Sum(b => b.Quantity + b.PackageQuantity)
         let purchase = production.PurchaseItems.Where(b => purchaseId.HasValue ? b.PurchaseRecordId != purchaseId : true).Sum(b => b.Quantity)
         let stock = purchase - dispatch
+        let orderDispatch = production.OrderItems.Sum(b => b.OverDeliveredNumber)
 
-       
         let items = production.OrderItems.Select(o =>
           new StockRequireDTO
           {
@@ -166,11 +166,11 @@ namespace OrderTrackBlazor.Services
           DispatchNumber = dispatch,
           StockNumber = stock,
           PurchaseNumber = purchase,
-          PendingNumber = required - dispatch,
+          PendingNumber = required - orderDispatch,
           Items = items,
           CategoryName = production.Category.Name,
           CategoryDisplayOrder = production.Category.DisplayOrder,
-          
+
         };
 
       return query.Where(b => b.PendingNumber > b.StockNumber && b.PendingNumber > 0);

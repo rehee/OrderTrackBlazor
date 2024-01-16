@@ -55,21 +55,11 @@
       {
 
         //var needToBuy = PendingNumber - StockNumber;
-        return PendingNumber - StockNumber + Items?.Sum(b => b.OverDispatched) ?? 0;
+        return PendingNumber - StockNumber;
       }
       set { }
     }
-    public int PendingOrderNumber
-    {
-      get
-      {
-        if (Items?.Any() != true)
-        {
-          return PendingNumber;
-        }
-        return Items.Sum(b => b.RequiredNumber > b.DispatchNumber ? b.RequiredNumber : b.DispatchNumber);
-      }
-    }
+
     public int StockNumber { get; set; }
     public int? PurchaseNumber { get; set; }
     public int? Number { get; set; }

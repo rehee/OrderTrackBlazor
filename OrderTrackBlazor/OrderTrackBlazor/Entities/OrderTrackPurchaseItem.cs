@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using ReheeCmf.Components.ChangeComponents;
+using ReheeCmf.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OrderTrackBlazor.Entities
 {
@@ -7,7 +9,7 @@ namespace OrderTrackBlazor.Entities
     [ForeignKey(nameof(OrderTrackPurchaseRecord))]
     public long? PurchaseRecordId { get; set; }
     public virtual OrderTrackPurchaseRecord? PurchaseRecord { get; set; }
-    
+
     [ForeignKey(nameof(OrderTrackProduction))]
     public long? ProductionId { get; set; }
     public virtual OrderTrackProduction? Production { get; set; }
@@ -15,4 +17,6 @@ namespace OrderTrackBlazor.Entities
     public int Quantity { get; set; }
 
   }
+
+  
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using ReheeCmf.Components.ChangeComponents;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OrderTrackBlazor.Entities
 {
@@ -24,5 +25,33 @@ namespace OrderTrackBlazor.Entities
     [ForeignKey(nameof(OrderTrackStockDispatchPackage))]
     public long? OrderTrackStockDispatchPackageId { get; set; }
     public virtual OrderTrackStockDispatchPackage? OrderTrackStockDispatchPackage { get; set; }
+  }
+  [EntityChangeTracker<OrderTrackDispatchItem>]
+  public class OrderTrackDispatchItemItemHandler : OrderTrackEntityHandler<OrderTrackDispatchItem>
+  {
+    public override async Task AfterCreateAsync(CancellationToken ct = default)
+    {
+      await base.AfterCreateAsync(ct);
+      if (entity.OrderProduction != null)
+      {
+        await entity.OrderProduction.OverDeliveredCheck(context);
+      }
+    }
+    public override async Task AfterUpdateAsync(CancellationToken ct = default)
+    {
+      await base.AfterUpdateAsync(ct);
+      if (entity.OrderProduction != null)
+      {
+        await entity.OrderProduction.OverDeliveredCheck(context);
+      }
+    }
+    public override async Task AfterDeleteAsync(CancellationToken ct = default)
+    {
+      await base.AfterDeleteAsync(ct);
+      if (entity.OrderProduction != null)
+      {
+        await entity.OrderProduction.OverDeliveredCheck(context);
+      }
+    }
   }
 }

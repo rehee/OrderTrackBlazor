@@ -45,13 +45,20 @@ namespace OrderTrackBlazor.Workers
             });
           }
           await context1.SaveChangesAsync(null);
+
+          var ordersCheck = await context1.Query<OrderTrackOrderItem>(false).Where(b => b.OverDeliveredNumber <= 0).ToArrayAsync();
+          foreach (var o in ordersCheck)
+          {
+            await o.OverDeliveredCheck(context1);
+          }
+          await context1.SaveChangesAsync(null);
         }
         while (true)
         {
 
           await Task.Delay(1000
           //);
-          *60);
+          * 60);
           using var scope = sp.CreateScope();
           using var context = scope.ServiceProvider.GetService<IContext>();
           var current = DateTime.UtcNow;

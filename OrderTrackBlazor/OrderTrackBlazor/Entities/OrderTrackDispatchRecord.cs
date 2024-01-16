@@ -1,4 +1,5 @@
-﻿using ReheeCmf.Components.ChangeComponents;
+﻿using Microsoft.EntityFrameworkCore;
+using ReheeCmf.Components.ChangeComponents;
 using ReheeCmf.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -56,6 +57,54 @@ namespace OrderTrackBlazor.Entities
       else
       {
         entity.SoftDeleteUntil = null;
+      }
+    }
+
+    public override async Task AfterCreateAsync(CancellationToken ct = default)
+    {
+      await base.AfterCreateAsync(ct);
+      var items = await context.Query<OrderTrackDispatchItem>(true)
+        .Where(b => b.DispatchRecordId == entity.Id)
+        .Select(b => b.OrderProduction).DistinctBy(b => b.Id).ToArrayAsync();
+      foreach (var item in items)
+      {
+        if (item == null)
+        {
+          continue;
+        }
+        await item.OverDeliveredCheck(context);
+      }
+
+
+    }
+    public override async Task AfterUpdateAsync(CancellationToken ct = default)
+    {
+      await base.AfterUpdateAsync(ct);
+      var items = await context.Query<OrderTrackDispatchItem>(true)
+        .Where(b => b.DispatchRecordId == entity.Id)
+        .Select(b => b.OrderProduction).DistinctBy(b => b.Id).ToArrayAsync();
+      foreach (var item in items)
+      {
+        if (item == null)
+        {
+          continue;
+        }
+        await item.OverDeliveredCheck(context);
+      }
+    }
+    public override async Task AfterDeleteAsync(CancellationToken ct = default)
+    {
+      await base.AfterDeleteAsync(ct);
+      var items = await context.Query<OrderTrackDispatchItem>(true)
+        .Where(b => b.DispatchRecordId == entity.Id)
+        .Select(b => b.OrderProduction).DistinctBy(b => b.Id).ToArrayAsync();
+      foreach (var item in items)
+      {
+        if (item == null)
+        {
+          continue;
+        }
+        await item.OverDeliveredCheck(context);
       }
     }
   }
