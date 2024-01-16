@@ -12,7 +12,14 @@
     public string? RecommandShopName { get; set; }
     public long? RecommandShopId2 { get; set; }
     public string? RecommandShopName2 { get; set; }
-
+    public int OverDispatched
+    {
+      get
+      {
+        if (RequiredNumber >= DispatchNumber) return 0;
+        return RequiredNumber - DispatchNumber;
+      }
+    }
     public IEnumerable<string?> RecommandShopNames
     {
       get
@@ -48,7 +55,7 @@
       {
 
         //var needToBuy = PendingNumber - StockNumber;
-        return PendingNumber - StockNumber;
+        return PendingNumber - StockNumber + Items?.Sum(b => b.OverDispatched) ?? 0;
       }
       set { }
     }
