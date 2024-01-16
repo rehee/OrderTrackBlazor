@@ -48,7 +48,7 @@
       {
 
         //var needToBuy = PendingNumber - StockNumber;
-        return PendingOrderNumber - StockNumber;
+        return PendingNumber - StockNumber;
       }
       set { }
     }
