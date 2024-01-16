@@ -2,6 +2,7 @@
 using Dropbox.Api.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using OrderTrackBlazor.Components.Pages;
 using OrderTrackBlazor.Consts;
 using ReheeCmf.Contexts;
 
@@ -126,9 +127,10 @@ namespace OrderTrackBlazor.Services
                b.OrderTrackStockDispatchPackage.Dispatch != null &&
                b.OrderTrackStockDispatchPackage.Dispatch.Status != EnumDispatchStatus.Error))
             .Sum(b => b.Quantity + b.PackageQuantity)
-
         let purchase = production.PurchaseItems.Where(b => purchaseId.HasValue ? b.PurchaseRecordId != purchaseId : true).Sum(b => b.Quantity)
         let stock = purchase - dispatch
+
+       
         let items = production.OrderItems.Select(o =>
           new StockRequireDTO
           {
@@ -152,7 +154,7 @@ namespace OrderTrackBlazor.Services
                d.OrderTrackStockDispatchPackage.Dispatch != null &&
                d.OrderTrackStockDispatchPackage.Dispatch.Status != EnumDispatchStatus.Error))
             .Sum(s => s.Quantity + s.PackageQuantity)
-          }).Where(w => w.RequiredNumber > w.DispatchNumber)
+          })
 
 
         select new StockRequireSummaryDTO
@@ -167,10 +169,11 @@ namespace OrderTrackBlazor.Services
           PendingNumber = required - dispatch,
           Items = items,
           CategoryName = production.Category.Name,
-          CategoryDisplayOrder = production.Category.DisplayOrder
+          CategoryDisplayOrder = production.Category.DisplayOrder,
+          
         };
 
-      return query.Where(b => b.RequiredNumber > b.DispatchNumber && b.PendingNumber > b.StockNumber && b.PendingNumber > 0);
+      return query.Where(b => b.PendingNumber > b.StockNumber && b.PendingNumber > 0);
     }
 
     public async Task<StockPurchaseDTO> FindStockPurchase(long purchaseId)

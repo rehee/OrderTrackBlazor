@@ -41,15 +41,27 @@
     public int RequiredNumber { get; set; }
     public int DispatchNumber { get; set; }
     public int PendingNumber { get; set; }
-
+    public int StockDispatch { get; set; }
     public int NeedToBuy
     {
       get
       {
+
         //var needToBuy = PendingNumber - StockNumber;
-        return PendingNumber - StockNumber;
+        return PendingOrderNumber - StockNumber;
       }
       set { }
+    }
+    public int PendingOrderNumber
+    {
+      get
+      {
+        if (Items?.Any() != true)
+        {
+          return PendingNumber;
+        }
+        return Items.Sum(b => b.RequiredNumber > b.DispatchNumber ? b.RequiredNumber : b.DispatchNumber);
+      }
     }
     public int StockNumber { get; set; }
     public int? PurchaseNumber { get; set; }
