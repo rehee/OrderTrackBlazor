@@ -46,6 +46,7 @@
     {
       get
       {
+        //var needToBuy = PendingNumber - StockNumber;
         return PendingNumber - StockNumber;
       }
       set { }
