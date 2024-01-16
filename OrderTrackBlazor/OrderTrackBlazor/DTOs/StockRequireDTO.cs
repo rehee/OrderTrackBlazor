@@ -17,7 +17,7 @@
       get
       {
         if (RequiredNumber >= DispatchNumber) return 0;
-        return RequiredNumber - DispatchNumber;
+        return DispatchNumber - RequiredNumber;
       }
     }
     public IEnumerable<string?> RecommandShopNames
