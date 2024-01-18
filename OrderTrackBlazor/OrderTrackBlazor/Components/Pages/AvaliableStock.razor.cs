@@ -1,8 +1,12 @@
 using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
+using ReheeCmf.Commons;
+using ReheeCmf.Commons.DTOs;
 using ReheeCmf.Helpers;
+using System.Net;
 
 namespace OrderTrackBlazor.Components.Pages
 {
@@ -21,14 +25,35 @@ namespace OrderTrackBlazor.Components.Pages
     public StockSummaryDTO[] SummaryDTOsArray => SummaryDTOs.OrderByDescending(b => b.CategoryDisplayOrder)
     .ThenBy(b => b.CategoryDisplayOrder)
     .ThenBy(b => b.CategoryName).ToArray();
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync();
       dotnetObjRef = DotNetObjectReference.Create(this);
-      if (AvaliableUntil == null || AvaliableUntil.Value < DateTime.UtcNow)
+      if (authenticationState != null)
       {
-        return;
+        var authState = await authenticationState;
+        var user = authState?.User;
+        if (user?.Identity?.IsAuthenticated != true)
+        {
+          if (AvaliableUntil == null || AvaliableUntil.Value < DateTime.UtcNow)
+          {
+            return;
+          }
+        }
       }
+      else
+      {
+        if (AvaliableUntil == null || AvaliableUntil.Value < DateTime.UtcNow)
+        {
+          return;
+        }
+      }
+     
+
       SummaryDTOs = await stockService.QuerySummary().Where(b => b.CurrentStock > 0)
         .OrderBy(b => b.Name).ToArrayAsync();
 
