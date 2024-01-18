@@ -56,6 +56,7 @@ namespace OrderTrackBlazor.Components.Pages
         return DTOs.OrderByDescending(b => b.RecommandShops.Contains(SelectShopItem?.Text))
           .ThenByDescending(b => b.CategoryDisplayOrder.HasValue)
           .ThenBy(b => b.CategoryDisplayOrder)
+          .ThenBy(b => b.CategoryName)
           .ThenBy(b => b.ProductionName);
       }
     }
