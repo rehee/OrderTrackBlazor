@@ -125,3 +125,10 @@ h1:focus {
   word-break: break-word;
   word-wrap: break-word;
 }
+@media print {
+  
+  /* page-break-after works, as well */
+}
+.pagebreak {
+  page-break-before: always;
+}

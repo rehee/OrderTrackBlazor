@@ -116,7 +116,7 @@ namespace OrderTrackBlazor.Services
       return query;
     }
 
-    public IQueryable<StockRequireSummaryDTO> QueryRequireSummary(long? purchaseId = null)
+    public IQueryable<StockRequireSummaryDTO> QueryRequireSummary(long? purchaseId = null, bool showAvaliableOnly = true)
     {
       var query =
         from production in context.Query<OrderTrackProduction>(true)
@@ -172,7 +172,10 @@ namespace OrderTrackBlazor.Services
           CategoryDisplayOrder = production.Category.DisplayOrder,
 
         };
-
+      if (showAvaliableOnly != true)
+      {
+        return query;
+      }
       return query.Where(b => b.PendingNumber > b.StockNumber && b.PendingNumber > 0);
     }
 
@@ -317,6 +320,11 @@ namespace OrderTrackBlazor.Services
       }
       await context.SaveChangesAsync(null);
       return true;
+    }
+
+    public async Task<StockRequireSummaryDTO?> FindRequireSummary(long productionId)
+    {
+      return await QueryRequireSummary(null, false).Where(b => b.ProductionId == productionId).FirstOrDefaultAsync();
     }
   }
 }

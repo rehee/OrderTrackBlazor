@@ -2,7 +2,7 @@
 
 <Card>
   <HeaderTemplate>
-    下单日期 @DTO.OrderDate?.ToString(DefaultValues.DatFormat) 备注: @DTO.OrderNote
+    下单日期 @DTO.OrderDate?.ToString(DefaultValues.DatFormat) 备注: @DTO.OrderNote (出库数量 @DTO.DispatchNumber)
   </HeaderTemplate>
   <BodyTemplate>
     <h5>@DTO.ProductionName</h5>

@@ -18,8 +18,10 @@
       <h5>总价格: @DTOs.Sum(DTO => DTO.Items.Sum(b => b.Number * b.Price) + DTO.Packages.Sum(b => b.Number * b.PackagePrice))</h5>
     </BodyTemplate>
   </Card>
+
   foreach (var DTO in DTOs)
   {
+    <div style="break-after:page"></div>
     <Card>
       <HeaderTemplate>
         @DTO.DispatchDate?.ToString(DefaultValues.DatFormat)
@@ -60,5 +62,6 @@
         </table>
       </BodyTemplate>
     </Card>
+    
   }
 }

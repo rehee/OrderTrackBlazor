@@ -8,12 +8,14 @@
   <Header>
     <div class="row g-3">
       <div class="col-12">
-       
+
         <BootstrapInputGroup>
           <Button Color="Color.Primary" Text="添加产品" OnClickWithoutRender="()=>CreateProduction()" />
           <NavLink class="btn btn-success" href="Category">品类</NavLink>
           <Select Items="ProductionsSelection" ShowSearch="true" @bind-Value="ProductionSelected" />
           <Button Color="Color.Success" Text="修改" OnClickWithoutRender="()=>CreateProduction(SelectedId)" />
+          <Button Color="Color.Warning" Text="订单" OnClickWithoutRender="()=>ShowOrder(SelectedId)" />
+          <Button Color="Color.Dark" Text="库存" OnClickWithoutRender="()=>ShowStock(SelectedId)" />
         </BootstrapInputGroup>
       </div>
     </div>
@@ -43,6 +45,9 @@
             <TableColumn @bind-Field="@context.Id" Text="操作" Width="100">
               <Template Context="value">
                 <Button Color="Color.Success" Text="编辑" OnClickWithoutRender="()=>CreateProduction(value.Value)" />
+                <Button Color="Color.Warning" Text="订单" OnClickWithoutRender="()=>ShowOrder(value.Value)" />
+                <Button Color="Color.Dark" Text="库存" OnClickWithoutRender="()=>ShowStock(value.Value)" />
+
               </Template>
             </TableColumn>
           </TableColumns>
