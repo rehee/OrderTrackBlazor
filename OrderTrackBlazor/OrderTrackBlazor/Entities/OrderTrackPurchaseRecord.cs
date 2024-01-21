@@ -19,6 +19,7 @@ namespace OrderTrackBlazor.Entities
     public virtual OrderTrackOrder? Order { get; set; }
 
     public decimal? Price { get; set; }
+    public string? ReceiptImage { get; set; }
   }
   [EntityChangeTracker<OrderTrackPurchaseRecord>]
   public class OrderTrackPurchaseRecordHandler : OrderTrackEntityHandler<OrderTrackPurchaseRecord>

@@ -1,0 +1,13 @@
+﻿@inherits ReceiptComponent
+@page "/receipt/{ids}"
+@* @page "/avaliable/{slide}" *@
+@rendermode InteractiveServer
+@* @using Microsoft.AspNetCore.Authorization
+@attribute [Authorize] *@
+@layout OrderTrackBlazor.Components.Layout.MainLayout2
+<PageTitle>采购小票</PageTitle>
+
+@foreach (var dto in DTOs)
+{
+  <img src="@dto.ReceiptImage" />
+}

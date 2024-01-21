@@ -187,6 +187,7 @@ namespace OrderTrackBlazor.Services
         {
           PurchaseId = record.Id,
           Price = record.Price,
+          ReceiptImage = record.ReceiptImage,
           PurchaseDate = record.PurchaseDate,
           ShopId = record.ShopId,
           Request = record.Items.Select(b => new StockRequireSummaryDTO
@@ -225,6 +226,7 @@ namespace OrderTrackBlazor.Services
       {
         PurchaseDate = stockPurchase.PurchaseDate?.Date ?? DateTime.UtcNow.Date,
         Price = stockPurchase.Price,
+        ReceiptImage = stockPurchase.ReceiptImage,
         ShopId = stockPurchase.ShopId,
       };
       await context.AddAsync(purchase, CancellationToken.None);
@@ -257,6 +259,8 @@ namespace OrderTrackBlazor.Services
       record.ShopId = stockPurchase.ShopId;
       record.PurchaseDate = stockPurchase.PurchaseDate;
       record.Price = stockPurchase.Price;
+      record.ReceiptImage = stockPurchase.ReceiptImage;
+
       var items = record.Items.ToArray().GroupBy(b => b.ProductionId).ToArray();
       foreach (var dto in stockPurchase.RequestAdding)
       {

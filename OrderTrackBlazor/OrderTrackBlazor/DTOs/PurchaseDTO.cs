@@ -5,6 +5,7 @@ namespace OrderTrackBlazor.DTOs
 {
   public class PurchaseDTO : DTOBase, IWithOrderProductionsDTO
   {
+    public bool Selected { get; set; }
     public DateTime? PurchaseDate { get; set; }
     public DateTime? CreateDate { get; set; }
     public string PurchaseDateFormat
@@ -19,6 +20,8 @@ namespace OrderTrackBlazor.DTOs
     public string? ShopName { get; set; }
     public decimal? ShopPrice { get; set; }
     public long? OrderId { get; set; }
+    public string? ReceiptImage { get
+        ; set; }
     public List<OrderProductionDTO>? Productions { get; set; }
   }
 

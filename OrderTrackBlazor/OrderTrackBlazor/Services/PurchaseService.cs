@@ -31,6 +31,7 @@ namespace OrderTrackBlazor.Services
           ShopName = purchase.Shop.Name,
           ShopPrice = purchase.Price,
           OrderId = purchase.OrderId,
+          ReceiptImage = purchase.ReceiptImage,
           Productions = purchase.Items.Select(b =>
            new OrderProductionDTO
            {

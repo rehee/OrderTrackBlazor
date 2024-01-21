@@ -35,6 +35,10 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       Shops = await ItemService.GetEntitySelection<OrderTrackShop>();
       StateHasChanged();
     }
+    public async Task ShowImage()
+    {
+      nm.NavigateTo($"receipt/{String.Join(",", Purchases.Where(b => b.Selected).Select(b => b.Id))}");
+    }
     public async Task EditPurchase(PurchaseDTO dto)
     {
       if (dto.OrderId != null)

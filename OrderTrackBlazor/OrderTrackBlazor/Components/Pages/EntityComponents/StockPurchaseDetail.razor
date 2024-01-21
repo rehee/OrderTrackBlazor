@@ -12,6 +12,17 @@
                           ShowLabel="true"
                           DisplayText="采购价格" />
   </div>
+  <div class="col-12">
+    <BootstrapInputGroup>
+      <Avatar Url="@DTO.ReceiptImage" Size="Size.Medium" />
+      @if (!String.IsNullOrEmpty(DTO.ReceiptImage))
+      {
+        <Button Color="Color.Danger" OnClickWithoutRender="()=>OnFileDelete()">删除</Button>
+      }
+      <InputUpload TValue="string" ShowDeleteButton="false" OnChange="@OnFileChange" ShowLabel="true" DisplayText="产品图片"></InputUpload>
+
+    </BootstrapInputGroup>
+  </div>
   <div class="col-12 ">
     <Button OnClickWithoutRender="()=>AddProduction()">添加产品</Button>
   </div>

@@ -1,5 +1,6 @@
 using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Collections.Generic;
 using static Dropbox.Api.Files.ListRevisionsMode;
 
@@ -88,5 +89,27 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
         return await Service.UpdateStockPurchase(DTO);
       }
     }
+
+    public Task<bool> OnFileDelete()
+    {
+      DTO.ReceiptImage = null;
+      StateHasChanged();
+      return Task.FromResult(true);
+    }
+    public UploadFile File { get; set; } = new UploadFile();
+    public async Task OnFileChange(UploadFile file)
+    {
+      // 未真正保存文件
+      // file.SaveToFile()
+      if (file != null && file.File != null)
+      {
+
+        var format = file.File.ContentType;
+        await file.RequestBase64ImageFileAsync(format, 480, 640, long.MaxValue);
+        DTO.ReceiptImage = file.PrevUrl;
+      }
+      StateHasChanged();
+    }
+
   }
 }

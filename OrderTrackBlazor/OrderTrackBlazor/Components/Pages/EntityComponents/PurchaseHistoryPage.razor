@@ -17,10 +17,21 @@
       <div class="col-2">
         <br />
         <Button Icon="fas fa-magnifying-glass-chart" OnClickWithoutRender="()=>Refresh()" />
+        <Button Icon="fas fa-magnifying-glass-chart" Color="Color.Warning" OnClickWithoutRender="()=>ShowImage()" />
       </div>
       <div class="col-12">
         <Table TItem="PurchaseDTO" Items="@Purchases">
           <TableColumns>
+            <TableColumn @bind-Field="@context.Id" Text="操作" Width="100">
+              <Template Context="value">
+                @{
+                  var item = Purchases.FirstOrDefault(b => b.Id == value.Value);
+                  <Switch @bind-Value="item.Selected" OnColor="Color.Success"></Switch>
+
+                }
+              </Template>
+            </TableColumn>
+
             <TableColumn @bind-Field="@context.PurchaseDateFormat" Text="采购日期">
             </TableColumn>
             <TableColumn @bind-Field="@context.ShopName" Text="采购地点" Width="100">
