@@ -105,7 +105,7 @@ namespace OrderTrackBlazor.Components.Pages.EntityComponents
       {
 
         var format = file.File.ContentType;
-        await file.RequestBase64ImageFileAsync(format, 480, 640, long.MaxValue);
+        await file.RequestBase64ImageFileAsync(format, 1080, 1920, long.MaxValue);
         DTO.ReceiptImage = file.PrevUrl;
       }
       StateHasChanged();
