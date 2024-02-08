@@ -22,6 +22,46 @@
   foreach (var DTO in DTOs)
   {
     <div style="break-after:page"></div>
+    @foreach (var package in DTO.Packages)
+    {
+      <Card>
+        <HeaderTemplate>
+          @package.BriefDiscribtion 箱子种类:@package.PackageSizeName @package.BriefDiscribtion
+        </HeaderTemplate>
+        <BodyTemplate>
+          <h6>箱数: @package.Number</h6>
+          <table class="table">
+            <thead>
+              <tr>
+
+                <th style="width:70%">产品名</th>
+                <th style="width:15%">数量</th>
+                <th style="width:15%">总量</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach (var item in package.PackageItem)
+              {
+                <tr>
+
+                  <td> @item.ProductionName </td>
+                  <td> @item.Number</td>
+                  <td> @item.Number * @package.Number = (@(item.Number * package.Number))</td>
+                </tr>
+              }
+            </tbody>
+            <tfoot>
+              <tr>
+
+                <th></th>
+                <td>@package.PackageItem.Sum(b => b.Number)</td>
+                <td>@(package.PackageItem.Sum(b => b.Number) * package.Number)</td>
+              </tr>
+            </tfoot>
+          </table>
+        </BodyTemplate>
+      </Card>
+    }
     <Card>
       <HeaderTemplate>
         @DTO.DispatchDate?.ToString(DefaultValues.DatFormat)
@@ -62,6 +102,6 @@
         </table>
       </BodyTemplate>
     </Card>
-    
+
   }
 }
