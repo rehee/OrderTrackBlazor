@@ -222,7 +222,7 @@ namespace OrderTrackBlazor.Services
             {
               ProductionId = o.ProductionId,
               Number = o.PackageQuantity,
-              Price = o.OrderProduction.OrderPrice == null ? o.OrderProduction.Production.OriginalPrice : o.OrderProduction.OrderPrice,
+              Price = o.OrderProduction.OrderPrice == null ? o.Production.OriginalPrice : o.OrderProduction.OrderPrice,
               ProductionName = o.Production.Name,
               OrderTime = o.OrderProduction.Order.OrderDate
             })
